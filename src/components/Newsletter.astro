@@ -1,0 +1,135 @@
+---
+---
+
+<section class="newsletter-section">
+  <div class="container">
+    <div class="newsletter-card">
+      <div class="dispatch-header">
+        <span class="dispatch-badge">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+            <polyline points="22,6 12,13 2,6"></polyline>
+          </svg>
+          FORTNIGHTLY BRIEFING
+        </span>
+        <h2>The Kritrimta Dispatch</h2>
+        <p class="dispatch-subtitle">
+          Concise, unfiltered technical analysis of frontier AI models, silicon microarchitectures, and digital sovereignty. Delivered directly by Saurav Karki every other Thursday.
+        </p>
+      </div>
+      
+      <form class="newsletter-form" onsubmit="event.preventDefault(); alert('Thank you for subscribing to The Kritrimta Dispatch.');">
+        <div class="input-group">
+          <input 
+            type="email" 
+            placeholder="name@domain.com" 
+            required 
+            class="form-input" 
+            aria-label="Email address for The Kritrimta Dispatch" 
+          />
+          <button type="submit" class="btn btn-primary">
+            Join the Dispatch
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </button>
+        </div>
+        <p class="disclaimer">
+          Direct editorial emails only. No sponsored promotions, tracking pixels, or affiliate links.
+        </p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<style>
+  .newsletter-section {
+    padding: 3.5rem 0 5rem;
+  }
+
+  .newsletter-card {
+    background-color: var(--color-surface);
+    border-radius: 1rem;
+    padding: 3rem 2rem;
+    border: 1px solid var(--color-border);
+    box-shadow: 0 4px 20px var(--color-shadow);
+    max-width: 840px;
+    margin: 0 auto;
+    position: relative;
+  }
+
+  @media (min-width: 768px) {
+    .newsletter-card {
+      padding: 3.5rem 3.5rem;
+    }
+  }
+
+  .dispatch-header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .dispatch-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--color-accent);
+    letter-spacing: 0.12em;
+    background: var(--color-accent-subtle);
+    padding: 0.3rem 0.8rem;
+    border-radius: 9999px;
+    margin-bottom: 1rem;
+  }
+
+  .dispatch-header h2 {
+    font-family: var(--font-serif);
+    font-size: clamp(1.8rem, 3.5vw, 2.4rem);
+    margin-bottom: 0.75rem;
+    letter-spacing: -0.015em;
+  }
+
+  .dispatch-subtitle {
+    color: var(--color-text-muted);
+    font-size: 1.025rem;
+    line-height: 1.6;
+    max-width: 580px;
+    margin: 0 auto;
+  }
+
+  .newsletter-form {
+    max-width: 520px;
+    margin: 0 auto;
+  }
+
+  .input-group {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 0.85rem;
+  }
+
+  @media (max-width: 600px) {
+    .input-group {
+      flex-direction: column;
+    }
+  }
+
+  .input-group .form-input {
+    flex-grow: 1;
+    font-size: 0.95rem;
+  }
+
+  .input-group .btn {
+    flex-shrink: 0;
+  }
+
+  .disclaimer {
+    font-size: 0.78rem;
+    color: var(--color-text-faint);
+    text-align: center;
+    line-height: 1.4;
+  }
+</style>

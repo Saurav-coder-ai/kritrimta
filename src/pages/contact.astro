@@ -1,0 +1,172 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Editorial Desk & Tips"
+  description="Contact the Kritrimta editorial desk. Send technical tips, benchmark research inquiries, or correspondence to Saurav Karki."
+>
+  <section class="contact-page">
+    <div class="container">
+      <div class="contact-content">
+        <span class="mono-kicker">COMMUNICATIONS</span>
+        <h1 class="contact-title">The Editorial Desk</h1>
+        <p class="contact-lead">
+          For news tips, technical corrections, research papers, or hardware benchmark discussions. All correspondence is read directly by editor Saurav Karki.
+        </p>
+
+        <div class="contact-channels">
+          <div class="channel-card">
+            <span class="channel-label">DIRECT EMAIL</span>
+            <a href="mailto:editor@kritrimta.com" class="channel-value">editor@kritrimta.com</a>
+          </div>
+          <div class="channel-card">
+            <span class="channel-label">RESPONSE TIME</span>
+            <span class="channel-value">1–2 business days</span>
+          </div>
+        </div>
+
+        <form class="contact-form" onsubmit="event.preventDefault(); alert('Your message has been dispatched to the editorial desk.');">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="name">Your Name</label>
+              <input type="text" id="name" name="name" required placeholder="Saurav Karki" class="form-input" />
+            </div>
+
+            <div class="form-group">
+              <label for="email">Email Address</label>
+              <input type="email" id="email" name="email" required placeholder="name@domain.com" class="form-input" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="topic">Inquiry Nature</label>
+            <input type="text" id="topic" name="subject" required placeholder="e.g. LLM Benchmark Discrepancy / Silicon Architecture Tip" class="form-input" />
+          </div>
+
+          <div class="form-group">
+            <label for="message">Detailed Note / Tip</label>
+            <textarea id="message" name="message" rows="6" required placeholder="Provide technical details, context, or links to papers/repositories..." class="form-input"></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-primary">
+            Send to Editorial Desk
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="22" y1="2" x2="11" y2="13"></line>
+              <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+            </svg>
+          </button>
+        </form>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .contact-page {
+    padding: 4rem 0 5rem;
+  }
+
+  .contact-content {
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  .mono-kicker {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    color: var(--color-accent);
+    display: block;
+    margin-bottom: 0.75rem;
+  }
+
+  .contact-title {
+    font-size: clamp(2.2rem, 4vw, 3.2rem);
+    line-height: 1.15;
+    margin-bottom: 1rem;
+    letter-spacing: -0.02em;
+  }
+
+  .contact-lead {
+    color: var(--color-text-muted);
+    font-size: 1.15rem;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+    font-family: var(--font-serif);
+  }
+
+  .contact-channels {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+  }
+
+  @media (min-width: 560px) {
+    .contact-channels {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  .channel-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 0.5rem;
+    padding: 1.15rem 1.35rem;
+  }
+
+  .channel-label {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    color: var(--color-accent);
+    letter-spacing: 0.1em;
+    display: block;
+    margin-bottom: 0.35rem;
+  }
+
+  .channel-value {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--color-text);
+  }
+
+  .contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    padding: 2.25rem;
+    border-radius: 0.75rem;
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
+  @media (min-width: 600px) {
+    .form-row {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+  }
+
+  .form-group label {
+    font-weight: 600;
+    font-size: 0.85rem;
+    font-family: var(--font-sans);
+  }
+
+  .form-group textarea {
+    resize: vertical;
+  }
+</style>

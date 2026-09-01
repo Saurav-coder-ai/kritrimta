@@ -1,0 +1,78 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="404 — Document Not Found"
+  description="The requested editorial document or index does not exist in the Kritrimta archives."
+>
+  <section class="not-found-page">
+    <div class="container">
+      <div class="not-found-box">
+        <span class="error-code">404 // UNMAPPED ADDRESS</span>
+        <h1>Document Not Found</h1>
+        <p>The essay, benchmark report, or index you requested does not exist at this URI. It may have been archived or repositioned.</p>
+        <div class="actions">
+          <a href="/" class="btn btn-primary">
+            Return to Frontpage
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </a>
+          <a href="/about" class="btn btn-outline">About Kritrimta</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .not-found-page {
+    padding: 6rem 0;
+    min-height: 65vh;
+    display: flex;
+    align-items: center;
+  }
+
+  .not-found-box {
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: center;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 1rem;
+    padding: 3.5rem 2rem;
+  }
+
+  .error-code {
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--color-accent);
+    letter-spacing: 0.12em;
+    display: block;
+    margin-bottom: 1.25rem;
+  }
+
+  .not-found-box h1 {
+    font-size: clamp(2rem, 4vw, 2.75rem);
+    margin-bottom: 1rem;
+    letter-spacing: -0.02em;
+  }
+
+  .not-found-box p {
+    color: var(--color-text-muted);
+    font-size: 1.05rem;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+    font-family: var(--font-serif);
+  }
+
+  .actions {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+</style>

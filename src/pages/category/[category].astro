@@ -1,0 +1,117 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PostCard from '@/components/PostCard.astro';
+import CategoryList from '@/components/CategoryList.astro';
+import { getCollection } from 'astro:content';
+import { CATEGORIES } from '@/utils/helpers';
+
+export async function getStaticPaths() {
+  const allPosts = await getCollection('blog');
+  return CATEGORIES.map(({ name, slug }) => {
+    const filteredPosts = allPosts
+      .filter(post => post.data.category === name)
+      .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+    return {
+      params: { category: slug },
+      props: { posts: filteredPosts, categoryName: name, currentSlug: slug },
+    };
+  });
+}
+
+const { posts, categoryName, currentSlug } = Astro.props;
+---
+
+<BaseLayout
+  title={categoryName}
+  description={`Dispatches, evaluations, and essays filed under ${categoryName} in the Kritrimta journal.`}
+>
+  <section class="archive-page">
+    <div class="container">
+      <header class="archive-header">
+        <span class="archive-kicker">ARCHIVE INDEX</span>
+        <h1 class="archive-title">{categoryName}</h1>
+        <p class="archive-sub">{posts.length} analytical document{posts.length !== 1 ? 's' : ''} published in this category</p>
+      </header>
+
+      <CategoryList activeSlug={currentSlug} />
+
+      {posts.length > 0 ? (
+        <div class="posts-grid">
+          {posts.map(post => (
+            <PostCard
+              title={post.data.title}
+              description={post.data.description}
+              pubDate={post.data.pubDate}
+              heroImage={post.data.heroImage}
+              category={post.data.category}
+              slug={post.id}
+              body={post.body || ''}
+              author={post.data.author}
+              layout="standard"
+            />
+          ))}
+        </div>
+      ) : (
+        <div class="empty-state">
+          <p>No essays are currently filed under this index. Check back with upcoming issues.</p>
+        </div>
+      )}
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .archive-page {
+    padding: 3.5rem 0 5rem;
+  }
+
+  .archive-header {
+    text-align: center;
+    max-width: 680px;
+    margin: 0 auto 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .archive-kicker {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--color-accent);
+    letter-spacing: 0.12em;
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+
+  .archive-title {
+    font-size: clamp(2.2rem, 4.5vw, 3.4rem);
+    margin-bottom: 0.75rem;
+    letter-spacing: -0.02em;
+  }
+
+  .archive-sub {
+    color: var(--color-text-muted);
+    font-size: 1rem;
+    font-family: var(--font-serif);
+    font-style: italic;
+  }
+
+  .posts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.75rem;
+    margin-top: 1.5rem;
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 4rem 2rem;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 0.75rem;
+    color: var(--color-text-muted);
+    font-size: 1.1rem;
+    font-family: var(--font-serif);
+    margin-top: 2rem;
+  }
+</style>

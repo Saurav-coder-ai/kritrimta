@@ -1,0 +1,234 @@
+---
+import { formatDate, getCategorySlug } from '@/utils/helpers';
+import { getReadingTime, formatReadingTime } from '@/utils/reading-time';
+
+interface Props {
+  title: string;
+  description: string;
+  pubDate: Date;
+  heroImage?: string;
+  category: string;
+  slug: string;
+  body?: string;
+  author?: string;
+  layout?: 'standard' | 'horizontal' | 'compact';
+}
+
+const { 
+  title, 
+  description, 
+  pubDate, 
+  heroImage, 
+  category, 
+  slug, 
+  body = '', 
+  author = 'Saurav Karki',
+  layout = 'standard' 
+} = Astro.props;
+
+const readingTime = getReadingTime(body);
+const categorySlug = getCategorySlug(category);
+---
+
+<article class={`editorial-card card-${layout}`}>
+  <div class="card-image-wrap">
+    <a href={`/blog/${slug}`} class="card-image-link" aria-label={title}>
+      {heroImage ? (
+        <img src={heroImage} alt={title} loading="lazy" class="card-image" />
+      ) : (
+        <div class="card-placeholder"></div>
+      )}
+    </a>
+    <a href={`/category/${categorySlug}`} class="card-category-tag">
+      {category}
+    </a>
+  </div>
+  
+  <div class="card-body">
+    <div class="card-meta-top">
+      <time datetime={pubDate.toISOString()} class="card-date">{formatDate(pubDate)}</time>
+      <span class="meta-dot">&bull;</span>
+      <span class="card-read-time">{formatReadingTime(readingTime)}</span>
+    </div>
+    
+    <h3 class="card-title">
+      <a href={`/blog/${slug}`}>{title}</a>
+    </h3>
+    
+    <p class="card-desc">{description}</p>
+    
+    <div class="card-footer">
+      <span class="card-author">By {author}</span>
+      <a href={`/blog/${slug}`} class="card-arrow" aria-label={`Read ${title}`}>
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+          <polyline points="12 5 19 12 12 19"></polyline>
+        </svg>
+      </a>
+    </div>
+  </div>
+</article>
+
+<style>
+  .editorial-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 0.75rem;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  }
+
+  .editorial-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 24px -6px var(--color-shadow);
+    border-color: var(--color-accent);
+  }
+
+  .card-image-wrap {
+    position: relative;
+    aspect-ratio: 16/9;
+    overflow: hidden;
+    background: #0f131a;
+  }
+
+  .card-image-link {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .card-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.35s ease;
+  }
+
+  .editorial-card:hover .card-image {
+    transform: scale(1.04);
+  }
+
+  .card-placeholder {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, var(--color-surface-subtle), var(--color-border));
+  }
+
+  .card-category-tag {
+    position: absolute;
+    top: 0.75rem;
+    left: 0.75rem;
+    background: rgba(15, 19, 26, 0.88);
+    color: #ffffff;
+    backdrop-filter: blur(6px);
+    padding: 0.2rem 0.65rem;
+    border-radius: 0.35rem;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    transition: background 0.2s;
+  }
+
+  .card-category-tag:hover {
+    background: var(--color-accent);
+    color: #ffffff;
+  }
+
+  .card-body {
+    padding: 1.4rem;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+  }
+
+  .card-meta-top {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    margin-bottom: 0.6rem;
+  }
+
+  .meta-dot {
+    opacity: 0.4;
+  }
+
+  .card-title {
+    font-family: var(--font-serif);
+    font-size: 1.35rem;
+    font-weight: 600;
+    line-height: 1.25;
+    margin-bottom: 0.65rem;
+  }
+
+  .card-title a {
+    color: var(--color-text);
+    text-decoration: none;
+    transition: color 0.15s ease;
+  }
+
+  .card-title a:hover {
+    color: var(--color-accent);
+  }
+
+  .card-desc {
+    color: var(--color-text-muted);
+    font-size: 0.92rem;
+    line-height: 1.55;
+    margin-bottom: 1.25rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    flex-grow: 1;
+  }
+
+  .card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 0.85rem;
+    border-top: 1px solid var(--color-border-subtle);
+    font-size: 0.8rem;
+    margin-top: auto;
+  }
+
+  .card-author {
+    font-family: var(--font-sans);
+    font-weight: 500;
+    color: var(--color-text-muted);
+  }
+
+  .card-arrow {
+    color: var(--color-accent);
+    display: flex;
+    align-items: center;
+    transition: transform 0.2s ease;
+  }
+
+  .editorial-card:hover .card-arrow {
+    transform: translateX(3px);
+  }
+
+  /* Horizontal Variant */
+  @media (min-width: 768px) {
+    .card-horizontal {
+      display: grid;
+      grid-template-columns: 1fr 1.35fr;
+      height: auto;
+    }
+
+    .card-horizontal .card-image-wrap {
+      aspect-ratio: auto;
+      height: 100%;
+    }
+  }
+</style>

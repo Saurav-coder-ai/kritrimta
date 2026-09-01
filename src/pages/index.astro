@@ -1,0 +1,247 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import FeaturedPost from '@/components/FeaturedPost.astro';
+import PostCard from '@/components/PostCard.astro';
+import CategoryList from '@/components/CategoryList.astro';
+import Newsletter from '@/components/Newsletter.astro';
+import { getCollection } from 'astro:content';
+
+const allPosts = await getCollection('blog');
+const sortedPosts = allPosts.sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+
+// Lead story: first post with featured=true, or most recent
+const featuredPost = sortedPosts.find(p => p.data.featured) || sortedPosts[0];
+const remainingPosts = sortedPosts.filter(p => p.id !== featuredPost?.id);
+
+// Spotlight story & standard stories for varied layout rhythm
+const spotlightPost = remainingPosts[0];
+const secondaryPosts = remainingPosts.slice(1);
+---
+
+<BaseLayout
+  title="Kritrimta"
+  description="An independent journal of artificial intelligence, high-performance computing, and hardware engineering. Edited by Saurav Karki."
+>
+  <!-- Masthead / Editorial Hero Section -->
+  <section class="masthead-section">
+    <div class="container">
+      <div class="masthead-meta">
+        <span class="masthead-tag">KRITRIMTA JOURNAL // EST. 2026</span>
+        <span class="masthead-divider">&bull;</span>
+        <span class="masthead-editor">EDITED BY SAURAV KARKI</span>
+        <span class="masthead-divider">&bull;</span>
+        <span class="masthead-status">AUTONOMOUS COMPUTING & SILICON</span>
+      </div>
+
+      <div class="masthead-content">
+        <h1 class="masthead-title">
+          Analysis, Benchmarks &amp; <span class="accent-gradient">First Principles</span> in Artificial Intelligence.
+        </h1>
+        <p class="masthead-mission">
+          An independent publication examining the engineering realities, model economics, and silicon architectures behind modern computing systems. Uncompromised by corporate PR.
+        </p>
+      </div>
+
+      <div class="masthead-rule"></div>
+    </div>
+  </section>
+
+  <!-- Lead Story (Featured Article) -->
+  {featuredPost && (
+    <section class="lead-story-section">
+      <div class="container">
+        <div class="section-kicker-bar">
+          <span class="kicker-label">LEAD INVESTIGATION</span>
+          <span class="kicker-line"></span>
+        </div>
+        <FeaturedPost
+          title={featuredPost.data.title}
+          description={featuredPost.data.description}
+          pubDate={featuredPost.data.pubDate}
+          heroImage={featuredPost.data.heroImage}
+          category={featuredPost.data.category}
+          author={featuredPost.data.author}
+          slug={featuredPost.id}
+          body={featuredPost.body || ''}
+        />
+      </div>
+    </section>
+  )}
+
+  <!-- Topic Navigator -->
+  <section class="topic-index-section">
+    <div class="container">
+      <div class="section-kicker-bar">
+        <span class="kicker-label">JOURNAL SECTIONS</span>
+        <span class="kicker-line"></span>
+      </div>
+      <CategoryList />
+    </div>
+  </section>
+
+  <!-- Asymmetric Editorial Grid for Recent Coverage -->
+  {remainingPosts.length > 0 && (
+    <section class="dispatches-section">
+      <div class="container">
+        <div class="section-kicker-bar">
+          <span class="kicker-label">RECENT DISPATCHES & BENCHMARKS</span>
+          <span class="kicker-line"></span>
+        </div>
+
+        <div class="asymmetric-feed">
+          <!-- Main spotlight card (wider / prominent) -->
+          {spotlightPost && (
+            <div class="spotlight-block">
+              <PostCard
+                title={spotlightPost.data.title}
+                description={spotlightPost.data.description}
+                pubDate={spotlightPost.data.pubDate}
+                heroImage={spotlightPost.data.heroImage}
+                category={spotlightPost.data.category}
+                slug={spotlightPost.id}
+                body={spotlightPost.body || ''}
+                author={spotlightPost.data.author}
+                layout="horizontal"
+              />
+            </div>
+          )}
+
+          <!-- Secondary stories grid -->
+          {secondaryPosts.length > 0 && (
+            <div class="secondary-grid">
+              {secondaryPosts.map(post => (
+                <PostCard
+                  title={post.data.title}
+                  description={post.data.description}
+                  pubDate={post.data.pubDate}
+                  heroImage={post.data.heroImage}
+                  category={post.data.category}
+                  slug={post.id}
+                  body={post.body || ''}
+                  author={post.data.author}
+                  layout="standard"
+                />
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- Editorial Field Note & Newsletter Section -->
+  <Newsletter />
+</BaseLayout>
+
+<style>
+  .masthead-section {
+    padding: 3.5rem 0 1.5rem;
+  }
+
+  .masthead-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--color-text-faint);
+    letter-spacing: 0.08em;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .masthead-tag {
+    color: var(--color-accent);
+    font-weight: 600;
+  }
+
+  .masthead-divider {
+    opacity: 0.4;
+  }
+
+  .masthead-content {
+    max-width: 960px;
+    margin-bottom: 2.5rem;
+  }
+
+  .masthead-title {
+    font-family: var(--font-serif);
+    font-size: clamp(2.3rem, 5vw, 3.8rem);
+    line-height: 1.1;
+    font-weight: 600;
+    letter-spacing: -0.025em;
+    margin-bottom: 1.25rem;
+  }
+
+  .masthead-mission {
+    font-size: clamp(1.05rem, 2vw, 1.25rem);
+    color: var(--color-text-muted);
+    line-height: 1.6;
+    max-width: 740px;
+    font-family: var(--font-sans);
+  }
+
+  .masthead-rule {
+    height: 1px;
+    background: var(--color-border);
+    width: 100%;
+  }
+
+  .section-kicker-bar {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.75rem;
+  }
+
+  .kicker-label {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    color: var(--color-accent);
+    white-space: nowrap;
+  }
+
+  .kicker-line {
+    flex-grow: 1;
+    height: 1px;
+    background: var(--color-border);
+  }
+
+  .lead-story-section {
+    padding: 2rem 0;
+  }
+
+  .topic-index-section {
+    padding: 1.5rem 0 2rem;
+  }
+
+  .dispatches-section {
+    padding: 2rem 0 3.5rem;
+  }
+
+  .asymmetric-feed {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .spotlight-block {
+    width: 100%;
+  }
+
+  .secondary-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.75rem;
+  }
+
+  @media (min-width: 768px) {
+    .secondary-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+</style>

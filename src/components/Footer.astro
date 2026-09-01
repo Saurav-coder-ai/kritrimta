@@ -1,0 +1,232 @@
+---
+const currentYear = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="footer-logo">
+          <svg class="logo-mark" viewBox="0 0 32 32" width="24" height="24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="32" height="32" rx="7" fill="#121722"/>
+            <path d="M9 8v16M9 16l9-8M11 14l9 10" stroke="#e0532b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span class="brand-title">KRITRIMTA</span>
+        </div>
+        <p class="brand-desc">
+          An independent journal chronicling artificial intelligence, sovereign computing systems, and hardware engineering. Edited by Saurav Karki.
+        </p>
+        <div class="author-attribution">
+          <span class="mono-label">CHIEF WRITER & EDITOR</span>
+          <span class="author-title">Saurav Karki</span>
+        </div>
+      </div>
+      
+      <div class="footer-nav-col">
+        <h4>Sections</h4>
+        <ul>
+          <li><a href="/category/ai-tools">AI Tools & Models</a></li>
+          <li><a href="/category/gadget-reviews">Hardware & Silicon</a></li>
+          <li><a href="/category/tech-news">Industry Dispatches</a></li>
+          <li><a href="/category/tutorials">Technical Guides</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-nav-col">
+        <h4>Journal</h4>
+        <ul>
+          <li><a href="/about">About the Publication</a></li>
+          <li><a href="/about#editorial-policy">Editorial Independence</a></li>
+          <li><a href="/contact">Editorial Desk & Tips</a></li>
+          <li><a href="/admin">CMS Studio Login</a></li>
+        </ul>
+      </div>
+      
+      <div class="footer-dispatch-col">
+        <h4>The Kritrimta Dispatch</h4>
+        <p class="dispatch-blurb">Fortnightly essays on machine intelligence and benchmark analysis delivered directly.</p>
+        <form class="footer-form" onsubmit="event.preventDefault(); alert('Subscribed to The Kritrimta Dispatch.');">
+          <input type="email" placeholder="Your email address" required class="form-input" />
+          <button type="submit" class="btn btn-primary" aria-label="Subscribe">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </button>
+        </form>
+      </div>
+    </div>
+    
+    <div class="bottom-bar">
+      <p class="copyright">
+        &copy; {currentYear} Kritrimta. Published by Saurav Karki. All rights reserved.
+      </p>
+      <div class="legal-links">
+        <a href="/robots.txt">robots.txt</a>
+        <span class="sep">&middot;</span>
+        <a href="/sitemap-index.xml">sitemap.xml</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    background-color: var(--color-surface);
+    border-top: 1px solid var(--color-border);
+    padding: 4.5rem 0 2.5rem;
+    margin-top: auto;
+    transition: background-color 0.25s ease, border-color 0.25s ease;
+  }
+
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+    margin-bottom: 3.5rem;
+  }
+
+  @media (min-width: 640px) {
+    .footer-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .footer-grid {
+      grid-template-columns: 1.4fr 0.8fr 0.8fr 1.2fr;
+      gap: 2.5rem;
+    }
+  }
+
+  .footer-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    margin-bottom: 1rem;
+  }
+
+  .brand-title {
+    font-family: var(--font-serif);
+    font-size: 1.25rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: var(--color-text);
+  }
+
+  .brand-desc {
+    color: var(--color-text-muted);
+    font-size: 0.925rem;
+    line-height: 1.6;
+    margin-bottom: 1.25rem;
+  }
+
+  .author-attribution {
+    display: flex;
+    flex-direction: column;
+    padding-top: 0.85rem;
+    border-top: 1px solid var(--color-border-subtle);
+  }
+
+  .mono-label {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    color: var(--color-accent);
+    letter-spacing: 0.1em;
+  }
+
+  .author-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--color-text);
+  }
+
+  .footer-nav-col h4,
+  .footer-dispatch-col h4 {
+    font-family: var(--font-serif);
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 1.15rem;
+    color: var(--color-text);
+  }
+
+  .footer-nav-col ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .footer-nav-col a {
+    color: var(--color-text-muted);
+    font-size: 0.9rem;
+    text-decoration: none;
+    transition: color 0.15s ease;
+  }
+
+  .footer-nav-col a:hover {
+    color: var(--color-accent);
+  }
+
+  .dispatch-blurb {
+    font-size: 0.88rem;
+    color: var(--color-text-muted);
+    line-height: 1.55;
+    margin-bottom: 1rem;
+  }
+
+  .footer-form {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .footer-form .form-input {
+    font-size: 0.88rem;
+    padding: 0.6rem 0.85rem;
+  }
+
+  .footer-form .btn {
+    padding: 0.6rem 0.9rem;
+    flex-shrink: 0;
+  }
+
+  .bottom-bar {
+    border-top: 1px solid var(--color-border);
+    padding-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    color: var(--color-text-muted);
+    font-size: 0.85rem;
+  }
+
+  @media (min-width: 640px) {
+    .bottom-bar {
+      flex-direction: row;
+      justify-content: space-between;
+    }
+  }
+
+  .legal-links {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .legal-links a {
+    color: var(--color-text-muted);
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+  }
+
+  .legal-links a:hover {
+    color: var(--color-accent);
+  }
+
+  .sep {
+    color: var(--color-border);
+  }
+</style>

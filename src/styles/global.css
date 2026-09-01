@@ -1,0 +1,347 @@
+:root {
+  /* Light Theme variables — Warm Editorial Paper */
+  --color-bg: #faf8f5;
+  --color-surface: #ffffff;
+  --color-surface-subtle: #f3efe8;
+  --color-text: #111620;
+  --color-text-muted: #5e6b7c;
+  --color-text-faint: #8d9aa9;
+  --color-accent: #d94e28;
+  --color-accent-hover: #b83e1c;
+  --color-accent-subtle: rgba(217, 78, 40, 0.08);
+  --color-border: #e6dfd3;
+  --color-border-subtle: #efe9df;
+  --color-shadow: rgba(17, 22, 32, 0.06);
+  --color-shadow-lg: rgba(17, 22, 32, 0.12);
+  --color-card-dark: #121722;
+  
+  --font-serif: 'Newsreader', Georgia, Cambria, 'Times New Roman', Times, serif;
+  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', 'SFMono-Regular', Menlo, Monaco, Consolas, monospace;
+}
+
+[data-theme='dark'] {
+  /* Dark Theme variables — Obsidian Technical Ink */
+  --color-bg: #0b0e14;
+  --color-surface: #121720;
+  --color-surface-subtle: #171e2a;
+  --color-text: #f5f2ec;
+  --color-text-muted: #8b99ad;
+  --color-text-faint: #566477;
+  --color-accent: #e0532b;
+  --color-accent-hover: #f06943;
+  --color-accent-subtle: rgba(224, 83, 43, 0.12);
+  --color-border: #202938;
+  --color-border-subtle: #18202d;
+  --color-shadow: rgba(0, 0, 0, 0.35);
+  --color-shadow-lg: rgba(0, 0, 0, 0.55);
+  --color-card-dark: #161d28;
+}
+
+/* Reset */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+body, h1, h2, h3, h4, h5, h6, p, figure, blockquote, dl, dd {
+  margin: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  line-height: 1.6;
+  transition: background-color 0.25s ease, color 0.25s ease;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  color: var(--color-text);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+a:hover {
+  color: var(--color-accent);
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+input, button, textarea, select {
+  font: inherit;
+}
+
+/* Container */
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.25rem;
+}
+
+@media (min-width: 768px) {
+  .container { padding: 0 2rem; }
+}
+
+@media (min-width: 1100px) {
+  .container { padding: 0 2.5rem; }
+}
+
+/* Editorial Typography */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  line-height: 1.18;
+  color: var(--color-text);
+  letter-spacing: -0.015em;
+}
+
+h1 { font-size: clamp(2.2rem, 4.8vw, 3.4rem); }
+h2 { font-size: clamp(1.65rem, 3.2vw, 2.4rem); }
+h3 { font-size: clamp(1.3rem, 2.2vw, 1.75rem); }
+h4 { font-size: clamp(1.1rem, 1.6vw, 1.35rem); }
+
+.mono-tag {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* Utilities */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.text-center { text-align: center; }
+.text-muted { color: var(--color-text-muted); }
+
+/* Editorial Accent Utilities */
+.accent-gradient {
+  color: var(--color-accent);
+  background: linear-gradient(135deg, var(--color-accent) 0%, #f59e0b 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1.35rem;
+  border-radius: 0.5rem;
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+  text-decoration: none;
+}
+
+.btn-primary {
+  background-color: var(--color-accent);
+  color: #ffffff !important;
+  box-shadow: 0 2px 8px rgba(217, 78, 40, 0.25);
+}
+
+.btn-primary:hover {
+  background-color: var(--color-accent-hover);
+  color: #ffffff !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(217, 78, 40, 0.35);
+  text-decoration: none;
+}
+
+.btn-outline {
+  background-color: transparent;
+  color: var(--color-text);
+  border-color: var(--color-border);
+}
+
+.btn-outline:hover {
+  background-color: var(--color-surface-subtle);
+  border-color: var(--color-text);
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+/* Form Inputs */
+.form-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: 0.5rem;
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px var(--color-accent-subtle);
+}
+
+/* Editorial Prose for Blog Posts */
+.prose {
+  font-family: var(--font-sans);
+  line-height: 1.8;
+  font-size: 1.1rem;
+  color: var(--color-text);
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.prose p {
+  margin-bottom: 1.65em;
+  color: var(--color-text);
+}
+
+.prose h2 {
+  font-family: var(--font-serif);
+  font-size: 1.9rem;
+  font-weight: 600;
+  margin-top: 2.5em;
+  margin-bottom: 0.75em;
+  letter-spacing: -0.015em;
+  padding-bottom: 0.35em;
+  border-bottom: 1px solid var(--color-border-subtle);
+}
+
+.prose h3 {
+  font-family: var(--font-serif);
+  font-size: 1.45rem;
+  font-weight: 600;
+  margin-top: 2em;
+  margin-bottom: 0.6em;
+}
+
+.prose a {
+  color: var(--color-accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.prose a:hover {
+  color: var(--color-accent-hover);
+}
+
+.prose ul, .prose ol {
+  padding-left: 1.5rem;
+  margin-bottom: 1.75em;
+}
+
+.prose li {
+  margin-bottom: 0.5em;
+  line-height: 1.7;
+}
+
+.prose blockquote {
+  border-left: 3px solid var(--color-accent);
+  padding: 0.75rem 0 0.75rem 1.5rem;
+  margin: 2em 0;
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  font-style: italic;
+  line-height: 1.6;
+  color: var(--color-text);
+}
+
+.prose code {
+  font-family: var(--font-mono);
+  background-color: var(--color-surface-subtle);
+  padding: 0.15em 0.4em;
+  border-radius: 0.3rem;
+  font-size: 0.88em;
+  border: 1px solid var(--color-border);
+}
+
+.prose pre {
+  background-color: #0d1117;
+  color: #f0f6fc;
+  padding: 1.25rem 1.5rem;
+  border-radius: 0.75rem;
+  overflow-x: auto;
+  margin: 2em 0;
+  border: 1px solid #21262d;
+  font-size: 0.92em;
+}
+
+.prose pre code {
+  background-color: transparent;
+  padding: 0;
+  border: none;
+  color: inherit;
+}
+
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 2em 0;
+  font-size: 0.95rem;
+}
+
+.prose th, .prose td {
+  border: 1px solid var(--color-border);
+  padding: 0.75rem 1rem;
+  text-align: left;
+}
+
+.prose th {
+  background-color: var(--color-surface-subtle);
+  font-weight: 600;
+  font-family: var(--font-sans);
+}
+
+/* Skip to content accessibility */
+.skip-link,
+.skip-to-content {
+  position: fixed;
+  top: -9999px;
+  left: 1.5rem;
+  background: var(--color-accent);
+  color: #ffffff !important;
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  font-size: 0.875rem;
+  border-radius: 0 0 0.5rem 0.5rem;
+  z-index: 99999;
+  text-decoration: none;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+  transition: top 0.2s ease;
+}
+
+.skip-link:focus,
+.skip-to-content:focus {
+  top: 0;
+  outline: 2px solid #ffffff;
+  outline-offset: 2px;
+}

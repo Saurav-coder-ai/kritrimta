@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <radialGradient id="glow-green" cx="70%" cy="40%" r="55%">
+      <stop offset="0%" stop-color="#10b981" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#0e131b" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="pcb-grid" width="30" height="30" patternUnits="userSpaceOnUse">
+      <path d="M 30 0 L 0 0 0 30" fill="none" stroke="#1d2633" stroke-width="0.75"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="630" fill="#0d1117"/>
+  <rect width="1200" height="630" fill="url(#pcb-grid)"/>
+  <rect width="1200" height="630" fill="url(#glow-green)"/>
+
+  <!-- Editorial Stamp -->
+  <rect x="70" y="60" width="175" height="28" rx="4" fill="#161d27" stroke="#253243" stroke-width="1"/>
+  <text x="85" y="78" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="600" fill="#10b981" letter-spacing="2">KRITRIMTA · LABS</text>
+  <text x="1130" y="80" font-family="'JetBrains Mono', monospace" font-size="12" fill="#4d5b6e" text-anchor="end">BENCHMARK // HARDWARE REPORT</text>
+
+  <!-- Silicon Wafer / Die Diagram -->
+  <g transform="translate(620, 140)">
+    <!-- Wafer outline -->
+    <rect x="0" y="0" width="460" height="340" rx="12" fill="#131922" stroke="#273547" stroke-width="2"/>
+    <!-- SM array blocks -->
+    <g fill="#1a2330" stroke="#33445c" stroke-width="1">
+      <rect x="25" y="25" width="95" height="65" rx="4"/>
+      <rect x="130" y="25" width="95" height="65" rx="4"/>
+      <rect x="235" y="25" width="95" height="65" rx="4"/>
+      <rect x="340" y="25" width="95" height="65" rx="4"/>
+
+      <rect x="25" y="100" width="95" height="65" rx="4"/>
+      <rect x="130" y="100" width="95" height="65" rx="4" fill="#10b981" fill-opacity="0.2" stroke="#10b981"/>
+      <rect x="235" y="100" width="95" height="65" rx="4" fill="#e0532b" fill-opacity="0.2" stroke="#e0532b"/>
+      <rect x="340" y="100" width="95" height="65" rx="4"/>
+
+      <rect x="25" y="175" width="198" height="65" rx="4"/>
+      <rect x="235" y="175" width="200" height="65" rx="4"/>
+
+      <!-- Memory Bus -->
+      <rect x="25" y="255" width="410" height="60" rx="4" fill="#17202c"/>
+    </g>
+    <!-- Circuit lines -->
+    <path d="M 177 165 L 177 255 M 282 165 L 282 255 M 72 90 L 72 255 M 387 90 L 387 255" stroke="#10b981" stroke-width="1.5" stroke-dasharray="2 3"/>
+    <text x="230" y="292" font-family="'JetBrains Mono', monospace" font-size="11" fill="#71849d" text-anchor="middle">32GB GDDR7 · 512-BIT BUS INTERFACE</text>
+  </g>
+
+  <!-- Headline typography -->
+  <text x="70" y="260" font-family="Georgia, serif" font-size="52" font-weight="700" fill="#f5f0eb" letter-spacing="-1">Silicon at</text>
+  <text x="70" y="325" font-family="Georgia, serif" font-size="52" font-weight="700" fill="#10b981" letter-spacing="-1">the Extremes</text>
+
+  <text x="70" y="390" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="20" fill="#8f9eb2">
+    21,760 Blackwell cores, thermal thresholds, and the 4K frontier.
+  </text>
+
+  <!-- Metadata -->
+  <line x1="70" y1="520" x2="1130" y2="520" stroke="#202937" stroke-width="1"/>
+  <text x="70" y="555" font-family="'JetBrains Mono', monospace" font-size="13" fill="#6c7c91">BY SAURAV KARKI</text>
+  <text x="320" y="555" font-family="'JetBrains Mono', monospace" font-size="13" fill="#6c7c91">CATEGORY: GADGET REVIEWS</text>
+  <text x="640" y="555" font-family="'JetBrains Mono', monospace" font-size="13" fill="#6c7c91">TEST BENCH // BLACKWELL</text>
+  <text x="1130" y="555" font-family="'JetBrains Mono', monospace" font-size="13" fill="#10b981" text-anchor="end">KRITRIMTA.COM</text>
+</svg>

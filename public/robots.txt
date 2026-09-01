@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://kritrimta.netlify.app/sitemap-index.xml

@@ -1,0 +1,98 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PostCard from '@/components/PostCard.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const allPosts = await getCollection('blog');
+  const allTags = [...new Set(allPosts.flatMap(post => post.data.tags))];
+
+  return allTags.map(tag => {
+    const tagSlug = tag.toLowerCase().replace(/\s+/g, '-');
+    const filteredPosts = allPosts
+      .filter(post => post.data.tags.includes(tag))
+      .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+    return {
+      params: { tag: tagSlug },
+      props: { posts: filteredPosts, tagName: tag },
+    };
+  });
+}
+
+const { posts, tagName } = Astro.props;
+---
+
+<BaseLayout
+  title={`#${tagName}`}
+  description={`All technical essays and benchmarks indexed under #${tagName} in Kritrimta.`}
+>
+  <section class="archive-page">
+    <div class="container">
+      <header class="archive-header">
+        <span class="archive-kicker">TAG INDEX</span>
+        <h1 class="archive-title">#{tagName}</h1>
+        <p class="archive-sub">{posts.length} indexed document{posts.length !== 1 ? 's' : ''}</p>
+      </header>
+
+      <div class="posts-grid">
+        {posts.map(post => (
+          <PostCard
+            title={post.data.title}
+            description={post.data.description}
+            pubDate={post.data.pubDate}
+            heroImage={post.data.heroImage}
+            category={post.data.category}
+            slug={post.id}
+            body={post.body || ''}
+            author={post.data.author}
+            layout="standard"
+          />
+        ))}
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .archive-page {
+    padding: 3.5rem 0 5rem;
+  }
+
+  .archive-header {
+    text-align: center;
+    max-width: 680px;
+    margin: 0 auto 2.5rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .archive-kicker {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--color-accent);
+    letter-spacing: 0.12em;
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+
+  .archive-title {
+    font-size: clamp(2.2rem, 4.5vw, 3.4rem);
+    margin-bottom: 0.75rem;
+    letter-spacing: -0.02em;
+    color: var(--color-accent);
+  }
+
+  .archive-sub {
+    color: var(--color-text-muted);
+    font-size: 1rem;
+    font-family: var(--font-serif);
+    font-style: italic;
+  }
+
+  .posts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.75rem;
+  }
+</style>
