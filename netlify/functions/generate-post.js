@@ -147,87 +147,132 @@ export const handler = async (event) => {
     };
   }
 
-  // ── Call Gemini API with Fallback Models ──
+  // ── Call Gemini API with Dynamic Model Discovery ──
   const prompt = buildPrompt(topic, keywords);
-  const modelsToTry = [
-    "gemini-1.5-flash",
-    "gemini-2.0-flash",
-    "gemini-1.5-pro",
-    "gemini-2.0-flash-exp",
-  ];
-
-  let geminiRes = null;
-  let lastErrorDetails = "";
 
   try {
-    for (const model of modelsToTry) {
+    // 1. Discover available models for this API key
+    let candidateModels = [
+      "gemini-1.5-flash",
+      "gemini-1.5-flash-latest",
+      "gemini-2.0-flash",
+      "gemini-2.0-flash-001",
+      "gemini-1.5-pro",
+      "gemini-1.5-pro-latest",
+    ];
+
     try {
-      const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey.trim()}`;
-      const res = await fetch(url, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          contents: [{ parts: [{ text: prompt }] }],
-          generationConfig: {
-            temperature: 0.7,
-            maxOutputTokens: 8192,
-            responseMimeType: "application/json",
-            responseSchema: {
-              type: "object",
-              properties: {
-                title: { type: "string" },
-                description: { type: "string" },
-                body: { type: "string" },
-                tags: { type: "array", items: { type: "string" } },
-                category: { type: "string" },
-                slug: { type: "string" },
-              },
-              required: [
-                "title",
-                "description",
-                "body",
-                "tags",
-                "category",
-                "slug",
-              ],
-            },
-          },
-        }),
-      });
+      const listRes = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey.trim()}`
+      );
+      if (listRes.ok) {
+        const listData = await listRes.json();
+        if (Array.isArray(listData.models)) {
+          const available = listData.models
+            .filter((m) =>
+              m.supportedGenerationMethods?.includes("generateContent")
+            )
+            .map((m) => m.name.replace(/^models\//, ""));
 
-      if (res.ok) {
-        geminiRes = res;
-        break;
+          if (available.length > 0) {
+            // Sort to prioritize flash models then pro models
+            available.sort((a, b) => {
+              const score = (name) => {
+                if (name.includes("2.0-flash")) return 1;
+                if (name.includes("1.5-flash")) return 2;
+                if (name.includes("2.5-flash")) return 3;
+                if (name.includes("flash")) return 4;
+                if (name.includes("pro")) return 5;
+                return 10;
+              };
+              return score(a) - score(b);
+            });
+            candidateModels = available;
+            console.log("[Gemini] Discovered models:", candidateModels.slice(0, 5));
+          }
+        }
+      } else {
+        const listErr = await listRes.text();
+        console.warn("[Gemini] ListModels returned", listRes.status, listErr);
       }
-
-      const errText = await res.text();
-      lastErrorDetails = `Model ${model} returned ${res.status}: ${errText}`;
-      console.warn(`[Gemini] ${lastErrorDetails}`);
-
-      if (res.status === 429) {
-        return {
-          statusCode: 429,
-          headers,
-          body: JSON.stringify({
-            error: "Gemini API quota exceeded. Please wait a minute and try again.",
-          }),
-        };
-      }
-    } catch (fetchErr) {
-      lastErrorDetails = `Fetch error with ${model}: ${fetchErr.message}`;
-      console.error(`[Gemini] ${lastErrorDetails}`);
+    } catch (e) {
+      console.warn("[Gemini] ListModels request error:", e.message);
     }
-  }
 
-  if (!geminiRes) {
-    return {
-      statusCode: 502,
-      headers,
-      body: JSON.stringify({
-        error: `AI generation failed. ${lastErrorDetails.slice(0, 200)}`,
-      }),
-    };
-  }
+    let geminiRes = null;
+    let lastErrorDetails = "";
+
+    for (const model of candidateModels) {
+      try {
+        const modelPath = model.startsWith("models/") ? model : `models/${model}`;
+        const url = `https://generativelanguage.googleapis.com/v1beta/${modelPath}:generateContent?key=${apiKey.trim()}`;
+        
+        const res = await fetch(url, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            contents: [{ parts: [{ text: prompt }] }],
+            generationConfig: {
+              temperature: 0.7,
+              maxOutputTokens: 8192,
+              responseMimeType: "application/json",
+              responseSchema: {
+                type: "object",
+                properties: {
+                  title: { type: "string" },
+                  description: { type: "string" },
+                  body: { type: "string" },
+                  tags: { type: "array", items: { type: "string" } },
+                  category: { type: "string" },
+                  slug: { type: "string" },
+                },
+                required: [
+                  "title",
+                  "description",
+                  "body",
+                  "tags",
+                  "category",
+                  "slug",
+                ],
+              },
+            },
+          }),
+        });
+
+        if (res.ok) {
+          geminiRes = res;
+          console.log(`[Gemini] Successfully generated with model: ${model}`);
+          break;
+        }
+
+        const errText = await res.text();
+        lastErrorDetails = `Model ${model} returned ${res.status}: ${errText}`;
+        console.warn(`[Gemini] ${lastErrorDetails}`);
+
+        if (res.status === 429) {
+          return {
+            statusCode: 429,
+            headers,
+            body: JSON.stringify({
+              error: "Gemini API quota exceeded. Please wait a minute and try again.",
+            }),
+          };
+        }
+      } catch (fetchErr) {
+        lastErrorDetails = `Fetch error with ${model}: ${fetchErr.message}`;
+        console.error(`[Gemini] ${lastErrorDetails}`);
+      }
+    }
+
+    if (!geminiRes) {
+      return {
+        statusCode: 502,
+        headers,
+        body: JSON.stringify({
+          error: `AI generation failed. ${lastErrorDetails.slice(0, 200)}`,
+        }),
+      };
+    }
 
     const data = await geminiRes.json();
 
