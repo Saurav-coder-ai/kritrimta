@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://kritrimta.netlify.app/sitemap-index.xml
+Sitemap: https://kushumpoudel.com.np/sitemap-index.xml

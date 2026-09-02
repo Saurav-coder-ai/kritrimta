@@ -1,8 +1,8 @@
-﻿---
+---
 title: "Gemini 2.5 Pro vs GPT-4o: What the Benchmarks Actually Tell You"
 description: "Gemini 2.5 Pro tops MMLU and coding leaderboards — but do frontier AI benchmarks predict real-world performance? A first-principles breakdown."
 pubDate: 2026-09-02
-heroImage: "/images/blog/gpt5-launch.svg"
+heroImage: "/images/blog/gemini-pro-vs-gpt4o.svg"
 author: "Saurav Karki"
 category: "AI Tools"
 tags: ["AI", "LLM", "benchmark", "Gemini", "GPT-4o", "frontier models"]

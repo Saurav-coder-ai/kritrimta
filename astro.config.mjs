@@ -3,7 +3,7 @@ import sitemap from '@astrojs/sitemap';
 import mdx from '@astrojs/mdx';
 
 export default defineConfig({
-  site: 'https://kritrimta.netlify.app',
+  site: 'https://kushumpoudel.com.np',
   output: 'static',
   integrations: [sitemap(), mdx()],
   markdown: {
