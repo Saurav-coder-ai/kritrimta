@@ -26,7 +26,7 @@
       /* ── Floating Action Button ── */
       #ai-gen-fab {
         position: fixed;
-        bottom: 28px;
+        bottom: 84px;
         right: 28px;
         z-index: 9990;
         display: flex;
@@ -752,13 +752,42 @@
     showLoadingState(topic);
 
     try {
-      const response = await fetch(API_ENDPOINT, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ topic, keywords }),
-      });
+      const endpoints = ["/.netlify/functions/generate-post", "/api/generate-post"];
+      let response = null;
+      let lastError = null;
 
-      const data = await response.json();
+      for (const url of endpoints) {
+        try {
+          const res = await fetch(url, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ topic, keywords }),
+          });
+          // If not 404, this is the working endpoint
+          if (res.status !== 404) {
+            response = res;
+            break;
+          }
+          response = res;
+        } catch (e) {
+          lastError = e;
+        }
+      }
+
+      if (!response) {
+        throw new Error(lastError ? lastError.message : "Network error — could not reach server.");
+      }
+
+      let data = {};
+      const responseText = await response.text();
+      try {
+        data = JSON.parse(responseText);
+      } catch {
+        if (response.status === 404) {
+          throw new Error("Function endpoint not found (404). Please ensure the Netlify build has finished and functions are enabled.");
+        }
+        throw new Error(`Server returned status ${response.status}: ${responseText.slice(0, 120)}`);
+      }
 
       if (!response.ok) {
         throw new Error(data.error || `Server error (${response.status})`);
