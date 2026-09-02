@@ -175,20 +175,21 @@ export const handler = async (event) => {
             .map((m) => m.name.replace(/^models\//, ""));
 
           if (available.length > 0) {
-            // Sort to prioritize flash models then pro models
+            // Sort: prioritize highest-quota flash models first (1.5-flash has 1500 RPD free quota)
             available.sort((a, b) => {
               const score = (name) => {
-                if (name.includes("2.0-flash")) return 1;
-                if (name.includes("1.5-flash")) return 2;
-                if (name.includes("2.5-flash")) return 3;
-                if (name.includes("flash")) return 4;
-                if (name.includes("pro")) return 5;
+                if (name === "gemini-1.5-flash" || name === "models/gemini-1.5-flash") return 1;
+                if (name.includes("1.5-flash-8b")) return 2;
+                if (name.includes("1.5-flash")) return 3;
+                if (name.includes("2.0-flash")) return 4;
+                if (name.includes("flash")) return 5;
+                if (name.includes("1.5-pro")) return 6;
                 return 10;
               };
               return score(a) - score(b);
             });
             candidateModels = available;
-            console.log("[Gemini] Discovered models:", candidateModels.slice(0, 5));
+            console.log("[Gemini] Prioritized models:", candidateModels.slice(0, 5));
           }
         }
       } else {
@@ -201,6 +202,7 @@ export const handler = async (event) => {
 
     let geminiRes = null;
     let lastErrorDetails = "";
+    let hit429Count = 0;
 
     for (const model of candidateModels) {
       try {
@@ -214,7 +216,7 @@ export const handler = async (event) => {
             contents: [{ parts: [{ text: prompt }] }],
             generationConfig: {
               temperature: 0.7,
-              maxOutputTokens: 8192,
+              maxOutputTokens: 6000,
               responseMimeType: "application/json",
               responseSchema: {
                 type: "object",
@@ -250,13 +252,10 @@ export const handler = async (event) => {
         console.warn(`[Gemini] ${lastErrorDetails}`);
 
         if (res.status === 429) {
-          return {
-            statusCode: 429,
-            headers,
-            body: JSON.stringify({
-              error: "Gemini API quota exceeded. Please wait a minute and try again.",
-            }),
-          };
+          hit429Count++;
+          // Do not abort immediately — try next model or wait briefly
+          await new Promise((r) => setTimeout(r, 1200));
+          continue;
         }
       } catch (fetchErr) {
         lastErrorDetails = `Fetch error with ${model}: ${fetchErr.message}`;
@@ -265,6 +264,15 @@ export const handler = async (event) => {
     }
 
     if (!geminiRes) {
+      if (hit429Count > 0 && hit429Count >= candidateModels.length) {
+        return {
+          statusCode: 429,
+          headers,
+          body: JSON.stringify({
+            error: "Gemini free tier rate limit reached. Please wait ~30 seconds and try again.",
+          }),
+        };
+      }
       return {
         statusCode: 502,
         headers,
