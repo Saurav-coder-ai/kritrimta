@@ -147,13 +147,23 @@ export const handler = async (event) => {
     };
   }
 
-  // ── Call Gemini API ──
+  // ── Call Gemini API with Fallback Models ──
   const prompt = buildPrompt(topic, keywords);
+  const modelsToTry = [
+    "gemini-1.5-flash",
+    "gemini-2.0-flash",
+    "gemini-1.5-pro",
+    "gemini-2.0-flash-exp",
+  ];
+
+  let geminiRes = null;
+  let lastErrorDetails = "";
 
   try {
-    const geminiRes = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
-      {
+    for (const model of modelsToTry) {
+    try {
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey.trim()}`;
+      const res = await fetch(url, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -183,32 +193,41 @@ export const handler = async (event) => {
             },
           },
         }),
+      });
+
+      if (res.ok) {
+        geminiRes = res;
+        break;
       }
-    );
 
-    if (!geminiRes.ok) {
-      const errText = await geminiRes.text();
-      console.error(`Gemini API error ${geminiRes.status}:`, errText);
+      const errText = await res.text();
+      lastErrorDetails = `Model ${model} returned ${res.status}: ${errText}`;
+      console.warn(`[Gemini] ${lastErrorDetails}`);
 
-      if (geminiRes.status === 429) {
+      if (res.status === 429) {
         return {
           statusCode: 429,
           headers,
           body: JSON.stringify({
-            error:
-              "Gemini API quota exceeded. Please wait a minute and try again.",
+            error: "Gemini API quota exceeded. Please wait a minute and try again.",
           }),
         };
       }
-
-      return {
-        statusCode: 502,
-        headers,
-        body: JSON.stringify({
-          error: `AI generation failed (HTTP ${geminiRes.status}). Please try again.`,
-        }),
-      };
+    } catch (fetchErr) {
+      lastErrorDetails = `Fetch error with ${model}: ${fetchErr.message}`;
+      console.error(`[Gemini] ${lastErrorDetails}`);
     }
+  }
+
+  if (!geminiRes) {
+    return {
+      statusCode: 502,
+      headers,
+      body: JSON.stringify({
+        error: `AI generation failed. ${lastErrorDetails.slice(0, 200)}`,
+      }),
+    };
+  }
 
     const data = await geminiRes.json();
 
