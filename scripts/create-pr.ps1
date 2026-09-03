@@ -18,6 +18,9 @@ if (Test-Path "public/images/blog/$Slug.jpg") {
 if (Test-Path "public/images/blog/$Slug.png") {
     git add "public/images/blog/$Slug.png"
 }
+if (Test-Path "public/images/blog/$Slug.svg") {
+    git add "public/images/blog/$Slug.svg"
+}
 
 Write-Host "Committing changes..."
 git commit -m "feat(blog): $Title"
