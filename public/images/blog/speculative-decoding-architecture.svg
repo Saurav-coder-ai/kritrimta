@@ -1,0 +1,141 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#06090e" />
+      <stop offset="50%" stop-color="#0c111c" />
+      <stop offset="100%" stop-color="#141a29" />
+    </linearGradient>
+    <linearGradient id="accent-amber" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f59e0b" />
+      <stop offset="100%" stop-color="#ef4444" />
+    </linearGradient>
+    <linearGradient id="accent-cyan" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8" />
+      <stop offset="100%" stop-color="#0284c7" />
+    </linearGradient>
+    <linearGradient id="accent-emerald" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#10b981" />
+      <stop offset="100%" stop-color="#059669" />
+    </linearGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255, 255, 255, 0.03)" stroke-width="1"/>
+    </pattern>
+    <marker id="arrow-amber" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 9 5 L 0 9 z" fill="#f59e0b" />
+    </marker>
+    <marker id="arrow-cyan" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 9 5 L 0 9 z" fill="#38bdf8" />
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)" />
+  <rect width="1200" height="630" fill="url(#grid)" />
+
+  <!-- Outer Editorial Frame -->
+  <rect x="30" y="30" width="1140" height="570" fill="none" stroke="rgba(255, 255, 255, 0.08)" stroke-width="1.5" />
+  
+  <!-- Masthead Kicker -->
+  <text x="70" y="80" fill="#f59e0b" font-family="'JetBrains Mono', monospace" font-size="13" letter-spacing="4" font-weight="600">KRITRIMTA SYSTEMS &amp; ARCHITECTURE // ESSAY #15</text>
+  <line x1="70" y1="96" x2="1130" y2="96" stroke="rgba(255, 255, 255, 0.1)" stroke-width="1" />
+
+  <!-- Left Side: Editorial Typography -->
+  <g transform="translate(70, 145)">
+    <!-- Category Badge -->
+    <rect x="0" y="0" width="168" height="26" rx="4" fill="rgba(245, 158, 11, 0.1)" stroke="#f59e0b" stroke-width="1"/>
+    <text x="84" y="17" fill="#fbbf24" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="600" text-anchor="middle" letter-spacing="1.5">INFERENCE SYSTEMS</text>
+
+    <!-- Main Title -->
+    <text x="0" y="75" fill="#ffffff" font-family="'Inter', -apple-system, sans-serif" font-size="42" font-weight="800" letter-spacing="-1.5">THE LATENCY</text>
+    <text x="0" y="125" fill="url(#accent-amber)" font-family="'Inter', -apple-system, sans-serif" font-size="42" font-weight="800" letter-spacing="-1.5">ARBITRAGE</text>
+
+    <!-- Subtitle Deck -->
+    <text x="0" y="176" fill="#94a3b8" font-family="'Inter', -apple-system, sans-serif" font-size="16" font-weight="400">How Speculative Decoding and Tree Attention</text>
+    <text x="0" y="202" fill="#94a3b8" font-family="'Inter', -apple-system, sans-serif" font-size="16" font-weight="400">Shattered the Autoregressive Memory Wall.</text>
+
+    <!-- Metadata Block -->
+    <g transform="translate(0, 260)">
+      <line x1="0" y1="0" x2="460" y2="0" stroke="rgba(255, 255, 255, 0.1)" stroke-width="1" />
+      
+      <text x="0" y="30" fill="#64748b" font-family="'JetBrains Mono', monospace" font-size="11" letter-spacing="1">AUTHOR</text>
+      <text x="0" y="50" fill="#f1f5f9" font-family="'JetBrains Mono', monospace" font-size="13" font-weight="600">Saurav Karki</text>
+
+      <text x="150" y="30" fill="#64748b" font-family="'JetBrains Mono', monospace" font-size="11" letter-spacing="1">DISPATCH DATE</text>
+      <text x="150" y="50" fill="#f1f5f9" font-family="'JetBrains Mono', monospace" font-size="13" font-weight="600">September 2026</text>
+
+      <text x="310" y="30" fill="#64748b" font-family="'JetBrains Mono', monospace" font-size="11" letter-spacing="1">READING TIME</text>
+      <text x="310" y="50" fill="#f1f5f9" font-family="'JetBrains Mono', monospace" font-size="13" font-weight="600">12 Min Deep Dive</text>
+      
+      <line x1="0" y1="72" x2="460" y2="72" stroke="rgba(255, 255, 255, 0.1)" stroke-width="1" />
+      
+      <!-- Key Equation Pill -->
+      <g transform="translate(0, 88)">
+        <rect x="0" y="0" width="370" height="28" rx="4" fill="rgba(255, 255, 255, 0.04)" stroke="rgba(255, 255, 255, 0.1)" stroke-width="1"/>
+        <text x="14" y="18" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="11">ROOFLINE ARBITRAGE: </text>
+        <text x="160" y="18" fill="#38bdf8" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="600">GEMV (1 FLOP/B) ➔ GEMM (K FLOP/B)</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- Right Side: Architectural Schematic -->
+  <g transform="translate(570, 140)">
+    <!-- Container Card -->
+    <rect x="0" y="0" width="550" height="420" rx="8" fill="#090d16" stroke="rgba(255, 255, 255, 0.12)" stroke-width="1.5" />
+    
+    <!-- Schematic Header -->
+    <path d="M 0 0 L 550 0" stroke="url(#accent-amber)" stroke-width="3" />
+    <text x="25" y="32" fill="#e2e8f0" font-family="'JetBrains Mono', monospace" font-size="12" font-weight="600" letter-spacing="1.5">PARALLEL VERIFICATION TOPOLOGY</text>
+    <text x="460" y="32" fill="#10b981" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="600">LOSSLESS</text>
+    <line x1="25" y1="46" x2="525" y2="46" stroke="rgba(255, 255, 255, 0.08)" stroke-width="1" />
+
+    <!-- STAGE 1: Fast Speculative Drafting -->
+    <g transform="translate(25, 65)">
+      <rect x="0" y="0" width="500" height="78" rx="6" fill="#0f172a" stroke="rgba(56, 189, 248, 0.4)" stroke-width="1" />
+      <rect x="12" y="12" width="6" height="54" rx="2" fill="#38bdf8" />
+      <text x="28" y="28" fill="#38bdf8" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="700">STAGE 1: TREE SPECULATIVE DRAFTER (EAGLE-3 / MTP)</text>
+      <text x="28" y="46" fill="#94a3b8" font-family="'Inter', sans-serif" font-size="12">Generates candidate token tree in hidden-feature space without HBM weight sweep</text>
+      <text x="28" y="64" fill="#64748b" font-family="'JetBrains Mono', monospace" font-size="10">Candidate Tokens: [t₁] ──┬──► [t₂ₐ] ──► [t₃ₐ]  |  Branching Factor: γ = 4.8</text>
+      <text x="28" y="64" fill="#64748b" font-family="'JetBrains Mono', monospace" font-size="10">                                └──► [t₂ᵦ] ──► [t₃ᵦ]  |  Cost: ~4% Target FLOPs</text>
+    </g>
+
+    <!-- Flow Arrow 1 -->
+    <line x1="275" y1="148" x2="275" y2="175" stroke="#f59e0b" stroke-width="2" marker-end="url(#arrow-amber)" />
+    <text x="285" y="165" fill="#f59e0b" font-family="'JetBrains Mono', monospace" font-size="10">Full Tree Tokens</text>
+
+    <!-- STAGE 2: Target Model Parallel Verification -->
+    <g transform="translate(25, 180)">
+      <rect x="0" y="0" width="500" height="100" rx="6" fill="#181210" stroke="rgba(245, 158, 11, 0.5)" stroke-width="1.2" />
+      <rect x="12" y="12" width="6" height="76" rx="2" fill="#f59e0b" />
+      <text x="28" y="28" fill="#f59e0b" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="700">STAGE 2: TARGET MODEL PARALLEL VERIFICATION (GEMM)</text>
+      <text x="28" y="46" fill="#cbd5e1" font-family="'Inter', sans-serif" font-size="12">Single forward pass computes logits for ALL tree nodes simultaneously</text>
+      
+      <!-- Mini Sub-Boxes in Target Stage -->
+      <g transform="translate(28, 56)">
+        <rect x="0" y="0" width="140" height="32" rx="4" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.1)" />
+        <text x="10" y="15" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="9">MEMORY READ</text>
+        <text x="10" y="26" fill="#f1f5f9" font-family="'JetBrains Mono', monospace" font-size="10" font-weight="600">1x HBM Pass</text>
+
+        <rect x="155" y="0" width="140" height="32" rx="4" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.1)" />
+        <text x="10" y="15" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="9" transform="translate(155, 0)">ATTENTION MASK</text>
+        <text x="10" y="26" fill="#38bdf8" font-family="'JetBrains Mono', monospace" font-size="10" font-weight="600" transform="translate(155, 0)">Tree-Attention</text>
+
+        <rect x="310" y="0" width="150" height="32" rx="4" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.1)" />
+        <text x="10" y="15" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="9" transform="translate(310, 0)">ARITHMETIC INTENSITY</text>
+        <text x="10" y="26" fill="#10b981" font-family="'JetBrains Mono', monospace" font-size="10" font-weight="600" transform="translate(310, 0)">Up to 6x Boost</text>
+      </g>
+    </g>
+
+    <!-- Flow Arrow 2 -->
+    <line x1="275" y1="285" x2="275" y2="310" stroke="#10b981" stroke-width="2" marker-end="url(#arrow-cyan)" />
+    <text x="285" y="302" fill="#10b981" font-family="'JetBrains Mono', monospace" font-size="10">Target Logits p(x) vs Draft q(x)</text>
+
+    <!-- STAGE 3: Modified Rejection Sampling -->
+    <g transform="translate(25, 315)">
+      <rect x="0" y="0" width="500" height="85" rx="6" fill="#061c16" stroke="rgba(16, 185, 129, 0.5)" stroke-width="1.2" />
+      <rect x="12" y="12" width="6" height="61" rx="2" fill="#10b981" />
+      <text x="28" y="28" fill="#10b981" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="700">STAGE 3: MODIFIED REJECTION SAMPLER (PROVABLY LOSSLESS)</text>
+      <text x="28" y="46" fill="#94a3b8" font-family="'Inter', sans-serif" font-size="12">Acceptance Criterion: α = min(1, p(x)/q(x)) | Resample on failure</text>
+      <text x="28" y="66" fill="#6ee7b7" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="600">➔ Output Tokens: [t₁ ✓] [t₂ₐ ✓] [t₃ₐ ✓] + [t_bonus] = 4 Tokens / 1 Step</text>
+    </g>
+  </g>
+</svg>
