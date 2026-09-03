@@ -22,7 +22,7 @@ const { title, description, pubDate, updatedDate, heroImage, author = 'Saurav Ka
 const readingTime = getReadingTime(body);
 
 // Get related posts (same category, excluding current)
-const allPosts = await getCollection('blog');
+const allPosts = await getCollection('blog', ({ data }) => import.meta.env.DEV || !data.draft);
 const relatedPosts = allPosts
   .filter(post => post.data.category === category && post.data.title !== title)
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())

@@ -13,6 +13,7 @@ const blog = defineCollection({
     category: z.enum(['AI Tools', 'Gadget Reviews', 'Tech News', 'Tutorials']),
     tags: z.array(z.string()).default([]),
     featured: z.boolean().default(false),
+    draft: z.boolean().default(false),
   }),
 });
 

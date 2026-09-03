@@ -6,7 +6,7 @@ import { getCollection } from 'astro:content';
 import { CATEGORIES } from '@/utils/helpers';
 
 export async function getStaticPaths() {
-  const allPosts = await getCollection('blog');
+  const allPosts = await getCollection('blog', ({ data }) => import.meta.env.DEV || !data.draft);
   return CATEGORIES.map(({ name, slug }) => {
     const filteredPosts = allPosts
       .filter(post => post.data.category === name)
