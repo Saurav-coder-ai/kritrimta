@@ -1,0 +1,90 @@
+---
+import ToolLayout from '@/components/tools/ToolLayout.astro';
+import WordToPdf from '@/components/tools/WordToPdf.astro';
+
+const toolName = 'Word to PDF Converter';
+const toolSlug = 'word-to-pdf';
+const primaryKeyword = 'Convert Word to PDF Online Free – DOCX to PDF';
+const title = 'Word to PDF – Free Online DOCX to PDF Converter';
+const description = 'Convert Microsoft Word (.docx) documents to high-quality PDF online for free. Clean formatting preservation, live document preview, custom page sizing (A4, Letter), and 100% client-side privacy.';
+
+const howToSteps = [
+  'Click the upload dropzone or drag and drop your Microsoft Word (.docx) file into the upload box.',
+  'Inspect the live document preview to review text formatting, headings, and paragraph layout.',
+  'Customize your preferred PDF settings: Page Size (A4 or US Letter), Orientation (Portrait or Landscape), and Margin width.',
+  'Click the "Convert to PDF & Download" button to start client-side compilation.',
+  'Your polished PDF document will download instantly without your file ever leaving your browser.'
+];
+
+const benefits = [
+  {
+    title: '100% Client-Side Privacy',
+    description: 'Your private Word documents, contracts, and assignments are parsed locally in browser memory with zero cloud uploads or data storage.'
+  },
+  {
+    title: 'Live Document Preview',
+    description: 'Inspect extracted document styling, headings, and tables in real-time before triggering PDF export.'
+  },
+  {
+    title: 'A4 & US Letter Support',
+    description: 'Easily select standard international A4 paper or North American US Letter dimensions with adjustable margin sizes.'
+  },
+  {
+    title: 'No Software or Add-ons Needed',
+    description: 'Convert DOCX files directly on Mac, Windows, Linux, Android, or iOS without installing Microsoft Office or Adobe Acrobat.'
+  }
+];
+
+const faqs = [
+  {
+    question: 'How does this client-side Word to PDF converter work?',
+    answer: 'Our tool utilizes Mammoth.js to parse the internal XML structures of .docx files directly in browser memory, renders an accurate typographic layout, and packages it into a downloadable PDF via jsPDF.'
+  },
+  {
+    question: 'Are my confidential documents safe when using this converter?',
+    answer: 'Yes! Your documents never touch external servers or cloud storage. Everything runs inside your own browser tab, guaranteeing total privacy for business proposals, legal contracts, and personal records.'
+  },
+  {
+    question: 'What version of Word documents are supported?',
+    answer: 'This converter supports standard Microsoft Word documents saved in the modern XML-based .docx format (Word 2007 and newer, Google Docs, Apple Pages, and LibreOffice exports).'
+  },
+  {
+    question: 'Can I use this tool on my mobile phone?',
+    answer: 'Yes, this converter is fully responsive and allows you to upload .docx files directly from your smartphone file picker or Google Drive on iOS and Android.'
+  },
+  {
+    question: 'Is there any limit or fee for converting documents?',
+    answer: 'No. This tool is completely free with no subscriptions, usage limits, watermarks, or account registration required.'
+  }
+];
+
+const relatedPosts = [
+  {
+    title: 'Free Online Tools for Nepali Students, Freelancers & Professionals in 2026',
+    slug: 'free-online-tools-nepal-nepali-users',
+    description: 'Essential free online tools for word counting, currency exchange, unit conversion, and PDF document workflows.',
+    category: 'Tutorials'
+  },
+  {
+    title: 'Top AI Writing Tools & Research Assistants',
+    slug: 'best-ai-writing-tools-2026',
+    description: 'An in-depth review of the most powerful AI writing platforms and autonomous text assistants.',
+    category: 'AI Tools'
+  }
+];
+---
+
+<ToolLayout
+  title={title}
+  description={description}
+  toolName={toolName}
+  toolSlug={toolSlug}
+  primaryKeyword={primaryKeyword}
+  applicationCategory="OfficeApplication"
+  howToSteps={howToSteps}
+  benefits={benefits}
+  faqs={faqs}
+  relatedPosts={relatedPosts}
+>
+  <WordToPdf />
+</ToolLayout>
