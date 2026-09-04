@@ -1,0 +1,394 @@
+---
+// CaseConverter.astro - Multi-format Case Converter Tool
+---
+
+<div class="case-converter-app">
+  <!-- Conversion Action Buttons Grid -->
+  <div class="transform-actions-grid">
+    <button type="button" class="btn-case-action" data-case="upper">
+      <span class="btn-case-title">UPPERCASE</span>
+      <span class="btn-case-example">EXAMPLE TEXT</span>
+    </button>
+    <button type="button" class="btn-case-action" data-case="lower">
+      <span class="btn-case-title">lowercase</span>
+      <span class="btn-case-example">example text</span>
+    </button>
+    <button type="button" class="btn-case-action" data-case="title">
+      <span class="btn-case-title">Title Case</span>
+      <span class="btn-case-example">Example Text Here</span>
+    </button>
+    <button type="button" class="btn-case-action" data-case="sentence">
+      <span class="btn-case-title">Sentence case</span>
+      <span class="btn-case-example">Example text here.</span>
+    </button>
+    <button type="button" class="btn-case-action" data-case="camel">
+      <span class="btn-case-title">camelCase</span>
+      <span class="btn-case-example">exampleTextHere</span>
+    </button>
+    <button type="button" class="btn-case-action" data-case="pascal">
+      <span class="btn-case-title">PascalCase</span>
+      <span class="btn-case-example">ExampleTextHere</span>
+    </button>
+    <button type="button" class="btn-case-action" data-case="snake">
+      <span class="btn-case-title">snake_case</span>
+      <span class="btn-case-example">example_text_here</span>
+    </button>
+    <button type="button" class="btn-case-action" data-case="kebab">
+      <span class="btn-case-title">kebab-case</span>
+      <span class="btn-case-example">example-text-here</span>
+    </button>
+    <button type="button" class="btn-case-action" data-case="alternating">
+      <span class="btn-case-title">aLtErNaTiNg CaSe</span>
+      <span class="btn-case-example">eXaMpLe tExT</span>
+    </button>
+    <button type="button" class="btn-case-action" data-case="inverse">
+      <span class="btn-case-title">InVeRsE cAsE</span>
+      <span class="btn-case-example">iNvErSe cAsE</span>
+    </button>
+  </div>
+
+  <!-- Text Input Area -->
+  <div class="input-container">
+    <div class="input-toolbar">
+      <div class="text-meta">
+        <span id="cc-char-count">0 characters</span>
+        <span class="sep">&bull;</span>
+        <span id="cc-word-count">0 words</span>
+      </div>
+      <div class="input-buttons">
+        <button type="button" class="btn-tool-action" id="cc-sample-btn">Sample Text</button>
+        <button type="button" class="btn-tool-action primary" id="cc-copy-btn">Copy to Clipboard</button>
+        <button type="button" class="btn-tool-action danger" id="cc-clear-btn">Clear</button>
+      </div>
+    </div>
+    <textarea
+      id="cc-textarea"
+      class="case-converter-textarea"
+      placeholder="Type or paste your text here, then click any format button above to instantly convert..."
+      rows="9"
+      spellcheck="false"
+    ></textarea>
+  </div>
+</div>
+
+<style>
+  .case-converter-app {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .transform-actions-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.65rem;
+  }
+
+  @media (min-width: 640px) {
+    .transform-actions-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  @media (min-width: 900px) {
+    .transform-actions-grid {
+      grid-template-columns: repeat(5, 1fr);
+    }
+  }
+
+  .btn-case-action {
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: 0.5rem;
+    padding: 0.65rem 0.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    text-align: center;
+  }
+
+  .btn-case-action:hover {
+    background: var(--color-accent-subtle);
+    border-color: var(--color-accent);
+    transform: translateY(-1px);
+  }
+
+  .btn-case-action:active {
+    transform: translateY(0);
+  }
+
+  .btn-case-title {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--color-text);
+  }
+
+  .btn-case-example {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    color: var(--color-text-muted);
+    margin-top: 0.15rem;
+  }
+
+  .input-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .input-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .text-meta {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--color-text-muted);
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .input-buttons {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .btn-tool-action {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    color: var(--color-text);
+    padding: 0.4rem 0.85rem;
+    border-radius: 0.4rem;
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .btn-tool-action:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+    background: var(--color-surface-subtle);
+  }
+
+  .btn-tool-action.primary {
+    background: var(--color-accent);
+    color: #ffffff;
+    border-color: var(--color-accent);
+  }
+
+  .btn-tool-action.primary:hover {
+    background: var(--color-accent-hover);
+    color: #ffffff;
+  }
+
+  .btn-tool-action.danger:hover {
+    border-color: #ef4444;
+    color: #ef4444;
+  }
+
+  .case-converter-textarea {
+    width: 100%;
+    min-height: 240px;
+    padding: 1rem;
+    font-family: var(--font-mono);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    background: var(--color-bg);
+    color: var(--color-text);
+    border: 1px solid var(--color-border);
+    border-radius: 0.6rem;
+    resize: vertical;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  .case-converter-textarea:focus {
+    outline: none;
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 3px var(--color-accent-subtle);
+  }
+</style>
+
+<script>
+  const textarea = document.getElementById('cc-textarea') as HTMLTextAreaElement | null;
+  const charCountEl = document.getElementById('cc-char-count');
+  const wordCountEl = document.getElementById('cc-word-count');
+  const clearBtn = document.getElementById('cc-clear-btn');
+  const copyBtn = document.getElementById('cc-copy-btn');
+  const sampleBtn = document.getElementById('cc-sample-btn');
+  const caseButtons = document.querySelectorAll('.btn-case-action');
+
+  const SAMPLE_TEXT = `Modern artificial intelligence architectures require precision in formatting and naming conventions. Convert this text into UPPERCASE, camelCase, snake_case, or Title Case with a single click!`;
+
+  function updateMeta() {
+    if (!textarea) return;
+    const text = textarea.value;
+    const chars = text.length;
+    const words = text.trim().length > 0 ? text.trim().split(/\s+/).filter(Boolean).length : 0;
+    if (charCountEl) charCountEl.textContent = `${chars.toLocaleString()} characters`;
+    if (wordCountEl) wordCountEl.textContent = `${words.toLocaleString()} words`;
+  }
+
+  function toTitleCase(str: string): string {
+    const minorWords = new Set(['and', 'as', 'but', 'for', 'if', 'nor', 'or', 'so', 'yet', 'a', 'an', 'the', 'at', 'by', 'for', 'in', 'of', 'off', 'on', 'per', 'to', 'up', 'via']);
+    return str.toLowerCase().replace(/[A-Za-z0-9\u00C0-\u00FF]+[^\s-]*/g, (match, index) => {
+      if (index > 0 && minorWords.has(match)) {
+        return match;
+      }
+      return match.charAt(0).toUpperCase() + match.slice(1);
+    });
+  }
+
+  function toSentenceCase(str: string): string {
+    return str.toLowerCase().replace(/(^\s*|[.!?]\s+)([a-z])/g, (_match, separator, char) => {
+      return separator + char.toUpperCase();
+    });
+  }
+
+  function toCamelCase(str: string): string {
+    return str
+      .replace(/[^a-zA-Z0-9]+(.)/g, (_m, chr) => chr.toUpperCase())
+      .replace(/^[A-Z]/, chr => chr.toLowerCase())
+      .replace(/[^a-zA-Z0-9]/g, '');
+  }
+
+  function toPascalCase(str: string): string {
+    return str
+      .replace(/[^a-zA-Z0-9]+(.)/g, (_m, chr) => chr.toUpperCase())
+      .replace(/^[a-z]/, chr => chr.toUpperCase())
+      .replace(/[^a-zA-Z0-9]/g, '');
+  }
+
+  function toSnakeCase(str: string): string {
+    return str
+      .trim()
+      .replace(/([a-z])([A-Z])/g, '$1_$2')
+      .replace(/[^a-zA-Z0-9]+/g, '_')
+      .replace(/^_+|_+$/g, '')
+      .toLowerCase();
+  }
+
+  function toKebabCase(str: string): string {
+    return str
+      .trim()
+      .replace(/([a-z])([A-Z])/g, '$1-$2')
+      .replace(/[^a-zA-Z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '')
+      .toLowerCase();
+  }
+
+  function toAlternatingCase(str: string): string {
+    let result = '';
+    let upper = false;
+    for (const char of str) {
+      if (/[a-zA-Z]/.test(char)) {
+        result += upper ? char.toUpperCase() : char.toLowerCase();
+        upper = !upper;
+      } else {
+        result += char;
+      }
+    }
+    return result;
+  }
+
+  function toInverseCase(str: string): string {
+    let result = '';
+    for (const char of str) {
+      if (char === char.toUpperCase()) {
+        result += char.toLowerCase();
+      } else {
+        result += char.toUpperCase();
+      }
+    }
+    return result;
+  }
+
+  caseButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (!textarea) return;
+      const caseType = btn.getAttribute('data-case');
+      const text = textarea.value;
+      if (!text) return;
+
+      let converted = text;
+      switch (caseType) {
+        case 'upper':
+          converted = text.toUpperCase();
+          break;
+        case 'lower':
+          converted = text.toLowerCase();
+          break;
+        case 'title':
+          converted = toTitleCase(text);
+          break;
+        case 'sentence':
+          converted = toSentenceCase(text);
+          break;
+        case 'camel':
+          converted = toCamelCase(text);
+          break;
+        case 'pascal':
+          converted = toPascalCase(text);
+          break;
+        case 'snake':
+          converted = toSnakeCase(text);
+          break;
+        case 'kebab':
+          converted = toKebabCase(text);
+          break;
+        case 'alternating':
+          converted = toAlternatingCase(text);
+          break;
+        case 'inverse':
+          converted = toInverseCase(text);
+          break;
+      }
+
+      textarea.value = converted;
+      updateMeta();
+    });
+  });
+
+  textarea?.addEventListener('input', updateMeta);
+
+  clearBtn?.addEventListener('click', () => {
+    if (textarea) {
+      textarea.value = '';
+      updateMeta();
+      textarea.focus();
+    }
+  });
+
+  copyBtn?.addEventListener('click', async () => {
+    if (!textarea || !textarea.value) return;
+    try {
+      await navigator.clipboard.writeText(textarea.value);
+      const orig = copyBtn.textContent;
+      copyBtn.textContent = 'Copied to Clipboard! ✓';
+      setTimeout(() => {
+        if (copyBtn) copyBtn.textContent = orig;
+      }, 2000);
+    } catch (err) {
+      console.error('Failed to copy', err);
+    }
+  });
+
+  sampleBtn?.addEventListener('click', () => {
+    if (textarea) {
+      textarea.value = SAMPLE_TEXT;
+      updateMeta();
+    }
+  });
+
+  updateMeta();
+</script>

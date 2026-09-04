@@ -1,0 +1,90 @@
+---
+import ToolLayout from '@/components/tools/ToolLayout.astro';
+import UnitConverter from '@/components/tools/UnitConverter.astro';
+
+const toolName = 'Unit Converter';
+const toolSlug = 'unit-converter';
+const primaryKeyword = 'Online Unit Converter – Length, Weight, Temperature & Area';
+const title = 'Unit Converter – Free Multi-Category Measurement Converter';
+const description = 'Fast, accurate, and free online unit converter. Convert measurements for length (cm, inches, meters), weight (kg, lbs), temperature (Celsius, Fahrenheit), volume, area, speed, time, and data storage.';
+
+const howToSteps = [
+  'Select a measurement category from the tabs above (e.g., Length, Weight/Mass, Temperature, Area, Volume, Speed, Time, Data Storage).',
+  'Choose your input unit from the "FROM" dropdown and target unit from the "TO" dropdown.',
+  'Type the number you wish to convert into the input field. The converted value calculates instantly.',
+  'Click the circular swap button between the fields to quickly invert the conversion direction.',
+  'Review the exact conversion factor formula displayed below and click "Copy Result" for easy clipboard sharing.'
+];
+
+const benefits = [
+  {
+    title: '8 Diverse Measurement Categories',
+    description: 'Covers everyday units (miles to km, lbs to kg, °C to °F) along with specialized computing metrics (GB to MB, TB to PB).'
+  },
+  {
+    title: 'Bidirectional Live Conversion',
+    description: 'Edit either the left or right input field to calculate in either direction in real-time.'
+  },
+  {
+    title: 'High Numerical Precision',
+    description: 'Uses standardized international conversion constants with clean scientific rounding for micro and macro scales.'
+  },
+  {
+    title: 'Instant Client-Side Computation',
+    description: 'Zero external network requests or server latency. Runs completely offline in your browser.'
+  }
+];
+
+const faqs = [
+  {
+    question: 'How do you convert Celsius to Fahrenheit?',
+    answer: 'To convert Celsius to Fahrenheit, multiply the temperature by 9/5 (or 1.8) and add 32. For example: 20°C × 1.8 + 32 = 68°F.'
+  },
+  {
+    question: 'How many pounds are in one kilogram?',
+    answer: 'One kilogram (kg) is approximately equal to 2.20462 pounds (lbs). To convert kg to lbs, multiply the kilogram value by 2.20462.'
+  },
+  {
+    question: 'What is the conversion factor from centimeters to inches?',
+    answer: 'One inch is exactly 2.54 centimeters. To convert cm to inches, divide the number of centimeters by 2.54 (or multiply by 0.3937).'
+  },
+  {
+    question: 'Does this unit converter use decimal (1000) or binary (1024) data storage units?',
+    answer: 'Our data storage calculator uses binary byte values (1 KB = 1024 Bytes, 1 MB = 1024 KB, 1 GB = 1024 MB), which matches memory and operating system reporting standards.'
+  },
+  {
+    question: 'Can I use this tool offline?',
+    answer: 'Yes. Once loaded in your browser, all unit calculations run 100% locally with static math constants and require no active internet connection.'
+  }
+];
+
+const relatedPosts = [
+  {
+    title: 'NVIDIA RTX 5090 Engineering Review & Architecture',
+    slug: 'nvidia-rtx-5090-review',
+    description: 'Comprehensive analysis of silicon memory bandwidth, tensor cores, and compute throughput.',
+    category: 'Hardware'
+  },
+  {
+    title: 'Humanoid Robotics & Physical AI in 2026',
+    slug: 'humanoid-robots-physical-ai-2026',
+    description: 'Actuator torque, kinematics, and spatial computing units in next-generation physical robotics.',
+    category: 'Hardware'
+  }
+];
+---
+
+<ToolLayout
+  title={title}
+  description={description}
+  toolName={toolName}
+  toolSlug={toolSlug}
+  primaryKeyword={primaryKeyword}
+  applicationCategory="CalculatorApplication"
+  howToSteps={howToSteps}
+  benefits={benefits}
+  faqs={faqs}
+  relatedPosts={relatedPosts}
+>
+  <UnitConverter />
+</ToolLayout>

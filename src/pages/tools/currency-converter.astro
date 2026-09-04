@@ -1,0 +1,90 @@
+---
+import ToolLayout from '@/components/tools/ToolLayout.astro';
+import CurrencyConverter from '@/components/tools/CurrencyConverter.astro';
+
+const toolName = 'Currency Converter';
+const toolSlug = 'currency-converter';
+const primaryKeyword = 'Live Currency Converter – Real-Time Foreign Exchange Rates';
+const title = 'Currency Converter – Live FX Rates & Instant Money Calculator';
+const description = 'Free real-time currency converter calculator. Convert USD, EUR, GBP, INR, CAD, AUD, JPY and over 30 international currencies with live exchange rates and client-side caching.';
+
+const howToSteps = [
+  'Enter the money amount you want to convert into the input box (defaults to 100).',
+  'Choose your source currency from the "FROM" dropdown (e.g., USD, EUR, GBP, INR).',
+  'Select your destination currency from the "TO" dropdown.',
+  'View the calculated conversion output instantly along with the exact exchange rate ratio.',
+  'Click the swap button to invert the conversion pair or click "Copy Result" to share.'
+];
+
+const benefits = [
+  {
+    title: 'Real-Time Interbank Rates',
+    description: 'Pulls reliable exchange rates via the open-source Frankfurter ECB foreign exchange data feed.'
+  },
+  {
+    title: 'Smart Client-Side Caching',
+    description: 'Caches exchange rates in your browser for 4 hours to guarantee instant loading without hitting rate limits.'
+  },
+  {
+    title: '30+ Global Currencies',
+    description: 'Comprehensive coverage of major global currencies including USD, EUR, GBP, INR, JPY, CAD, AUD, CHF, and more.'
+  },
+  {
+    title: '1-Click Quick Pairs',
+    description: 'Pre-configured shortcut buttons for high-volume conversion pairs like USD to EUR, USD to INR, and GBP to USD.'
+  }
+];
+
+const faqs = [
+  {
+    question: 'How frequently are currency exchange rates updated?',
+    answer: 'Exchange rates are sourced from the European Central Bank (ECB) via the Frankfurter API and are updated on daily financial trading cycles. Rates are cached client-side for rapid repeat visits.'
+  },
+  {
+    question: 'Are there any hidden fees or commissions in this conversion?',
+    answer: 'No. This calculator displays raw mid-market interbank exchange rates. Commercial banks and credit card issuers may charge small foreign transaction spreads (typically 1-3%).'
+  },
+  {
+    question: 'How do I convert USD to INR?',
+    answer: 'Select "USD – US Dollar" in the From dropdown and "INR – Indian Rupee" in the To dropdown, then enter the desired dollar amount. The current rupee valuation will update automatically.'
+  },
+  {
+    question: 'Can I use this currency converter while traveling offline?',
+    answer: 'Yes! If you open the page while connected, your browser caches the latest rates so you can continue making approximate conversions even without active mobile data.'
+  },
+  {
+    question: 'Is this currency conversion tool free to use?',
+    answer: 'Yes, 100% free with no registration, no subscription, and no usage limits.'
+  }
+];
+
+const relatedPosts = [
+  {
+    title: 'Inference Scaling Laws & Test-Time Compute Analysis',
+    slug: 'inference-scaling-laws-test-time-compute',
+    description: 'Understanding computational efficiency, reasoning budgets, and local processing architectures.',
+    category: 'Engineering'
+  },
+  {
+    title: 'OpenAI GPT-5 Launch & Frontiers in Autonomous Computing',
+    slug: 'openai-gpt5-launch',
+    description: 'Architecture breakdown and performance metrics of next-generation foundation models.',
+    category: 'AI Models'
+  }
+];
+---
+
+<ToolLayout
+  title={title}
+  description={description}
+  toolName={toolName}
+  toolSlug={toolSlug}
+  primaryKeyword={primaryKeyword}
+  applicationCategory="FinanceApplication"
+  howToSteps={howToSteps}
+  benefits={benefits}
+  faqs={faqs}
+  relatedPosts={relatedPosts}
+>
+  <CurrencyConverter />
+</ToolLayout>

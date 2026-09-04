@@ -1,0 +1,746 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+
+export interface FAQItem {
+  question: string;
+  answer: string;
+}
+
+export interface BenefitItem {
+  title: string;
+  description: string;
+}
+
+export interface RelatedPost {
+  title: string;
+  slug: string;
+  description: string;
+  category: string;
+}
+
+interface Props {
+  title: string;
+  description: string;
+  toolName: string;
+  toolSlug: string;
+  primaryKeyword: string;
+  applicationCategory?: string;
+  howToSteps: string[];
+  benefits: BenefitItem[];
+  faqs: FAQItem[];
+  relatedPosts?: RelatedPost[];
+}
+
+const {
+  title,
+  description,
+  toolName,
+  toolSlug,
+  primaryKeyword,
+  applicationCategory = 'UtilityApplication',
+  howToSteps,
+  benefits,
+  faqs,
+  relatedPosts = [
+    {
+      title: 'Top AI Writing Tools & Research Assistants',
+      slug: 'best-ai-writing-tools-2026',
+      description: 'An in-depth review of the most powerful AI writing platforms and autonomous text assistants.',
+      category: 'AI Tools'
+    },
+    {
+      title: 'Inference Scaling Laws & Test-Time Compute Analysis',
+      slug: 'inference-scaling-laws-test-time-compute',
+      description: 'Understanding computational efficiency, reasoning budgets, and local processing architectures.',
+      category: 'Engineering'
+    }
+  ],
+} = Astro.props;
+
+const siteUrl = 'https://kushumpoudel.com.np';
+const toolUrl = `${siteUrl}/tools/${toolSlug}`;
+
+// All 6 tools for cross-linking
+const allTools = [
+  { name: 'Word Counter', slug: 'word-counter', icon: '📝', desc: 'Real-time word, character, reading time & keyword density stats.' },
+  { name: 'Case Converter', slug: 'case-converter', icon: '🔠', desc: 'Convert text to UPPERCASE, lowercase, Title Case, camelCase & snake_case.' },
+  { name: 'Unit Converter', slug: 'unit-converter', icon: '📐', desc: 'Fast client-side conversions for length, mass, temperature, area & storage.' },
+  { name: 'Currency Converter', slug: 'currency-converter', icon: '💱', desc: 'Live exchange rates with instant conversion and client-side caching.' },
+  { name: 'Image to PDF', slug: 'image-to-pdf', icon: '🖼️', desc: 'Combine multiple JPG, PNG, & WEBP images into a single PDF document.' },
+  { name: 'PDF to Word', slug: 'pdf-to-word', icon: '📄', desc: 'Extract text and convert PDF documents into editable DOCX format.' },
+];
+
+const otherTools = allTools.filter(t => t.slug !== toolSlug);
+
+// Structured Data: WebApplication
+const webAppSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebApplication',
+  name: toolName,
+  url: toolUrl,
+  description: description,
+  applicationCategory: applicationCategory,
+  operatingSystem: 'Any',
+  browserRequirements: 'Requires JavaScript. Requires HTML5.',
+  offers: {
+    '@type': 'Offer',
+    price: '0',
+    priceCurrency: 'USD'
+  },
+  author: {
+    '@type': 'Person',
+    name: 'Saurav Karki',
+    url: `${siteUrl}/about`
+  }
+};
+
+// Structured Data: BreadcrumbList
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    {
+      '@type': 'ListItem',
+      position: 1,
+      name: 'Home',
+      item: siteUrl
+    },
+    {
+      '@type': 'ListItem',
+      position: 2,
+      name: 'Tools',
+      item: `${siteUrl}/tools`
+    },
+    {
+      '@type': 'ListItem',
+      position: 3,
+      name: toolName,
+      item: toolUrl
+    }
+  ]
+};
+
+// Structured Data: FAQPage
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map(faq => ({
+    '@type': 'Question',
+    name: faq.question,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: faq.answer
+    }
+  }))
+};
+---
+
+<BaseLayout title={title} description={description}>
+  <!-- JSON-LD Structured Data for SEO -->
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(webAppSchema)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbSchema)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(faqSchema)} />
+
+  <div class="tool-page-wrapper">
+    <div class="container">
+      <!-- Breadcrumb Navigation -->
+      <nav class="tool-breadcrumbs" aria-label="Breadcrumb">
+        <ol>
+          <li><a href="/">Home</a></li>
+          <li class="crumb-sep">/</li>
+          <li><a href="/tools">Tools</a></li>
+          <li class="crumb-sep">/</li>
+          <li aria-current="page">{toolName}</li>
+        </ol>
+      </nav>
+
+      <!-- Tool Header -->
+      <header class="tool-header">
+        <div class="tool-badge-row">
+          <span class="tool-category-badge">{applicationCategory.replace('Application', '')} Tool</span>
+          <span class="tool-privacy-badge">🔒 100% Client-Side Privacy</span>
+        </div>
+        <h1 class="tool-h1">{primaryKeyword}</h1>
+        <p class="tool-lead">{description}</p>
+        
+        <div class="tool-actions-bar">
+          <button id="share-tool-btn" class="share-btn" aria-label="Share this tool">
+            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="18" cy="5" r="3"></circle>
+              <circle cx="6" cy="12" r="3"></circle>
+              <circle cx="18" cy="19" r="3"></circle>
+              <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+              <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+            </svg>
+            <span id="share-btn-text">Share Tool</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- Main Tool Widget Container (Above the Fold) -->
+      <section class="tool-widget-section" id="tool-app">
+        <slot />
+      </section>
+
+      <!-- Content & SEO Section Below Tool -->
+      <div class="tool-content-grid">
+        <!-- Main Explanatory Column -->
+        <div class="tool-main-content">
+          <!-- How to Use -->
+          <section class="content-block">
+            <div class="block-header">
+              <span class="block-kicker">STEP-BY-STEP</span>
+              <h2>How to Use the {toolName}</h2>
+            </div>
+            <ol class="how-to-steps">
+              {howToSteps.map((step, idx) => (
+                <li>
+                  <span class="step-num">{idx + 1}</span>
+                  <div class="step-text">{step}</div>
+                </li>
+              ))}
+            </ol>
+          </section>
+
+          <!-- Key Benefits & Why Use This Tool -->
+          <section class="content-block">
+            <div class="block-header">
+              <span class="block-kicker">ADVANTAGES</span>
+              <h2>Why Use Our Free {toolName}?</h2>
+            </div>
+            <div class="benefits-grid">
+              {benefits.map(benefit => (
+                <div class="benefit-card">
+                  <div class="benefit-icon">✓</div>
+                  <div>
+                    <h3>{benefit.title}</h3>
+                    <p>{benefit.description}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          <!-- FAQ Accordion -->
+          <section class="content-block" id="faq">
+            <div class="block-header">
+              <span class="block-kicker">QUESTIONS & ANSWERS</span>
+              <h2>Frequently Asked Questions</h2>
+            </div>
+            <div class="faq-list">
+              {faqs.map((faq, index) => (
+                <details class="faq-item" open={index === 0}>
+                  <summary class="faq-question">
+                    <span>{faq.question}</span>
+                    <svg class="faq-chevron" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                  </summary>
+                  <div class="faq-answer">
+                    <p>{faq.answer}</p>
+                  </div>
+                </details>
+              ))}
+            </div>
+          </section>
+        </div>
+
+        <!-- Sidebar Column: Other Tools & Blog Links -->
+        <aside class="tool-sidebar">
+          <!-- Other Tools Navigation -->
+          <div class="sidebar-box">
+            <h3 class="sidebar-title">Explore Other Tools</h3>
+            <div class="other-tools-list">
+              {otherTools.map(tool => (
+                <a href={`/tools/${tool.slug}`} class="other-tool-link">
+                  <span class="tool-ico">{tool.icon}</span>
+                  <div class="other-tool-meta">
+                    <span class="other-tool-name">{tool.name}</span>
+                    <span class="other-tool-desc">{tool.desc}</span>
+                  </div>
+                </a>
+              ))}
+            </div>
+            <a href="/tools" class="view-all-tools-link">View All 6 Tools &rarr;</a>
+          </div>
+
+          <!-- Internal Linking: Related Blog Posts -->
+          {relatedPosts && relatedPosts.length > 0 && (
+            <div class="sidebar-box">
+              <h3 class="sidebar-title">Related Journal Articles</h3>
+              <div class="related-posts-list">
+                {relatedPosts.map(post => (
+                  <a href={`/blog/${post.slug}`} class="related-post-card">
+                    <span class="post-cat-tag">{post.category}</span>
+                    <h4 class="related-post-heading">{post.title}</h4>
+                    <p class="related-post-desc">{post.description}</p>
+                  </a>
+                ))}
+              </div>
+            </div>
+          )}
+        </aside>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .tool-page-wrapper {
+    padding: 1.5rem 0 4rem;
+  }
+
+  .tool-breadcrumbs ol {
+    display: flex;
+    align-items: center;
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1.25rem;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .tool-breadcrumbs a {
+    color: var(--color-text-muted);
+    text-decoration: none;
+  }
+
+  .tool-breadcrumbs a:hover {
+    color: var(--color-accent);
+  }
+
+  .crumb-sep {
+    color: var(--color-border);
+  }
+
+  .tool-header {
+    margin-bottom: 2rem;
+  }
+
+  .tool-badge-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .tool-category-badge {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    background: var(--color-accent-subtle);
+    color: var(--color-accent);
+    padding: 0.25rem 0.65rem;
+    border-radius: 9999px;
+    border: 1px solid var(--color-accent);
+  }
+
+  .tool-privacy-badge {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--color-text-muted);
+    background: var(--color-surface-subtle);
+    padding: 0.25rem 0.65rem;
+    border-radius: 9999px;
+    border: 1px solid var(--color-border);
+  }
+
+  .tool-h1 {
+    font-family: var(--font-serif);
+    font-size: clamp(2rem, 4vw, 2.8rem);
+    font-weight: 700;
+    line-height: 1.15;
+    margin-bottom: 0.65rem;
+    color: var(--color-text);
+  }
+
+  .tool-lead {
+    font-size: 1.05rem;
+    color: var(--color-text-muted);
+    max-width: 800px;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+  }
+
+  .tool-actions-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .share-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    color: var(--color-text);
+    padding: 0.4rem 0.85rem;
+    border-radius: 0.4rem;
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .share-btn:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+    background: var(--color-surface-subtle);
+  }
+
+  .tool-widget-section {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 20px var(--color-shadow);
+    padding: 1.5rem;
+    margin-bottom: 3.5rem;
+  }
+
+  @media (min-width: 768px) {
+    .tool-widget-section {
+      padding: 2.25rem;
+    }
+  }
+
+  .tool-content-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+
+  @media (min-width: 992px) {
+    .tool-content-grid {
+      grid-template-columns: 1fr 340px;
+      gap: 3rem;
+    }
+  }
+
+  .content-block {
+    margin-bottom: 3rem;
+  }
+
+  .block-header {
+    margin-bottom: 1.25rem;
+  }
+
+  .block-kicker {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--color-accent);
+    letter-spacing: 0.12em;
+    display: block;
+    margin-bottom: 0.35rem;
+  }
+
+  .content-block h2 {
+    font-family: var(--font-serif);
+    font-size: 1.65rem;
+    font-weight: 600;
+    color: var(--color-text);
+  }
+
+  .how-to-steps {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .how-to-steps li {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    padding: 1rem 1.25rem;
+    border-radius: 0.5rem;
+  }
+
+  .step-num {
+    font-family: var(--font-mono);
+    font-size: 0.95rem;
+    font-weight: 700;
+    background: var(--color-accent-subtle);
+    color: var(--color-accent);
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .step-text {
+    font-size: 0.95rem;
+    color: var(--color-text);
+    line-height: 1.55;
+  }
+
+  .benefits-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  @media (min-width: 600px) {
+    .benefits-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  .benefit-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.85rem;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    padding: 1.15rem;
+    border-radius: 0.5rem;
+  }
+
+  .benefit-icon {
+    background: rgba(34, 197, 94, 0.15);
+    color: #22c55e;
+    font-weight: 700;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .benefit-card h3 {
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    color: var(--color-text);
+  }
+
+  .benefit-card p {
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  /* FAQ Accordion */
+  .faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .faq-item {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 0.5rem;
+    overflow: hidden;
+    transition: border-color 0.2s ease;
+  }
+
+  .faq-item[open] {
+    border-color: var(--color-accent);
+  }
+
+  .faq-question {
+    padding: 1rem 1.25rem;
+    font-weight: 600;
+    font-size: 0.98rem;
+    color: var(--color-text);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    list-style: none;
+    user-select: none;
+  }
+
+  .faq-question::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq-chevron {
+    transition: transform 0.2s ease;
+    color: var(--color-text-muted);
+    flex-shrink: 0;
+  }
+
+  .faq-item[open] .faq-chevron {
+    transform: rotate(180deg);
+    color: var(--color-accent);
+  }
+
+  .faq-answer {
+    padding: 0 1.25rem 1.15rem;
+    color: var(--color-text-muted);
+    font-size: 0.92rem;
+    line-height: 1.6;
+    border-top: 1px solid var(--color-border-subtle);
+    padding-top: 0.85rem;
+  }
+
+  .faq-answer p {
+    margin: 0;
+  }
+
+  /* Sidebar */
+  .tool-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
+  }
+
+  .sidebar-box {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 0.65rem;
+    padding: 1.25rem;
+  }
+
+  .sidebar-title {
+    font-family: var(--font-serif);
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--color-text);
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--color-border-subtle);
+  }
+
+  .other-tools-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+  }
+
+  .other-tool-link {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 0.6rem 0.75rem;
+    border-radius: 0.4rem;
+    border: 1px solid transparent;
+    transition: all 0.15s ease;
+    text-decoration: none;
+  }
+
+  .other-tool-link:hover {
+    background: var(--color-surface-subtle);
+    border-color: var(--color-border);
+  }
+
+  .tool-ico {
+    font-size: 1.2rem;
+    line-height: 1;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .other-tool-meta {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .other-tool-name {
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--color-text);
+  }
+
+  .other-tool-desc {
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+    line-height: 1.35;
+  }
+
+  .view-all-tools-link {
+    display: block;
+    margin-top: 1rem;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--color-accent);
+    text-align: center;
+    font-weight: 600;
+  }
+
+  .related-posts-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .related-post-card {
+    display: block;
+    text-decoration: none;
+    padding: 0.6rem 0.2rem;
+    border-bottom: 1px solid var(--color-border-subtle);
+  }
+
+  .related-post-card:last-child {
+    border-bottom: none;
+  }
+
+  .post-cat-tag {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    color: var(--color-accent);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .related-post-heading {
+    font-family: var(--font-serif);
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--color-text);
+    margin: 0.25rem 0 0.35rem;
+    line-height: 1.35;
+  }
+
+  .related-post-desc {
+    font-size: 0.78rem;
+    color: var(--color-text-muted);
+    line-height: 1.4;
+    margin: 0;
+  }
+</style>
+
+<script>
+  const shareBtn = document.getElementById('share-tool-btn');
+  const shareText = document.getElementById('share-btn-text');
+
+  shareBtn?.addEventListener('click', async () => {
+    try {
+      if (navigator.clipboard) {
+        await navigator.clipboard.writeText(window.location.href);
+        if (shareText) shareText.textContent = 'Link Copied! ✓';
+        setTimeout(() => {
+          if (shareText) shareText.textContent = 'Share Tool';
+        }, 2500);
+      } else if (navigator.share) {
+        await navigator.share({
+          title: document.title,
+          url: window.location.href
+        });
+      }
+    } catch (e) {
+      console.error('Share failed', e);
+    }
+  });
+</script>

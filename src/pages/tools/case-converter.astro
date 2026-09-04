@@ -1,0 +1,90 @@
+---
+import ToolLayout from '@/components/tools/ToolLayout.astro';
+import CaseConverter from '@/components/tools/CaseConverter.astro';
+
+const toolName = 'Case Converter';
+const toolSlug = 'case-converter';
+const primaryKeyword = 'Online Case Converter – Convert Text to Uppercase, Lowercase & Title Case';
+const title = 'Case Converter – Free Online Text Case Transformer';
+const description = 'Convert text case online for free. Transform any string to UPPERCASE, lowercase, Title Case, Sentence case, camelCase, snake_case, kebab-case, or aLtErNaTiNg CaSe instantly.';
+
+const howToSteps = [
+  'Paste or type the text you wish to format into the text box above.',
+  'Click any of the transformation buttons at the top (e.g., UPPERCASE, Title Case, camelCase, snake_case).',
+  'Watch your text transform instantly inside the editor without reloading or submitting the page.',
+  'Check your live character and word counters located above the editor.',
+  'Click "Copy to Clipboard" to copy the formatted text with a single click.'
+];
+
+const benefits = [
+  {
+    title: '10 Text Case Formats',
+    description: 'Includes programmer formats (camelCase, snake_case, kebab-case, PascalCase) alongside editorial formats (Title Case, Sentence case, UPPERCASE).'
+  },
+  {
+    title: 'Smart Title Casing',
+    description: 'Intelligently preserves minor connecting words (e.g., in, of, the, and) in lowercase unless they appear at the start of a title.'
+  },
+  {
+    title: 'Zero Latency & 100% Client-Side',
+    description: 'Everything processes locally in your browser with no network latency, guaranteeing 100% privacy for confidential documents or code snippets.'
+  },
+  {
+    title: 'One-Click Clipboard Copy',
+    description: 'Quickly export and paste your transformed string directly into your IDE, CMS, or social media composer.'
+  }
+];
+
+const faqs = [
+  {
+    question: 'What is the difference between Title Case and Sentence case?',
+    answer: 'Title Case capitalizes the first letter of each major word (e.g., "The Fast and the Furious"), while Sentence case capitalizes only the very first letter of each sentence and proper nouns (e.g., "The quick brown fox jumps over the lazy dog.").'
+  },
+  {
+    question: 'When should I use camelCase or snake_case?',
+    answer: 'camelCase (e.g., "myVariableName") is standard for identifiers in JavaScript, TypeScript, and Java. snake_case (e.g., "my_variable_name") is common in Python, Rust, and SQL database column names.'
+  },
+  {
+    question: 'Is my data secure when using this case converter?',
+    answer: 'Yes. All string operations run locally in your web browser. Nothing is ever sent to any remote server or logged in a database.'
+  },
+  {
+    question: 'Can I convert code variables or filenames?',
+    answer: 'Yes! The programmer casing buttons (camelCase, PascalCase, snake_case, and kebab-case) strip spaces and special characters to format valid code identifiers and URL slugs.'
+  },
+  {
+    question: 'Does this tool support international or accented characters?',
+    answer: 'Yes, our case converter supports Unicode character mapping for accented and non-ASCII Latin characters.'
+  }
+];
+
+const relatedPosts = [
+  {
+    title: 'Top AI Writing Tools & Research Assistants',
+    slug: 'best-ai-writing-tools-2026',
+    description: 'An in-depth review of the most powerful AI writing platforms and autonomous text assistants.',
+    category: 'AI Tools'
+  },
+  {
+    title: 'Speculative Decoding & High-Throughput Inference Architectures',
+    slug: 'speculative-decoding-architecture',
+    description: 'Deep dive into KV-cache optimization, draft models, and latency reduction in production systems.',
+    category: 'Engineering'
+  }
+];
+---
+
+<ToolLayout
+  title={title}
+  description={description}
+  toolName={toolName}
+  toolSlug={toolSlug}
+  primaryKeyword={primaryKeyword}
+  applicationCategory="TextEditorApplication"
+  howToSteps={howToSteps}
+  benefits={benefits}
+  faqs={faqs}
+  relatedPosts={relatedPosts}
+>
+  <CaseConverter />
+</ToolLayout>
