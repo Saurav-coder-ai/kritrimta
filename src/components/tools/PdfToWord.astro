@@ -378,7 +378,17 @@
       const pdf = await loadingTask.promise;
       const totalPages = pdf.numPages;
 
-      const extractedPagesText: string[][] = [];
+      const { Document, Packer, Paragraph, TextRun, HeadingLevel, ImageRun } = await import('docx');
+
+      interface PageData {
+        lines: string[];
+        imageBuffer: ArrayBuffer | null;
+        imageWidth: number;
+        imageHeight: number;
+        isScanned: boolean;
+      }
+
+      const pagesData: PageData[] = [];
 
       for (let pageNum = 1; pageNum <= totalPages; pageNum++) {
         const page = await pdf.getPage(pageNum);
@@ -407,20 +417,56 @@
           pageLines.push(currentLine.trim());
         }
 
-        extractedPagesText.push(pageLines);
+        // Detect scanned documents (e.g., CamScanner, photo scans where selectable text is minimal)
+        const totalMeaningfulText = pageLines.join(' ')
+          .replace(/scanned with camscanner/gi, '')
+          .replace(/camscanner/gi, '')
+          .trim();
+
+        const isScanned = totalMeaningfulText.length < 60;
+        let imageBuffer: ArrayBuffer | null = null;
+        let imageWidth = 550;
+        let imageHeight = 750;
+
+        if (isScanned) {
+          try {
+            const viewport = page.getViewport({ scale: 1.5 });
+            const canvas = document.createElement('canvas');
+            canvas.width = viewport.width;
+            canvas.height = viewport.height;
+            const ctx = canvas.getContext('2d');
+            if (ctx) {
+              await page.render({ canvasContext: ctx, viewport }).promise;
+              const blob = await new Promise<Blob | null>(res => canvas.toBlob(res, 'image/jpeg', 0.85));
+              if (blob) {
+                imageBuffer = await blob.arrayBuffer();
+                imageWidth = Math.min(560, Math.round(viewport.width * 0.7));
+                imageHeight = Math.min(800, Math.round(viewport.height * 0.7));
+              }
+            }
+          } catch (renderErr) {
+            console.warn('Canvas render for scanned page failed:', renderErr);
+          }
+        }
+
+        pagesData.push({
+          lines: pageLines,
+          imageBuffer,
+          imageWidth,
+          imageHeight,
+          isScanned
+        });
 
         const pct = Math.round(25 + (pageNum / totalPages) * 45);
         progressBar.style.width = `${pct}%`;
-        progressLabel.textContent = `Extracted page ${pageNum} of ${totalPages}...`;
+        progressLabel.textContent = `Extracted page ${pageNum} of ${totalPages}${isScanned ? ' (scanned page preserved)' : ''}...`;
       }
 
       progressBar.style.width = '75%';
       progressLabel.textContent = 'Building Microsoft Word (.docx) document...';
 
       // 3. Build DOCX document using docx library
-      const { Document, Packer, Paragraph, TextRun, HeadingLevel } = await import('docx');
-
-      const docSections = extractedPagesText.map((lines, pageIdx) => {
+      const docSections = pagesData.map((pData, pageIdx) => {
         const paragraphs = [];
 
         // Add page header / number indicator if multi-page
@@ -429,7 +475,7 @@
             new Paragraph({
               children: [
                 new TextRun({
-                  text: `Page ${pageIdx + 1}`,
+                  text: `Page ${pageIdx + 1}${pData.isScanned ? ' (Scanned Document Layout)' : ''}`,
                   color: '888888',
                   size: 18,
                   italics: true
@@ -439,7 +485,26 @@
           );
         }
 
-        for (const line of lines) {
+        // If page was scanned, embed the high-resolution page image directly into the Word document
+        if (pData.imageBuffer) {
+          paragraphs.push(
+            new Paragraph({
+              children: [
+                new ImageRun({
+                  data: new Uint8Array(pData.imageBuffer),
+                  transformation: {
+                    width: pData.imageWidth,
+                    height: pData.imageHeight
+                  }
+                })
+              ],
+              spacing: { after: 200 }
+            })
+          );
+        }
+
+        // Include any extracted text lines
+        for (const line of pData.lines) {
           // Check if line looks like a heading
           const isShort = line.length < 80;
           const isUppercase = line === line.toUpperCase() && line.length > 3 && /[A-Z]/.test(line);
