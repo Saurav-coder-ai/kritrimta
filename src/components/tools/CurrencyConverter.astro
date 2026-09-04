@@ -88,14 +88,15 @@
   <div class="quick-pairs-container">
     <span class="quick-pairs-title">Popular Conversions:</span>
     <div class="quick-pairs-pills">
+      <button type="button" class="pair-pill" data-from="USD" data-to="NPR">USD &rarr; NPR</button>
+      <button type="button" class="pair-pill" data-from="USD" data-to="INR">USD &rarr; INR</button>
       <button type="button" class="pair-pill" data-from="USD" data-to="EUR">USD &rarr; EUR</button>
       <button type="button" class="pair-pill" data-from="USD" data-to="GBP">USD &rarr; GBP</button>
-      <button type="button" class="pair-pill" data-from="USD" data-to="INR">USD &rarr; INR</button>
-      <button type="button" class="pair-pill" data-from="EUR" data-to="USD">EUR &rarr; USD</button>
-      <button type="button" class="pair-pill" data-from="GBP" data-to="USD">GBP &rarr; USD</button>
-      <button type="button" class="pair-pill" data-from="USD" data-to="CAD">USD &rarr; CAD</button>
-      <button type="button" class="pair-pill" data-from="USD" data-to="AUD">USD &rarr; AUD</button>
-      <button type="button" class="pair-pill" data-from="USD" data-to="JPY">USD &rarr; JPY</button>
+      <button type="button" class="pair-pill" data-from="EUR" data-to="NPR">EUR &rarr; NPR</button>
+      <button type="button" class="pair-pill" data-from="GBP" data-to="NPR">GBP &rarr; NPR</button>
+      <button type="button" class="pair-pill" data-from="AUD" data-to="NPR">AUD &rarr; NPR</button>
+      <button type="button" class="pair-pill" data-from="CAD" data-to="NPR">CAD &rarr; NPR</button>
+      <button type="button" class="pair-pill" data-from="INR" data-to="NPR">INR &rarr; NPR</button>
     </div>
   </div>
 </div>
@@ -183,14 +184,16 @@
   }
 
   .input-currency-group {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.6rem;
+    width: 100%;
   }
 
   @media (min-width: 480px) {
     .input-currency-group {
-      flex-direction: row;
+      grid-template-columns: 1fr 1.3fr;
+      align-items: center;
     }
   }
 
@@ -199,7 +202,9 @@
     font-size: 1.35rem;
     font-weight: 700;
     padding: 0.75rem 1rem;
-    flex: 1;
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
   }
 
   .currency-input.result-highlight {
@@ -213,8 +218,10 @@
     font-size: 0.95rem;
     font-weight: 600;
     padding: 0.75rem;
-    min-width: 140px;
+    width: 100%;
+    min-width: 0;
     cursor: pointer;
+    box-sizing: border-box;
   }
 
   .btn-swap-currency {
@@ -353,6 +360,7 @@
     EUR: 'EUR – Euro (€)',
     GBP: 'GBP – British Pound (£)',
     INR: 'INR – Indian Rupee (₹)',
+    NPR: 'NPR – Nepalese Rupee (रू)',
     CAD: 'CAD – Canadian Dollar (C$)',
     AUD: 'AUD – Australian Dollar (A$)',
     JPY: 'JPY – Japanese Yen (¥)',
@@ -376,42 +384,46 @@
     HUF: 'HUF – Hungarian Forint (Ft)',
     PHP: 'PHP – Philippine Peso (₱)',
     MYR: 'MYR – Malaysian Ringgit (RM)',
-    IDR: 'IDR – Indonesian Rupiah (Rp)'
+    IDR: 'IDR – Indonesian Rupiah (Rp)',
+    RUB: 'RUB – Russian Ruble (₽)'
   };
 
-  // Fallback fixed rates against USD (used if network offline / API fail)
+  // Fallback fixed rates against USD
   const FALLBACK_RATES: { [code: string]: number } = {
     USD: 1,
-    EUR: 0.92,
-    GBP: 0.78,
-    INR: 83.5,
-    CAD: 1.36,
-    AUD: 1.52,
-    JPY: 155.2,
-    CHF: 0.90,
-    CNY: 7.24,
-    SGD: 1.35,
-    NZD: 1.64,
-    HKD: 7.82,
-    SEK: 10.5,
-    NOK: 10.6,
-    DKK: 6.86,
-    PLN: 3.96,
-    BRL: 5.4,
-    MXN: 18.2,
-    ZAR: 18.4,
-    KRW: 1375,
-    THB: 36.8,
-    TRY: 32.5,
-    ILS: 3.7,
-    CZK: 23.2,
-    HUF: 365,
-    PHP: 58.5,
-    MYR: 4.7,
-    IDR: 16250
+    EUR: 0.86,
+    GBP: 0.74,
+    INR: 94.5,
+    NPR: 151.2,
+    CAD: 1.38,
+    AUD: 1.39,
+    JPY: 155.6,
+    CHF: 0.81,
+    CNY: 6.72,
+    SGD: 1.27,
+    NZD: 1.70,
+    HKD: 7.84,
+    SEK: 9.54,
+    NOK: 9.29,
+    DKK: 6.43,
+    PLN: 3.72,
+    BRL: 5.10,
+    MXN: 16.91,
+    ZAR: 15.99,
+    KRW: 1356.7,
+    THB: 32.9,
+    TRY: 48.4,
+    ILS: 3.01,
+    CZK: 20.79,
+    HUF: 311.0,
+    PHP: 62.56,
+    MYR: 4.04,
+    IDR: 17689,
+    RUB: 86.65
   };
 
-  const CACHE_KEY = 'kritrimta_currency_rates_v1';
+  const API_ENDPOINT = 'https://api.freecurrencyapi.com/v1/latest?apikey=fca_live_MYR9x4wEkMNiJlaL7kOMm9odthx4SqglIkMDYPYH';
+  const CACHE_KEY = 'kritrimta_freecurrencyapi_v1';
   const CACHE_TTL_MS = 4 * 60 * 60 * 1000; // 4 Hours
 
   let exchangeRates: { [code: string]: number } = { ...FALLBACK_RATES };
@@ -449,7 +461,7 @@
     });
 
     fromSelect.value = 'USD';
-    toSelect.value = 'EUR';
+    toSelect.value = 'NPR';
   }
 
   async function fetchExchangeRates(forceRefresh: boolean = false) {
@@ -472,22 +484,25 @@
       }
     }
 
-    if (statusText) statusText.textContent = 'Fetching latest live rates via Frankfurter API...';
+    if (statusText) statusText.textContent = 'Fetching latest live rates via FreeCurrencyAPI...';
 
     try {
-      // Frankfurter free API (base USD)
-      const res = await fetch('https://api.frankfurter.app/latest?from=USD');
+      const res = await fetch(API_ENDPOINT);
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const data = await res.json();
+      const json = await res.json();
 
-      if (data && data.rates) {
-        exchangeRates = { USD: 1, ...data.rates };
+      if (json && json.data) {
+        const rates: { [code: string]: number } = { ...json.data, USD: 1 };
+        // NPR pegged to INR (1 INR = 1.6 NPR)
+        if (rates.INR) {
+          rates.NPR = parseFloat((rates.INR * 1.6).toFixed(4));
+        }
+        exchangeRates = rates;
         const now = Date.now();
         try {
           localStorage.setItem(CACHE_KEY, JSON.stringify({
             timestamp: now,
-            rates: data.rates,
-            date: data.date
+            rates: rates
           }));
         } catch (e) {
           console.warn('Failed to cache rates', e);
@@ -495,7 +510,7 @@
         setLiveStatus(true, new Date(now));
       }
     } catch (err) {
-      console.warn('Rates API fetch failed, using fallback/cached rates:', err);
+      console.warn('FreeCurrencyAPI fetch failed, using benchmark rates:', err);
       if (statusText) statusText.textContent = 'Using cached benchmark exchange rates';
       if (statusDot) {
         statusDot.classList.remove('live');

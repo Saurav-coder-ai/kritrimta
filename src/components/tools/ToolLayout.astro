@@ -60,7 +60,7 @@ const {
 const siteUrl = 'https://kushumpoudel.com.np';
 const toolUrl = `${siteUrl}/tools/${toolSlug}`;
 
-// All 6 tools for cross-linking
+// All standalone tools for cross-linking
 const allTools = [
   { name: 'Word Counter', slug: 'word-counter', icon: '📝', desc: 'Real-time word, character, reading time & keyword density stats.' },
   { name: 'Case Converter', slug: 'case-converter', icon: '🔠', desc: 'Convert text to UPPERCASE, lowercase, Title Case, camelCase & snake_case.' },
@@ -68,6 +68,7 @@ const allTools = [
   { name: 'Currency Converter', slug: 'currency-converter', icon: '💱', desc: 'Live exchange rates with instant conversion and client-side caching.' },
   { name: 'Image to PDF', slug: 'image-to-pdf', icon: '🖼️', desc: 'Combine multiple JPG, PNG, & WEBP images into a single PDF document.' },
   { name: 'PDF to Word', slug: 'pdf-to-word', icon: '📄', desc: 'Extract text and convert PDF documents into editable DOCX format.' },
+  { name: 'Word to PDF', slug: 'word-to-pdf', icon: '📑', desc: 'Convert Word (.docx) documents into clean downloadable PDF files.' },
 ];
 
 const otherTools = allTools.filter(t => t.slug !== toolSlug);
@@ -261,7 +262,7 @@ const faqSchema = {
                 </a>
               ))}
             </div>
-            <a href="/tools" class="view-all-tools-link">View All 6 Tools &rarr;</a>
+            <a href="/tools" class="view-all-tools-link">Explore All Tools &rarr;</a>
           </div>
 
           <!-- Internal Linking: Related Blog Posts -->

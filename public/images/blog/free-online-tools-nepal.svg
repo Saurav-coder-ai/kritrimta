@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <radialGradient id="glow" cx="70%" cy="30%" r="65%">
+      <stop offset="0%" stop-color="#e0532b" stop-opacity="0.25"/>
+      <stop offset="60%" stop-color="#121722" stop-opacity="0.1"/>
+      <stop offset="100%" stop-color="#0b0e14" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#1c2533" stroke-width="0.75"/>
+    </pattern>
+    <linearGradient id="nepal-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#e0532b"/>
+      <stop offset="100%" stop-color="#f59e0b"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="#0b0e14"/>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+
+  <!-- Himalayan Mountain Silhouette Geometry in Background -->
+  <path d="M520 480 L660 310 L740 390 L850 250 L950 370 L1080 220 L1200 360 L1200 520 L520 520 Z" 
+        fill="#121824" stroke="#253245" stroke-width="1.5" opacity="0.6"/>
+  <path d="M600 480 L720 340 L810 420 L920 280 L1020 390 L1140 260 L1200 320 L1200 520 L600 520 Z" 
+        fill="#172030" stroke="#e0532b" stroke-width="1" opacity="0.4"/>
+
+  <!-- Editorial Top Badge -->
+  <rect x="70" y="60" width="220" height="30" rx="6" fill="#171f2c" stroke="#2a374a" stroke-width="1"/>
+  <text x="85" y="80" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="700" fill="#e0532b" letter-spacing="2">KRITRIMTA · UTILITIES</text>
+  <text x="1130" y="80" font-family="'JetBrains Mono', monospace" font-size="12" fill="#64748b" text-anchor="end">NEPAL EDITION // 2026</text>
+
+  <!-- Right Visual Graphics: Interactive Tool Icons Suite -->
+  <g transform="translate(720, 160)">
+    <!-- Main Center Circle -->
+    <circle cx="200" cy="160" r="140" fill="#131a26" stroke="#2a374a" stroke-width="1.5"/>
+    <circle cx="200" cy="160" r="100" fill="none" stroke="#e0532b" stroke-width="1.5" stroke-dasharray="6 6"/>
+
+    <!-- Tool Icons Floating Nodes -->
+    <!-- Node 1: Word Counter -->
+    <g transform="translate(100, 70)">
+      <rect width="64" height="64" rx="14" fill="#182232" stroke="#e0532b" stroke-width="1.5"/>
+      <text x="32" y="42" font-family="'Plus Jakarta Sans', sans-serif" font-size="26" text-anchor="middle">📝</text>
+    </g>
+    <!-- Node 2: Currency Converter (NPR/USD) -->
+    <g transform="translate(240, 60)">
+      <rect width="64" height="64" rx="14" fill="#182232" stroke="#f59e0b" stroke-width="1.5"/>
+      <text x="32" y="42" font-family="'Plus Jakarta Sans', sans-serif" font-size="26" text-anchor="middle">💱</text>
+    </g>
+    <!-- Node 3: Unit Converter -->
+    <g transform="translate(270, 190)">
+      <rect width="64" height="64" rx="14" fill="#182232" stroke="#3b82f6" stroke-width="1.5"/>
+      <text x="32" y="42" font-family="'Plus Jakarta Sans', sans-serif" font-size="26" text-anchor="middle">📐</text>
+    </g>
+    <!-- Node 4: PDF Converters -->
+    <g transform="translate(80, 200)">
+      <rect width="64" height="64" rx="14" fill="#182232" stroke="#10b981" stroke-width="1.5"/>
+      <text x="32" y="42" font-family="'Plus Jakarta Sans', sans-serif" font-size="26" text-anchor="middle">📄</text>
+    </g>
+
+    <!-- Center Badge: 100% Client-Side Private -->
+    <circle cx="200" cy="160" r="44" fill="url(#nepal-gradient)"/>
+    <text x="200" y="155" font-family="'JetBrains Mono', monospace" font-size="12" font-weight="700" fill="#ffffff" text-anchor="middle">100%</text>
+    <text x="200" y="172" font-family="'JetBrains Mono', monospace" font-size="10" font-weight="700" fill="#ffffff" text-anchor="middle">PRIVATE</text>
+  </g>
+
+  <!-- Headline & Editorial Content -->
+  <text x="70" y="240" font-family="'Plus Jakarta Sans', sans-serif" font-size="15" font-weight="700" fill="#e0532b" letter-spacing="3">DIGITAL PRODUCTIVITY // NEPAL</text>
+  
+  <text x="70" y="305" font-family="'Newsreader', Georgia, serif" font-size="52" font-weight="700" fill="#f8fafc" letter-spacing="-1">Free Online Tools for</text>
+  <text x="70" y="365" font-family="'Newsreader', Georgia, serif" font-size="52" font-weight="700" fill="url(#nepal-gradient)" letter-spacing="-1">Nepali Professionals</text>
+  
+  <text x="70" y="425" font-family="'Plus Jakarta Sans', sans-serif" font-size="19" fill="#94a3b8">
+    Word Counter, Currency, Unit, Image &amp; PDF Converters —
+  </text>
+  <text x="70" y="455" font-family="'Plus Jakarta Sans', sans-serif" font-size="19" fill="#94a3b8">
+    Built client-side with zero server tracking for Nepali users.
+  </text>
+
+  <!-- Editorial Metadata Bottom Bar -->
+  <line x1="70" y1="520" x2="1130" y2="520" stroke="#1e293b" stroke-width="1"/>
+  <text x="70" y="555" font-family="'JetBrains Mono', monospace" font-size="13" fill="#64748b">BY SAURAV KARKI</text>
+  <text x="320" y="555" font-family="'JetBrains Mono', monospace" font-size="13" fill="#64748b">CATEGORY: TUTORIALS</text>
+  <text x="620" y="555" font-family="'JetBrains Mono', monospace" font-size="13" fill="#64748b">FOCUS: STUDENTS &amp; FREELANCERS</text>
+  <text x="1130" y="555" font-family="'JetBrains Mono', monospace" font-size="13" font-weight="700" fill="#e0532b" text-anchor="end">KRITRIMTA.COM/TOOLS</text>
+</svg>
