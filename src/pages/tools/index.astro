@@ -1,0 +1,366 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+
+const tools = [
+  {
+    name: 'Word Counter',
+    slug: 'word-counter',
+    category: 'Writing & SEO',
+    icon: '📝',
+    title: 'Word, Character & Reading Time Counter',
+    description: 'Calculate real-time word count, character stats (with/without spaces), sentence counts, reading & speaking time, and top keyword density.',
+    tags: ['Real-Time', 'Keyword Density', 'WPM Calculator']
+  },
+  {
+    name: 'Case Converter',
+    slug: 'case-converter',
+    category: 'Text & Code',
+    icon: '🔠',
+    title: 'Multi-Format Text Case Converter',
+    description: 'Transform strings instantly between UPPERCASE, lowercase, Title Case, Sentence case, camelCase, PascalCase, snake_case, and kebab-case.',
+    tags: ['10 Formats', 'Programmer Casing', '1-Click Copy']
+  },
+  {
+    name: 'Unit Converter',
+    slug: 'unit-converter',
+    category: 'Math & Units',
+    icon: '📐',
+    title: 'Multi-Category Measurement Converter',
+    description: 'Convert between standard and metric measurements across 8 categories: length, weight/mass, temperature, volume, area, speed, time, and data storage.',
+    tags: ['8 Categories', 'Formulas', 'Zero Latency']
+  },
+  {
+    name: 'Currency Converter',
+    slug: 'currency-converter',
+    category: 'Finance & FX',
+    icon: '💱',
+    title: 'Live Foreign Exchange Rate Converter',
+    description: 'Instant currency conversions across 30+ global currencies using daily European Central Bank rates with smart local caching for offline capability.',
+    tags: ['Live ECB Rates', '30+ Currencies', 'Offline Cache']
+  },
+  {
+    name: 'Image to PDF',
+    slug: 'image-to-pdf',
+    category: 'Documents',
+    icon: '🖼️',
+    title: 'Convert Photos & Images to PDF',
+    description: 'Merge multiple JPG, PNG, and WEBP images into a clean single PDF document with custom page sizes, orientations, margins, and drag-and-drop ordering.',
+    tags: ['Batch Merge', 'Reorder Pages', '100% Private']
+  },
+  {
+    name: 'PDF to Word',
+    slug: 'pdf-to-word',
+    category: 'Documents',
+    icon: '📄',
+    title: 'PDF to Editable Word (.docx) Converter',
+    description: 'Extract text, headings, and paragraph blocks from PDF files and compile them into editable Microsoft Word (.docx) documents client-side.',
+    tags: ['Client-Side', 'No Watermark', 'Clean DOCX']
+  }
+];
+
+const siteUrl = 'https://kushumpoudel.com.np';
+
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    {
+      '@type': 'ListItem',
+      position: 1,
+      name: 'Home',
+      item: siteUrl
+    },
+    {
+      '@type': 'ListItem',
+      position: 2,
+      name: 'Tools',
+      item: `${siteUrl}/tools`
+    }
+  ]
+};
+---
+
+<BaseLayout
+  title="Online Tools & Converters — Free Client-Side Utilities"
+  description="Explore our suite of fast, free, and 100% private online tools and converters. Word counters, unit conversions, case transformers, live currency exchange, and PDF tools."
+>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbSchema)} />
+
+  <div class="tools-directory-wrapper">
+    <div class="container">
+      <!-- Breadcrumb -->
+      <nav class="tool-breadcrumbs" aria-label="Breadcrumb">
+        <ol>
+          <li><a href="/">Home</a></li>
+          <li class="crumb-sep">/</li>
+          <li aria-current="page">Tools</li>
+        </ol>
+      </nav>
+
+      <!-- Directory Header -->
+      <header class="directory-header">
+        <div class="directory-badge">UTILITY SUITE // 100% CLIENT-SIDE</div>
+        <h1 class="directory-title">
+          Fast, Private &amp; <span class="accent-gradient">Free Online Tools</span>
+        </h1>
+        <p class="directory-desc">
+          A collection of lightweight developer, editorial, and document conversion tools. Built to run entirely inside your browser for maximum privacy, zero server latency, and instant results.
+        </p>
+      </header>
+
+      <!-- Tools Grid -->
+      <div class="tools-grid">
+        {tools.map(tool => (
+          <article class="tool-card">
+            <div class="tool-card-header">
+              <span class="tool-card-icon">{tool.icon}</span>
+              <span class="tool-card-category">{tool.category}</span>
+            </div>
+            
+            <h2 class="tool-card-title">
+              <a href={`/tools/${tool.slug}`}>{tool.name}</a>
+            </h2>
+            
+            <p class="tool-card-desc">{tool.description}</p>
+            
+            <div class="tool-card-tags">
+              {tool.tags.map(tag => (
+                <span class="tool-tag">{tag}</span>
+              ))}
+            </div>
+
+            <div class="tool-card-footer">
+              <a href={`/tools/${tool.slug}`} class="btn btn-outline btn-open-tool">
+                Launch Tool &rarr;
+              </a>
+            </div>
+          </article>
+        ))}
+      </div>
+
+      <!-- Feature Highlight / Why Client-Side Box -->
+      <section class="privacy-highlight-box">
+        <div class="highlight-content">
+          <div class="highlight-badge">ZERO SERVER TRACKING</div>
+          <h2>Why Our Client-Side Tools Are Faster &amp; Safer</h2>
+          <p>
+            Unlike traditional web utilities that upload your documents, images, and text to third-party cloud servers, Kritrimta Tools execute 100% inside your browser using modern WebAssembly and JavaScript APIs. Your data never touches our disks or databases, guaranteeing uncompromising security and zero bandwidth delays.
+          </p>
+        </div>
+      </section>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .tools-directory-wrapper {
+    padding: 1.5rem 0 4.5rem;
+  }
+
+  .tool-breadcrumbs ol {
+    display: flex;
+    align-items: center;
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    gap: 0.4rem;
+  }
+
+  .tool-breadcrumbs a {
+    color: var(--color-text-muted);
+    text-decoration: none;
+  }
+
+  .tool-breadcrumbs a:hover {
+    color: var(--color-accent);
+  }
+
+  .crumb-sep {
+    color: var(--color-border);
+  }
+
+  .directory-header {
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto 3.5rem;
+  }
+
+  .directory-badge {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: var(--color-accent);
+    background: var(--color-accent-subtle);
+    padding: 0.3rem 0.85rem;
+    border-radius: 9999px;
+    border: 1px solid var(--color-accent);
+    margin-bottom: 1rem;
+  }
+
+  .directory-title {
+    font-family: var(--font-serif);
+    font-size: clamp(2.2rem, 4.5vw, 3.2rem);
+    font-weight: 700;
+    line-height: 1.15;
+    margin-bottom: 1rem;
+    color: var(--color-text);
+  }
+
+  .directory-desc {
+    font-size: 1.1rem;
+    color: var(--color-text-muted);
+    line-height: 1.6;
+  }
+
+  .tools-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.75rem;
+    margin-bottom: 4rem;
+  }
+
+  @media (min-width: 640px) {
+    .tools-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .tools-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .tool-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 0.75rem;
+    padding: 1.75rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 4px 16px var(--color-shadow);
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .tool-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--color-accent);
+    box-shadow: 0 8px 24px var(--color-shadow-lg);
+  }
+
+  .tool-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+  }
+
+  .tool-card-icon {
+    font-size: 2rem;
+    line-height: 1;
+  }
+
+  .tool-card-category {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-text-muted);
+    background: var(--color-surface-subtle);
+    padding: 0.25rem 0.6rem;
+    border-radius: 9999px;
+  }
+
+  .tool-card-title {
+    font-family: var(--font-serif);
+    font-size: 1.45rem;
+    font-weight: 600;
+    margin-bottom: 0.65rem;
+    line-height: 1.25;
+  }
+
+  .tool-card-title a {
+    color: var(--color-text);
+    text-decoration: none;
+  }
+
+  .tool-card-title a:hover {
+    color: var(--color-accent);
+  }
+
+  .tool-card-desc {
+    font-size: 0.92rem;
+    color: var(--color-text-muted);
+    line-height: 1.55;
+    margin-bottom: 1.25rem;
+    flex-grow: 1;
+  }
+
+  .tool-card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .tool-tag {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    color: var(--color-text-faint);
+    background: var(--color-surface-subtle);
+    padding: 0.2rem 0.5rem;
+    border-radius: 0.3rem;
+  }
+
+  .tool-card-footer {
+    padding-top: 1rem;
+    border-top: 1px solid var(--color-border-subtle);
+  }
+
+  .btn-open-tool {
+    width: 100%;
+    font-size: 0.88rem;
+  }
+
+  .privacy-highlight-box {
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: 0.85rem;
+    padding: 2.5rem 1.75rem;
+    text-align: center;
+  }
+
+  .highlight-content {
+    max-width: 750px;
+    margin: 0 auto;
+  }
+
+  .highlight-badge {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--color-accent);
+    letter-spacing: 0.12em;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+
+  .privacy-highlight-box h2 {
+    font-family: var(--font-serif);
+    font-size: 1.85rem;
+    font-weight: 700;
+    margin-bottom: 0.85rem;
+    color: var(--color-text);
+  }
+
+  .privacy-highlight-box p {
+    font-size: 0.98rem;
+    color: var(--color-text-muted);
+    line-height: 1.65;
+  }
+</style>

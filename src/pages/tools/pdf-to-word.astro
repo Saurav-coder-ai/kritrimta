@@ -1,0 +1,90 @@
+---
+import ToolLayout from '@/components/tools/ToolLayout.astro';
+import PdfToWord from '@/components/tools/PdfToWord.astro';
+
+const toolName = 'PDF to Word Converter';
+const toolSlug = 'pdf-to-word';
+const primaryKeyword = 'Convert PDF to Word Online Free – PDF to Editable DOCX';
+const title = 'PDF to Word – Free Online PDF to DOCX Converter';
+const description = 'Convert PDF files to editable Microsoft Word (.docx) documents online for free. Extract text, headings, and paragraphs client-side with 100% privacy and zero server storage.';
+
+const howToSteps = [
+  'Click the upload dropzone or drag and drop your PDF document into the file box.',
+  'Review the file summary card to verify the document name and file size.',
+  'Click "Convert to Word (.docx) & Download" to initiate client-side text parsing and DOCX packaging.',
+  'Watch the real-time extraction progress bar as each page is parsed and formatted.',
+  'Your editable Word document (.docx) will automatically download to your computer or phone.'
+];
+
+const benefits = [
+  {
+    title: '100% Client-Side Privacy',
+    description: 'Your PDFs are never uploaded to any cloud server. Document parsing and file compilation execute entirely within your browser memory.'
+  },
+  {
+    title: 'Clean Text & Heading Preservation',
+    description: 'Intelligently identifies section headings, titles, and paragraph breaks to output a clean, easily editable Word document.'
+  },
+  {
+    title: 'No Software Installation Required',
+    description: 'Convert PDFs to DOCX directly in modern desktop and mobile browsers without installing Adobe Acrobat or third-party desktop tools.'
+  },
+  {
+    title: 'Zero Subscriptions or Watermarks',
+    description: 'Completely free to use with no paywalls, registration gates, credit card prompts, or added watermarks.'
+  }
+];
+
+const faqs = [
+  {
+    question: 'How does this client-side PDF to Word converter work?',
+    answer: 'Our converter uses Mozilla\'s pdf.js engine to extract raw text coordinates and lines from each page of your PDF, and then utilizes the docx library to assemble an editable Microsoft Word (.docx) archive directly in your browser.'
+  },
+  {
+    question: 'Will complex layouts, tables, and images be preserved perfectly in Tier 1?',
+    answer: 'Tier 1 client-side conversion focuses on extracting readable text, paragraph structure, and headings. Very complex multi-column magazines, scanned raster images, or intricate CAD tables may be flattened into clean linear text blocks.'
+  },
+  {
+    question: 'Are my confidential PDF documents safe?',
+    answer: 'Yes! Because the conversion happens 100% locally inside your browser, no data is sent over the network to our servers. Your legal contracts, financial statements, and private notes remain completely confidential.'
+  },
+  {
+    question: 'Can I convert scanned PDFs with this tool?',
+    answer: 'This Tier 1 tool is designed for text-based PDFs (where text can be highlighted and copied). Scanned PDFs containing only flat images require Optical Character Recognition (OCR).'
+  },
+  {
+    question: 'What file format does this tool output?',
+    answer: 'It produces standard `.docx` files fully compatible with Microsoft Word, Google Docs, Apple Pages, and LibreOffice Writer.'
+  }
+];
+
+const relatedPosts = [
+  {
+    title: 'Speculative Decoding & High-Throughput Inference Architectures',
+    slug: 'speculative-decoding-architecture',
+    description: 'Deep dive into KV-cache optimization, draft models, and latency reduction in production systems.',
+    category: 'Engineering'
+  },
+  {
+    title: 'Agent Harness & Model Context Protocol (MCP) Architecture',
+    slug: 'agent-harness-and-mcp-architecture',
+    description: 'Autonomous tool orchestration, client sandboxing, and context management protocols.',
+    category: 'Architecture'
+  }
+];
+---
+
+<ToolLayout
+  title={title}
+  description={description}
+  toolName={toolName}
+  toolSlug={toolSlug}
+  primaryKeyword={primaryKeyword}
+  applicationCategory="TextEditorApplication"
+  howToSteps={howToSteps}
+  benefits={benefits}
+  faqs={faqs}
+  relatedPosts={relatedPosts}
+>
+  <PdfToWord />
+</ToolLayout>

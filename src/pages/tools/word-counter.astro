@@ -1,0 +1,90 @@
+---
+import ToolLayout from '@/components/tools/ToolLayout.astro';
+import WordCounter from '@/components/tools/WordCounter.astro';
+
+const toolName = 'Word Counter';
+const toolSlug = 'word-counter';
+const primaryKeyword = 'Online Word Counter & Character Calculator';
+const title = 'Word Counter – Free Online Character & Reading Time Calculator';
+const description = 'Free real-time online word counter, character counter, sentence counter, reading duration estimator, and top keyword density checker. 100% client-side privacy.';
+
+const howToSteps = [
+  'Type directly into the text editor or paste your written copy from Word, Google Docs, or your notes app.',
+  'Instantly review the real-time statistics cards above: word count, total characters (with & without spaces), sentence count, and paragraphs.',
+  'Check your estimated reading time (calculated at 200 words per minute) and estimated speaking time (130 words per minute) to pace your essays, speeches, or scripts.',
+  'Inspect the Top Keyword Density box below the editor to identify overused words and optimize for SEO or readability.',
+  'Click "Copy Text" to copy your revised content back to your clipboard, or "Clear" to reset the editor for a fresh document.'
+];
+
+const benefits = [
+  {
+    title: 'Instant Real-Time Calculations',
+    description: 'Calculations occur on every keystroke with zero lag or delay, allowing seamless editing as you type.'
+  },
+  {
+    title: '100% Private & Client-Side',
+    description: 'Your text never leaves your browser. No data is stored or transmitted across servers, ensuring complete privacy.'
+  },
+  {
+    title: 'Keyword Density Analysis',
+    description: 'Automatically filters stop words and surfaces top repeating words with percentage breakdowns to prevent keyword stuffing.'
+  },
+  {
+    title: 'Reading & Speaking Time Estimates',
+    description: 'Accurately gauge how long it takes an average reader to finish your article or how long your presentation script will run.'
+  }
+];
+
+const faqs = [
+  {
+    question: 'How does this online word counter calculate reading time?',
+    answer: 'Our reading time calculator is based on the average adult reading speed of 200 words per minute (WPM). It divides your total word count by 200 to give an accurate estimate in minutes and seconds.'
+  },
+  {
+    question: 'Is my text safe and private when using this word counter?',
+    answer: 'Yes, 100%. All processing and statistical calculations run locally inside your browser using JavaScript. No text is sent to our servers or stored in any database.'
+  },
+  {
+    question: 'What is considered a good keyword density for SEO?',
+    answer: 'For optimal search engine optimization and natural readability, primary keywords should generally appear between 1% and 2.5% of your total word count. Our keyword density widget highlights recurring terms to help you strike the right balance.'
+  },
+  {
+    question: 'Does this tool count characters with and without spaces?',
+    answer: 'Yes! The character card displays total characters including spaces, and also provides a secondary breakdown excluding spaces for social media character limits (e.g. X/Twitter, LinkedIn, Meta tags).'
+  },
+  {
+    question: 'Can I use this word counter on mobile devices?',
+    answer: 'Yes, this tool is fully responsive and optimized for touch devices, smartphones, tablets, and desktops.'
+  }
+];
+
+const relatedPosts = [
+  {
+    title: 'Top AI Writing Tools & Research Assistants',
+    slug: 'best-ai-writing-tools-2026',
+    description: 'An in-depth review of the most powerful AI writing platforms and autonomous text assistants.',
+    category: 'AI Tools'
+  },
+  {
+    title: 'Inference Scaling Laws & Test-Time Compute Analysis',
+    slug: 'inference-scaling-laws-test-time-compute',
+    description: 'Understanding computational efficiency, reasoning budgets, and local processing architectures.',
+    category: 'Engineering'
+  }
+];
+---
+
+<ToolLayout
+  title={title}
+  description={description}
+  toolName={toolName}
+  toolSlug={toolSlug}
+  primaryKeyword={primaryKeyword}
+  applicationCategory="TextEditorApplication"
+  howToSteps={howToSteps}
+  benefits={benefits}
+  faqs={faqs}
+  relatedPosts={relatedPosts}
+>
+  <WordCounter />
+</ToolLayout>

@@ -1,0 +1,90 @@
+---
+import ToolLayout from '@/components/tools/ToolLayout.astro';
+import ImageToPdf from '@/components/tools/ImageToPdf.astro';
+
+const toolName = 'Image to PDF Converter';
+const toolSlug = 'image-to-pdf';
+const primaryKeyword = 'Convert Images to PDF Online – JPG, PNG & WEBP to PDF Free';
+const title = 'Image to PDF – Free Online JPG & PNG to PDF Converter';
+const description = 'Convert JPG, PNG, and WEBP images into a single PDF document for free. Drag, reorder, adjust page sizes (A4, Letter, Fit), and download high-quality PDFs client-side.';
+
+const howToSteps = [
+  'Click the upload dropzone or drag and drop your photos/images (JPG, PNG, WEBP, GIF) into the box.',
+  'Arrange your images in the exact sequence you want them to appear in the PDF by clicking the left/right directional arrows.',
+  'Choose your preferred page formatting: A4, US Letter, or Fit to Image Dimensions, and select margin sizes.',
+  'Click the "Convert to PDF & Download" button to begin client-side document compilation.',
+  'Your merged multi-page PDF will download immediately to your device without uploading files to any remote server.'
+];
+
+const benefits = [
+  {
+    title: '100% Client-Side Privacy',
+    description: 'Your photos and scanned documents are never sent over the internet or saved on remote servers. All PDF generation happens directly in your browser.'
+  },
+  {
+    title: 'Multi-Image Batch Merge',
+    description: 'Combine multiple image files into one structured, clean multi-page PDF document in seconds.'
+  },
+  {
+    title: 'Reorderable Pages & Previews',
+    description: 'Inspect full-color thumbnails, adjust page sequences, and remove unwanted photos before compiling.'
+  },
+  {
+    title: 'Flexible Page Sizing & Margins',
+    description: 'Supports standard A4 and US Letter document paper sizes as well as custom full-bleed and auto-aspect ratio matching.'
+  }
+];
+
+const faqs = [
+  {
+    question: 'Are my uploaded images uploaded to a server?',
+    answer: 'No. Our image to PDF tool operates 100% locally on your computer or phone using JavaScript (jsPDF). Your images never leave your device, ensuring maximum security for sensitive documents like ID cards, receipts, and contracts.'
+  },
+  {
+    question: 'Can I combine different image formats (e.g. JPG and PNG together)?',
+    answer: 'Yes! You can upload a mixture of JPG, PNG, WEBP, and GIF images simultaneously. The converter will process and embed them all into a unified PDF file.'
+  },
+  {
+    question: 'What is the maximum file size or image limit?',
+    answer: 'To ensure smooth browser performance and prevent memory crashes, we recommend uploading up to 20MB of images at a time. There is no artificial cap on the number of images.'
+  },
+  {
+    question: 'How do I rearrange the order of pages in the PDF?',
+    answer: 'Under the "Selected Images" queue, click the left (←) and right (→) arrow buttons on any thumbnail card to move that page backward or forward in the final document.'
+  },
+  {
+    question: 'Does this tool work on iPhone and Android phones?',
+    answer: 'Yes, this converter is completely mobile-friendly and lets you select photos directly from your camera roll or photo library.'
+  }
+];
+
+const relatedPosts = [
+  {
+    title: 'Agentic AI & Local Autonomous Inference in 2026',
+    slug: 'agentic-ai-autonomous-local-2026',
+    description: 'Examining on-device compute, localized privacy boundaries, and zero-server latency workflows.',
+    category: 'Engineering'
+  },
+  {
+    title: 'Humanoid Robotics & Physical AI in 2026',
+    slug: 'humanoid-robots-physical-ai-2026',
+    description: 'Spatial computing, computer vision sensors, and document ingestion in autonomous machines.',
+    category: 'Hardware'
+  }
+];
+---
+
+<ToolLayout
+  title={title}
+  description={description}
+  toolName={toolName}
+  toolSlug={toolSlug}
+  primaryKeyword={primaryKeyword}
+  applicationCategory="MultimediaApplication"
+  howToSteps={howToSteps}
+  benefits={benefits}
+  faqs={faqs}
+  relatedPosts={relatedPosts}
+>
+  <ImageToPdf />
+</ToolLayout>

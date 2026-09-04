@@ -131,6 +131,74 @@ const secondaryPosts = remainingPosts.slice(1);
     </section>
   )}
 
+  <!-- Featured Utility Tools Section -->
+  <section class="tools-showcase-section">
+    <div class="container">
+      <div class="section-kicker-bar">
+        <span class="kicker-label">CLIENT-SIDE UTILITIES</span>
+        <span class="kicker-line"></span>
+      </div>
+
+      <div class="tools-showcase-header">
+        <div>
+          <h2 class="showcase-title">Fast, Private &amp; Free Online Tools</h2>
+          <p class="showcase-subtitle">Zero server latency, complete client-side privacy, and instant conversion results.</p>
+        </div>
+        <a href="/tools" class="btn btn-outline btn-tools-all">View All 6 Tools &rarr;</a>
+      </div>
+
+      <div class="tools-mini-grid">
+        <a href="/tools/word-counter" class="tool-mini-card">
+          <span class="tool-mini-icon">📝</span>
+          <div class="tool-mini-info">
+            <h3>Word Counter</h3>
+            <p>Word, character, reading duration & keyword density stats.</p>
+          </div>
+        </a>
+
+        <a href="/tools/case-converter" class="tool-mini-card">
+          <span class="tool-mini-icon">🔠</span>
+          <div class="tool-mini-info">
+            <h3>Case Converter</h3>
+            <p>Convert to UPPERCASE, camelCase, snake_case & Title Case.</p>
+          </div>
+        </a>
+
+        <a href="/tools/unit-converter" class="tool-mini-card">
+          <span class="tool-mini-icon">📐</span>
+          <div class="tool-mini-info">
+            <h3>Unit Converter</h3>
+            <p>Convert length, weight, temperature, area & storage units.</p>
+          </div>
+        </a>
+
+        <a href="/tools/currency-converter" class="tool-mini-card">
+          <span class="tool-mini-icon">💱</span>
+          <div class="tool-mini-info">
+            <h3>Currency Converter</h3>
+            <p>Live ECB FX rates for USD, EUR, GBP, INR with local cache.</p>
+          </div>
+        </a>
+
+        <a href="/tools/image-to-pdf" class="tool-mini-card">
+          <span class="tool-mini-icon">🖼️</span>
+          <div class="tool-mini-info">
+            <h3>Image to PDF</h3>
+            <p>Batch merge JPG, PNG & WEBP photos into a single PDF.</p>
+          </div>
+        </a>
+
+        <a href="/tools/pdf-to-word" class="tool-mini-card">
+          <span class="tool-mini-icon">📄</span>
+          <div class="tool-mini-info">
+            <h3>PDF to Word</h3>
+            <p>Extract text and convert PDF documents to editable DOCX.</p>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
   <!-- Editorial Field Note & Newsletter Section -->
   <Newsletter />
 </BaseLayout>
@@ -243,5 +311,100 @@ const secondaryPosts = remainingPosts.slice(1);
     .secondary-grid {
       grid-template-columns: repeat(2, 1fr);
     }
+  }
+
+  .tools-showcase-section {
+    padding: 2.5rem 0 3.5rem;
+    border-top: 1px solid var(--color-border-subtle);
+  }
+
+  .tools-showcase-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .showcase-title {
+    font-family: var(--font-serif);
+    font-size: clamp(1.65rem, 3vw, 2.2rem);
+    font-weight: 700;
+    color: var(--color-text);
+    margin-bottom: 0.25rem;
+  }
+
+  .showcase-subtitle {
+    font-size: 0.95rem;
+    color: var(--color-text-muted);
+    margin: 0;
+  }
+
+  .btn-tools-all {
+    font-size: 0.85rem;
+    padding: 0.5rem 1rem;
+  }
+
+  .tools-mini-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
+  @media (min-width: 640px) {
+    .tools-mini-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .tools-mini-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .tool-mini-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 0.65rem;
+    padding: 1.25rem;
+    text-decoration: none;
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .tool-mini-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--color-accent);
+    box-shadow: 0 6px 18px var(--color-shadow);
+  }
+
+  .tool-mini-icon {
+    font-size: 1.85rem;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+
+  .tool-mini-info {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .tool-mini-info h3 {
+    font-family: var(--font-serif);
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--color-text);
+    margin-bottom: 0.25rem;
+  }
+
+  .tool-mini-info p {
+    font-size: 0.82rem;
+    color: var(--color-text-muted);
+    line-height: 1.45;
+    margin: 0;
   }
 </style>

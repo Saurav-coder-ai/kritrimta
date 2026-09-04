@@ -1,0 +1,480 @@
+---
+// WordCounter.astro - Interactive real-time word counter with keyword density
+---
+
+<div class="word-counter-app">
+  <!-- Top Stat Cards Grid -->
+  <div class="stats-overview-grid">
+    <div class="stat-card primary">
+      <span class="stat-label">WORDS</span>
+      <span class="stat-value" id="wc-words">0</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-label">CHARACTERS</span>
+      <span class="stat-value" id="wc-chars">0</span>
+      <span class="stat-subtext" id="wc-chars-no-space">(0 without spaces)</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-label">SENTENCES</span>
+      <span class="stat-value" id="wc-sentences">0</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-label">PARAGRAPHS</span>
+      <span class="stat-value" id="wc-paragraphs">0</span>
+    </div>
+  </div>
+
+  <!-- Secondary Read/Speak Time Cards -->
+  <div class="time-estimate-bar">
+    <div class="time-item">
+      <span class="time-icon">⏱️</span>
+      <div class="time-info">
+        <span class="time-title">Estimated Reading Time:</span>
+        <span class="time-val" id="wc-read-time">0 sec</span>
+        <span class="time-rate">(~200 words/min)</span>
+      </div>
+    </div>
+    <div class="time-item">
+      <span class="time-icon">🎙️</span>
+      <div class="time-info">
+        <span class="time-title">Estimated Speaking Time:</span>
+        <span class="time-val" id="wc-speak-time">0 sec</span>
+        <span class="time-rate">(~130 words/min)</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Text Input Area -->
+  <div class="input-container">
+    <div class="input-toolbar">
+      <span class="input-status-hint">Type or paste text below to see live statistics</span>
+      <div class="input-buttons">
+        <button type="button" class="btn-tool-action" id="wc-sample-btn">Load Sample</button>
+        <button type="button" class="btn-tool-action" id="wc-copy-btn">Copy Text</button>
+        <button type="button" class="btn-tool-action danger" id="wc-clear-btn">Clear</button>
+      </div>
+    </div>
+    <textarea
+      id="wc-textarea"
+      class="word-counter-textarea"
+      placeholder="Start typing or paste your content here to instantly calculate words, characters, sentences, reading duration, and keyword frequencies..."
+      rows="10"
+      spellcheck="false"
+    ></textarea>
+  </div>
+
+  <!-- Keyword Density Section -->
+  <div class="density-container">
+    <div class="density-header">
+      <span class="density-title">Top Keyword Density (Excluding Stop Words)</span>
+      <span class="density-caption">Identifies recurring words for content & SEO tuning</span>
+    </div>
+    <div id="wc-keywords-list" class="keywords-list">
+      <span class="empty-keywords-hint">Start typing text above to see keyword frequencies.</span>
+    </div>
+  </div>
+</div>
+
+<style>
+  .word-counter-app {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .stats-overview-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  @media (min-width: 768px) {
+    .stats-overview-grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  .stat-card {
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: 0.6rem;
+    padding: 1.15rem 1rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .stat-card.primary {
+    border-color: var(--color-accent);
+    background: var(--color-accent-subtle);
+  }
+
+  .stat-label {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    color: var(--color-text-muted);
+    margin-bottom: 0.25rem;
+  }
+
+  .stat-card.primary .stat-label {
+    color: var(--color-accent);
+    font-weight: 600;
+  }
+
+  .stat-value {
+    font-family: var(--font-mono);
+    font-size: 2.1rem;
+    font-weight: 700;
+    line-height: 1.1;
+    color: var(--color-text);
+  }
+
+  .stat-card.primary .stat-value {
+    color: var(--color-accent);
+  }
+
+  .stat-subtext {
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+    margin-top: 0.2rem;
+  }
+
+  .time-estimate-bar {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: 0.5rem;
+    padding: 0.85rem 1.25rem;
+  }
+
+  @media (min-width: 640px) {
+    .time-estimate-bar {
+      flex-direction: row;
+      justify-content: space-around;
+      gap: 1.5rem;
+    }
+  }
+
+  .time-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .time-icon {
+    font-size: 1.3rem;
+  }
+
+  .time-info {
+    display: flex;
+    align-items: baseline;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+    font-size: 0.88rem;
+  }
+
+  .time-title {
+    color: var(--color-text-muted);
+  }
+
+  .time-val {
+    font-family: var(--font-mono);
+    font-weight: 700;
+    color: var(--color-text);
+  }
+
+  .time-rate {
+    font-size: 0.78rem;
+    color: var(--color-text-faint);
+  }
+
+  .input-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .input-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .input-status-hint {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+  }
+
+  .input-buttons {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .btn-tool-action {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    color: var(--color-text);
+    padding: 0.35rem 0.75rem;
+    border-radius: 0.4rem;
+    font-size: 0.8rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .btn-tool-action:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+    background: var(--color-surface-subtle);
+  }
+
+  .btn-tool-action.danger:hover {
+    border-color: #ef4444;
+    color: #ef4444;
+  }
+
+  .word-counter-textarea {
+    width: 100%;
+    min-height: 220px;
+    padding: 1rem;
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.6;
+    background: var(--color-bg);
+    color: var(--color-text);
+    border: 1px solid var(--color-border);
+    border-radius: 0.6rem;
+    resize: vertical;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  .word-counter-textarea:focus {
+    outline: none;
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 3px var(--color-accent-subtle);
+  }
+
+  .density-container {
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: 0.6rem;
+    padding: 1.25rem;
+  }
+
+  .density-header {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 0.85rem;
+  }
+
+  .density-title {
+    font-family: var(--font-serif);
+    font-weight: 600;
+    font-size: 1.05rem;
+    color: var(--color-text);
+  }
+
+  .density-caption {
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+  }
+
+  .keywords-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    align-items: center;
+  }
+
+  .empty-keywords-hint {
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    font-style: italic;
+  }
+
+  .keyword-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    padding: 0.35rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.82rem;
+  }
+
+  .keyword-word {
+    font-weight: 600;
+    color: var(--color-text);
+  }
+
+  .keyword-count {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    background: var(--color-accent-subtle);
+    color: var(--color-accent);
+    padding: 0.1rem 0.4rem;
+    border-radius: 9999px;
+    font-weight: 700;
+  }
+</style>
+
+<script>
+  // Common English stop words to filter out from keyword density
+  const STOP_WORDS = new Set([
+    'a', 'about', 'above', 'after', 'again', 'against', 'all', 'am', 'an', 'and', 'any', 'are', 'aren\'t', 'as',
+    'at', 'be', 'because', 'been', 'before', 'being', 'below', 'between', 'both', 'but', 'by', 'can', 'can\'t',
+    'cannot', 'could', 'couldn\'t', 'did', 'didn\'t', 'do', 'does', 'doesn\'t', 'doing', 'don\'t', 'down',
+    'during', 'each', 'few', 'for', 'from', 'further', 'had', 'hadn\'t', 'has', 'hasn\'t', 'have', 'haven\'t',
+    'having', 'he', 'he\'d', 'he\'ll', 'he\'s', 'her', 'here', 'here\'s', 'hers', 'herself', 'him', 'himself',
+    'his', 'how', 'how\'s', 'i', 'i\'d', 'i\'ll', 'i\'m', 'i\'ve', 'if', 'in', 'into', 'is', 'isn\'t', 'it',
+    'it\'s', 'its', 'itself', 'let\'s', 'me', 'more', 'most', 'mustn\'t', 'my', 'myself', 'no', 'nor', 'not',
+    'of', 'off', 'on', 'once', 'only', 'or', 'other', 'ought', 'our', 'ours', 'ourselves', 'out', 'over', 'own',
+    'same', 'shan\'t', 'she', 'she\'d', 'she\'ll', 'she\'s', 'should', 'shouldn\'t', 'so', 'some', 'such',
+    'than', 'that', 'that\'s', 'the', 'their', 'theirs', 'them', 'themselves', 'then', 'there', 'there\'s',
+    'these', 'they', 'they\'d', 'they\'ll', 'they\'re', 'they\'ve', 'this', 'those', 'through', 'to', 'too',
+    'under', 'until', 'up', 'very', 'was', 'wasn\'t', 'we', 'we\'d', 'we\'ll', 'we\'re', 'we\'ve', 'were',
+    'weren\'t', 'what', 'what\'s', 'when', 'when\'s', 'where', 'where\'s', 'which', 'while', 'who', 'who\'s',
+    'whom', 'why', 'why\'s', 'with', 'won\'t', 'would', 'wouldn\'t', 'you', 'you\'d', 'you\'ll', 'you\'re',
+    'you\'ve', 'your', 'yours', 'yourself', 'yourselves'
+  ]);
+
+  const textarea = document.getElementById('wc-textarea') as HTMLTextAreaElement | null;
+  const wordsEl = document.getElementById('wc-words');
+  const charsEl = document.getElementById('wc-chars');
+  const charsNoSpaceEl = document.getElementById('wc-chars-no-space');
+  const sentencesEl = document.getElementById('wc-sentences');
+  const paragraphsEl = document.getElementById('wc-paragraphs');
+  const readTimeEl = document.getElementById('wc-read-time');
+  const speakTimeEl = document.getElementById('wc-speak-time');
+  const keywordsListEl = document.getElementById('wc-keywords-list');
+  const clearBtn = document.getElementById('wc-clear-btn');
+  const copyBtn = document.getElementById('wc-copy-btn');
+  const sampleBtn = document.getElementById('wc-sample-btn');
+
+  const SAMPLE_TEXT = `Artificial intelligence and autonomous agent architectures have advanced rapidly in 2026. High-performance reasoning models allow developers to automate complex multi-step workflows with remarkable speed and precision.\n\nFrom client-side computational utilities to deep inference scaling, modern applications deliver instant responses without server latency. Evaluating performance metrics, reading duration, and word density ensures written content remains concise and engaging for readers across technical domains.`;
+
+  function formatTime(seconds: number): string {
+    if (seconds < 60) {
+      return `${seconds} sec`;
+    }
+    const mins = Math.floor(seconds / 60);
+    const remainingSecs = seconds % 60;
+    return remainingSecs > 0 ? `${mins} min ${remainingSecs} sec` : `${mins} min`;
+  }
+
+  function updateCounts() {
+    if (!textarea) return;
+    const text = textarea.value;
+
+    // Characters
+    const totalChars = text.length;
+    const charsNoSpace = text.replace(/\s+/g, '').length;
+
+    // Words
+    const trimmed = text.trim();
+    const words = trimmed.length > 0 ? trimmed.split(/\s+/).filter(Boolean) : [];
+    const wordCount = words.length;
+
+    // Sentences
+    const sentences = trimmed.length > 0 
+      ? text.split(/[.!?]+/).filter(s => s.trim().length > 0)
+      : [];
+    const sentenceCount = sentences.length;
+
+    // Paragraphs
+    const paragraphs = text
+      .split(/\n+/)
+      .map(p => p.trim())
+      .filter(p => p.length > 0);
+    const paragraphCount = paragraphs.length;
+
+    // Reading & Speaking Time
+    // Reading ~200 WPM, Speaking ~130 WPM
+    const readSecs = Math.ceil((wordCount / 200) * 60);
+    const speakSecs = Math.ceil((wordCount / 130) * 60);
+
+    // Update DOM
+    if (wordsEl) wordsEl.textContent = wordCount.toLocaleString();
+    if (charsEl) charsEl.textContent = totalChars.toLocaleString();
+    if (charsNoSpaceEl) charsNoSpaceEl.textContent = `(${charsNoSpace.toLocaleString()} without spaces)`;
+    if (sentencesEl) sentencesEl.textContent = sentenceCount.toLocaleString();
+    if (paragraphsEl) paragraphsEl.textContent = paragraphCount.toLocaleString();
+    if (readTimeEl) readTimeEl.textContent = formatTime(readSecs);
+    if (speakTimeEl) speakTimeEl.textContent = formatTime(speakSecs);
+
+    // Calculate Top 5 Keywords
+    if (keywordsListEl) {
+      if (wordCount === 0) {
+        keywordsListEl.innerHTML = '<span class="empty-keywords-hint">Start typing text above to see keyword frequencies.</span>';
+        return;
+      }
+
+      const frequencyMap = new Map<string, number>();
+      words.forEach(w => {
+        const clean = w.toLowerCase().replace(/[^a-z0-9'-]/g, '').trim();
+        if (clean.length > 2 && !STOP_WORDS.has(clean) && !/^\d+$/.test(clean)) {
+          frequencyMap.set(clean, (frequencyMap.get(clean) || 0) + 1);
+        }
+      });
+
+      const sorted = Array.from(frequencyMap.entries())
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 5);
+
+      if (sorted.length === 0) {
+        keywordsListEl.innerHTML = '<span class="empty-keywords-hint">No prominent repeating keywords found yet.</span>';
+      } else {
+        keywordsListEl.innerHTML = sorted
+          .map(([word, count]) => {
+            const pct = ((count / wordCount) * 100).toFixed(1);
+            return `<div class="keyword-pill"><span class="keyword-word">${word}</span><span class="keyword-count">${count} (${pct}%)</span></div>`;
+          })
+          .join('');
+      }
+    }
+  }
+
+  textarea?.addEventListener('input', updateCounts);
+
+  clearBtn?.addEventListener('click', () => {
+    if (textarea) {
+      textarea.value = '';
+      updateCounts();
+      textarea.focus();
+    }
+  });
+
+  copyBtn?.addEventListener('click', async () => {
+    if (!textarea || !textarea.value) return;
+    try {
+      await navigator.clipboard.writeText(textarea.value);
+      const originalText = copyBtn.textContent;
+      copyBtn.textContent = 'Copied! ✓';
+      setTimeout(() => {
+        if (copyBtn) copyBtn.textContent = originalText;
+      }, 2000);
+    } catch (err) {
+      console.error('Failed to copy', err);
+    }
+  });
+
+  sampleBtn?.addEventListener('click', () => {
+    if (textarea) {
+      textarea.value = SAMPLE_TEXT;
+      updateCounts();
+    }
+  });
+
+  // Run on initial load
+  updateCounts();
+</script>

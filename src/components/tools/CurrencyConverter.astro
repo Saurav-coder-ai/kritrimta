@@ -1,0 +1,605 @@
+---
+// CurrencyConverter.astro - Real-time currency exchange calculator with client-side rate caching
+---
+
+<div class="currency-converter-app">
+  <!-- Status & Timestamp Banner -->
+  <div class="rate-status-bar">
+    <div class="rate-status-item">
+      <span class="status-indicator-dot" id="curr-status-dot"></span>
+      <span class="status-label" id="curr-status-text">Fetching latest exchange rates...</span>
+    </div>
+    <div class="rate-timestamp" id="curr-timestamp">
+      <!-- Last updated timestamp -->
+    </div>
+  </div>
+
+  <!-- Interactive Conversion Stage -->
+  <div class="converter-stage">
+    <!-- From Currency -->
+    <div class="conversion-column">
+      <label class="col-label" for="curr-amount-input">AMOUNT & FROM CURRENCY</label>
+      <div class="input-currency-group">
+        <input
+          type="number"
+          id="curr-amount-input"
+          class="form-input currency-input"
+          placeholder="100"
+          value="100"
+          min="0"
+          step="any"
+        />
+        <select id="curr-from-select" class="form-input currency-select" aria-label="From Currency">
+          <!-- Populated by JS -->
+        </select>
+      </div>
+    </div>
+
+    <!-- Swap Button -->
+    <button type="button" id="curr-swap-btn" class="btn-swap-currency" aria-label="Swap currencies">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="16 3 21 3 21 8"></polyline>
+        <line x1="4" y1="20" x2="21" y2="3"></line>
+        <polyline points="8 21 3 21 3 16"></polyline>
+        <line x1="20" y1="4" x2="3" y2="21"></line>
+      </svg>
+    </button>
+
+    <!-- To Currency -->
+    <div class="conversion-column">
+      <label class="col-label" for="curr-result-input">CONVERTED RESULT & TO CURRENCY</label>
+      <div class="input-currency-group">
+        <input
+          type="text"
+          id="curr-result-input"
+          class="form-input currency-input result-highlight"
+          placeholder="Converting..."
+          readonly
+        />
+        <select id="curr-to-select" class="form-input currency-select" aria-label="To Currency">
+          <!-- Populated by JS -->
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Exchange Rate Details Card -->
+  <div class="exchange-summary-card">
+    <div class="summary-left">
+      <span class="rate-lead" id="curr-rate-headline">1 USD = -- EUR</span>
+      <span class="rate-sub" id="curr-inverse-rate">1 EUR = -- USD</span>
+    </div>
+    <div class="summary-actions">
+      <button type="button" class="btn-tool-action" id="curr-refresh-btn">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="23 4 23 10 17 10"></polyline>
+          <polyline points="1 20 1 14 7 14"></polyline>
+          <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+        </svg>
+        <span>Refresh Rates</span>
+      </button>
+      <button type="button" class="btn-tool-action primary" id="curr-copy-btn">
+        Copy Result
+      </button>
+    </div>
+  </div>
+
+  <!-- Popular Currency Pair Quick-Picks -->
+  <div class="quick-pairs-container">
+    <span class="quick-pairs-title">Popular Conversions:</span>
+    <div class="quick-pairs-pills">
+      <button type="button" class="pair-pill" data-from="USD" data-to="EUR">USD &rarr; EUR</button>
+      <button type="button" class="pair-pill" data-from="USD" data-to="GBP">USD &rarr; GBP</button>
+      <button type="button" class="pair-pill" data-from="USD" data-to="INR">USD &rarr; INR</button>
+      <button type="button" class="pair-pill" data-from="EUR" data-to="USD">EUR &rarr; USD</button>
+      <button type="button" class="pair-pill" data-from="GBP" data-to="USD">GBP &rarr; USD</button>
+      <button type="button" class="pair-pill" data-from="USD" data-to="CAD">USD &rarr; CAD</button>
+      <button type="button" class="pair-pill" data-from="USD" data-to="AUD">USD &rarr; AUD</button>
+      <button type="button" class="pair-pill" data-from="USD" data-to="JPY">USD &rarr; JPY</button>
+    </div>
+  </div>
+</div>
+
+<style>
+  .currency-converter-app {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .rate-status-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    padding: 0.6rem 1rem;
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: 0.5rem;
+    font-size: 0.82rem;
+  }
+
+  .rate-status-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .status-indicator-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #eab308;
+    display: inline-block;
+  }
+
+  .status-indicator-dot.live {
+    background: #22c55e;
+    box-shadow: 0 0 6px rgba(34, 197, 94, 0.6);
+  }
+
+  .status-label {
+    color: var(--color-text-muted);
+    font-family: var(--font-sans);
+  }
+
+  .rate-timestamp {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--color-text-faint);
+  }
+
+  .converter-stage {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+    align-items: center;
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+  }
+
+  @media (min-width: 768px) {
+    .converter-stage {
+      grid-template-columns: 1fr auto 1fr;
+      gap: 1.5rem;
+    }
+  }
+
+  .conversion-column {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .col-label {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: var(--color-text-muted);
+  }
+
+  .input-currency-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  @media (min-width: 480px) {
+    .input-currency-group {
+      flex-direction: row;
+    }
+  }
+
+  .currency-input {
+    font-family: var(--font-mono);
+    font-size: 1.35rem;
+    font-weight: 700;
+    padding: 0.75rem 1rem;
+    flex: 1;
+  }
+
+  .currency-input.result-highlight {
+    background: var(--color-bg);
+    color: var(--color-accent);
+    cursor: default;
+  }
+
+  .currency-select {
+    font-family: var(--font-sans);
+    font-size: 0.95rem;
+    font-weight: 600;
+    padding: 0.75rem;
+    min-width: 140px;
+    cursor: pointer;
+  }
+
+  .btn-swap-currency {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    color: var(--color-text);
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    margin: 0 auto;
+    transition: all 0.2s ease;
+  }
+
+  .btn-swap-currency:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+    transform: rotate(180deg);
+  }
+
+  .exchange-summary-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 0.6rem;
+    padding: 1rem 1.25rem;
+  }
+
+  .summary-left {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  .rate-lead {
+    font-family: var(--font-serif);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--color-text);
+  }
+
+  .rate-sub {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+  }
+
+  .summary-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .btn-tool-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    color: var(--color-text);
+    padding: 0.45rem 0.85rem;
+    border-radius: 0.4rem;
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .btn-tool-action:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+  }
+
+  .btn-tool-action.primary {
+    background: var(--color-accent);
+    color: #ffffff;
+    border-color: var(--color-accent);
+  }
+
+  .btn-tool-action.primary:hover {
+    background: var(--color-accent-hover);
+    color: #ffffff;
+  }
+
+  .quick-pairs-container {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    font-size: 0.85rem;
+  }
+
+  .quick-pairs-title {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+  }
+
+  .quick-pairs-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .pair-pill {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    color: var(--color-text-muted);
+    padding: 0.25rem 0.65rem;
+    border-radius: 9999px;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .pair-pill:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+    background: var(--color-accent-subtle);
+  }
+</style>
+
+<script>
+  // Currencies list with names
+  const CURRENCIES: { [code: string]: string } = {
+    USD: 'USD – US Dollar ($)',
+    EUR: 'EUR – Euro (€)',
+    GBP: 'GBP – British Pound (£)',
+    INR: 'INR – Indian Rupee (₹)',
+    CAD: 'CAD – Canadian Dollar (C$)',
+    AUD: 'AUD – Australian Dollar (A$)',
+    JPY: 'JPY – Japanese Yen (¥)',
+    CHF: 'CHF – Swiss Franc (CHF)',
+    CNY: 'CNY – Chinese Yuan (¥)',
+    SGD: 'SGD – Singapore Dollar (S$)',
+    NZD: 'NZD – New Zealand Dollar (NZ$)',
+    HKD: 'HKD – Hong Kong Dollar (HK$)',
+    SEK: 'SEK – Swedish Krona (kr)',
+    NOK: 'NOK – Norwegian Krone (kr)',
+    DKK: 'DKK – Danish Krone (kr)',
+    PLN: 'PLN – Polish Zloty (zł)',
+    BRL: 'BRL – Brazilian Real (R$)',
+    MXN: 'MXN – Mexican Peso (Mex$)',
+    ZAR: 'ZAR – South African Rand (R)',
+    KRW: 'KRW – South Korean Won (₩)',
+    THB: 'THB – Thai Baht (฿)',
+    TRY: 'TRY – Turkish Lira (₺)',
+    ILS: 'ILS – Israeli Shekel (₪)',
+    CZK: 'CZK – Czech Koruna (Kč)',
+    HUF: 'HUF – Hungarian Forint (Ft)',
+    PHP: 'PHP – Philippine Peso (₱)',
+    MYR: 'MYR – Malaysian Ringgit (RM)',
+    IDR: 'IDR – Indonesian Rupiah (Rp)'
+  };
+
+  // Fallback fixed rates against USD (used if network offline / API fail)
+  const FALLBACK_RATES: { [code: string]: number } = {
+    USD: 1,
+    EUR: 0.92,
+    GBP: 0.78,
+    INR: 83.5,
+    CAD: 1.36,
+    AUD: 1.52,
+    JPY: 155.2,
+    CHF: 0.90,
+    CNY: 7.24,
+    SGD: 1.35,
+    NZD: 1.64,
+    HKD: 7.82,
+    SEK: 10.5,
+    NOK: 10.6,
+    DKK: 6.86,
+    PLN: 3.96,
+    BRL: 5.4,
+    MXN: 18.2,
+    ZAR: 18.4,
+    KRW: 1375,
+    THB: 36.8,
+    TRY: 32.5,
+    ILS: 3.7,
+    CZK: 23.2,
+    HUF: 365,
+    PHP: 58.5,
+    MYR: 4.7,
+    IDR: 16250
+  };
+
+  const CACHE_KEY = 'kritrimta_currency_rates_v1';
+  const CACHE_TTL_MS = 4 * 60 * 60 * 1000; // 4 Hours
+
+  let exchangeRates: { [code: string]: number } = { ...FALLBACK_RATES };
+  let baseCurrency = 'USD';
+
+  const amountInput = document.getElementById('curr-amount-input') as HTMLInputElement | null;
+  const resultInput = document.getElementById('curr-result-input') as HTMLInputElement | null;
+  const fromSelect = document.getElementById('curr-from-select') as HTMLSelectElement | null;
+  const toSelect = document.getElementById('curr-to-select') as HTMLSelectElement | null;
+  const swapBtn = document.getElementById('curr-swap-btn');
+  const statusDot = document.getElementById('curr-status-dot');
+  const statusText = document.getElementById('curr-status-text');
+  const timestampEl = document.getElementById('curr-timestamp');
+  const headlineEl = document.getElementById('curr-rate-headline');
+  const inverseEl = document.getElementById('curr-inverse-rate');
+  const refreshBtn = document.getElementById('curr-refresh-btn');
+  const copyBtn = document.getElementById('curr-copy-btn');
+  const pairPills = document.querySelectorAll('.pair-pill');
+
+  function populateDropdowns() {
+    if (!fromSelect || !toSelect) return;
+    fromSelect.innerHTML = '';
+    toSelect.innerHTML = '';
+
+    Object.entries(CURRENCIES).forEach(([code, name]) => {
+      const opt1 = document.createElement('option');
+      opt1.value = code;
+      opt1.textContent = name;
+      fromSelect.appendChild(opt1);
+
+      const opt2 = document.createElement('option');
+      opt2.value = code;
+      opt2.textContent = name;
+      toSelect.appendChild(opt2);
+    });
+
+    fromSelect.value = 'USD';
+    toSelect.value = 'EUR';
+  }
+
+  async function fetchExchangeRates(forceRefresh: boolean = false) {
+    // Check localStorage cache
+    if (!forceRefresh) {
+      try {
+        const cachedStr = localStorage.getItem(CACHE_KEY);
+        if (cachedStr) {
+          const cached = JSON.parse(cachedStr);
+          const age = Date.now() - cached.timestamp;
+          if (age < CACHE_TTL_MS && cached.rates) {
+            exchangeRates = { USD: 1, ...cached.rates };
+            setLiveStatus(true, new Date(cached.timestamp));
+            calculate();
+            return;
+          }
+        }
+      } catch (e) {
+        console.warn('LocalStorage error', e);
+      }
+    }
+
+    if (statusText) statusText.textContent = 'Fetching latest live rates via Frankfurter API...';
+
+    try {
+      // Frankfurter free API (base USD)
+      const res = await fetch('https://api.frankfurter.app/latest?from=USD');
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = await res.json();
+
+      if (data && data.rates) {
+        exchangeRates = { USD: 1, ...data.rates };
+        const now = Date.now();
+        try {
+          localStorage.setItem(CACHE_KEY, JSON.stringify({
+            timestamp: now,
+            rates: data.rates,
+            date: data.date
+          }));
+        } catch (e) {
+          console.warn('Failed to cache rates', e);
+        }
+        setLiveStatus(true, new Date(now));
+      }
+    } catch (err) {
+      console.warn('Rates API fetch failed, using fallback/cached rates:', err);
+      if (statusText) statusText.textContent = 'Using cached benchmark exchange rates';
+      if (statusDot) {
+        statusDot.classList.remove('live');
+        statusDot.style.background = '#f59e0b';
+      }
+    }
+
+    calculate();
+  }
+
+  function setLiveStatus(isLive: boolean, date: Date) {
+    if (statusDot) {
+      if (isLive) {
+        statusDot.classList.add('live');
+        statusDot.style.background = '#22c55e';
+      }
+    }
+    if (statusText) {
+      statusText.textContent = isLive ? 'Live Exchange Rates Active' : 'Cached Benchmark Rates';
+    }
+    if (timestampEl) {
+      timestampEl.textContent = `Rates updated: ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} (${date.toLocaleDateString()})`;
+    }
+  }
+
+  function calculate() {
+    if (!amountInput || !resultInput || !fromSelect || !toSelect) return;
+
+    const amount = parseFloat(amountInput.value);
+    const fromCode = fromSelect.value;
+    const toCode = toSelect.value;
+
+    if (isNaN(amount) || amount < 0) {
+      resultInput.value = '';
+      return;
+    }
+
+    const fromRate = exchangeRates[fromCode] || FALLBACK_RATES[fromCode] || 1;
+    const toRate = exchangeRates[toCode] || FALLBACK_RATES[toCode] || 1;
+
+    // Convert fromCode -> USD -> toCode
+    const rate = toRate / fromRate;
+    const converted = amount * rate;
+
+    // Format display
+    resultInput.value = converted.toLocaleString(undefined, {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 4
+    });
+
+    // Update summary text
+    if (headlineEl) {
+      headlineEl.textContent = `1 ${fromCode} = ${rate.toFixed(4)} ${toCode}`;
+    }
+    if (inverseEl) {
+      const inverseRate = 1 / rate;
+      inverseEl.textContent = `1 ${toCode} = ${inverseRate.toFixed(4)} ${fromCode}`;
+    }
+  }
+
+  amountInput?.addEventListener('input', calculate);
+  fromSelect?.addEventListener('change', calculate);
+  toSelect?.addEventListener('change', calculate);
+
+  swapBtn?.addEventListener('click', () => {
+    if (!fromSelect || !toSelect) return;
+    const temp = fromSelect.value;
+    fromSelect.value = toSelect.value;
+    toSelect.value = temp;
+    calculate();
+  });
+
+  refreshBtn?.addEventListener('click', () => {
+    fetchExchangeRates(true);
+  });
+
+  copyBtn?.addEventListener('click', async () => {
+    if (!amountInput || !resultInput || !fromSelect || !toSelect) return;
+    const text = `${amountInput.value} ${fromSelect.value} = ${resultInput.value} ${toSelect.value}`;
+    try {
+      await navigator.clipboard.writeText(text);
+      const orig = copyBtn.textContent;
+      copyBtn.textContent = 'Copied! ✓';
+      setTimeout(() => {
+        if (copyBtn) copyBtn.textContent = orig;
+      }, 2000);
+    } catch (e) {
+      console.error('Failed to copy', e);
+    }
+  });
+
+  pairPills.forEach(pill => {
+    pill.addEventListener('click', () => {
+      const from = pill.getAttribute('data-from');
+      const to = pill.getAttribute('data-to');
+      if (from && to && fromSelect && toSelect) {
+        fromSelect.value = from;
+        toSelect.value = to;
+        calculate();
+      }
+    });
+  });
+
+  // Initialize
+  populateDropdowns();
+  fetchExchangeRates(false);
+</script>
