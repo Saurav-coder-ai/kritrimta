@@ -2,7 +2,9 @@
 // Kritrimta — AI Generate Widget for Decap CMS
 // Injects a "Generate with AI" button into the blog post
 // editor that calls the Netlify serverless function and
-// auto-fills CMS fields with the generated content.
+// auto-fills CMS fields (Title, Description, Publish Date,
+// Hero Image, Category, Tags, Author, Body) so you can
+// immediately click Publish.
 // ──────────────────────────────────────────────────────────
 
 (function () {
@@ -218,7 +220,7 @@
         border: 1px solid #a7f3d0;
         border-radius: 10px;
         padding: 14px 20px;
-        max-width: 420px;
+        max-width: 440px;
         box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
         animation: aiFadeIn 0.3s ease;
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -296,58 +298,79 @@
   // ────────────────────────────
 
   /**
-   * Finds a CMS field container by its label text.
-   * Returns { container, label } or null.
+   * Decap CMS renders each field within a ControlContainer.
+   * Inputs/textareas have id="${fieldName}-field-${id}"
+   * Labels have htmlFor="${fieldName}-field-${id}"
    */
-  function findFieldByLabel(labelText) {
+  function findFieldContainer(fieldName, labelText) {
+    // 1. Direct match by id prefix
+    const controlById = document.querySelector(`[id^="${fieldName}-field-"]`);
+    if (controlById) {
+      const container =
+        controlById.closest('[class*="ControlContainer"]') ||
+        controlById.closest('[class*="EditorControl"]') ||
+        controlById.parentElement?.parentElement?.parentElement ||
+        controlById.parentElement?.parentElement ||
+        controlById.parentElement;
+      return { container, control: controlById };
+    }
+
+    // 2. Direct match by label for attribute
+    const labelByFor = document.querySelector(`label[for^="${fieldName}-field-"]`);
+    if (labelByFor) {
+      const forId = labelByFor.getAttribute("for");
+      const ctrl = forId ? document.getElementById(forId) : null;
+      const container =
+        labelByFor.closest('[class*="ControlContainer"]') ||
+        labelByFor.closest('[class*="EditorControl"]') ||
+        labelByFor.parentElement?.parentElement ||
+        labelByFor.parentElement;
+      return { container, control: ctrl, label: labelByFor };
+    }
+
+    // 3. Fallback: match by label text (case-insensitive)
     const labels = document.querySelectorAll("label");
+    const target = (labelText || fieldName).toLowerCase();
     for (const label of labels) {
-      const text = label.textContent.trim().replace(/\s*\*$/, "").trim();
-      if (text === labelText) {
-        // Walk up to find a meaningful container
-        let container = label.parentElement;
-        return { container, label };
+      const text = label.textContent.trim().replace(/\s*\*$/, "").trim().toLowerCase();
+      if (text === target || text.startsWith(target) || text.includes(target)) {
+        const forId = label.getAttribute("for");
+        const ctrl = forId ? document.getElementById(forId) : null;
+        const container =
+          label.closest('[class*="ControlContainer"]') ||
+          label.closest('[class*="EditorControl"]') ||
+          label.parentElement?.parentElement ||
+          label.parentElement;
+        return { container, control: ctrl, label };
       }
     }
+
     return null;
   }
 
   /**
-   * Sets the value of a React-controlled <input>.
+   * Sets value for a React-controlled input or textarea.
    */
-  function setNativeInputValue(input, value) {
-    if (!input) return false;
+  function setNativeValue(element, value) {
+    if (!element) return false;
     try {
-      const setter = Object.getOwnPropertyDescriptor(
-        HTMLInputElement.prototype,
-        "value"
-      ).set;
-      setter.call(input, value);
-      input.dispatchEvent(new Event("input", { bubbles: true }));
-      input.dispatchEvent(new Event("change", { bubbles: true }));
+      element.focus();
+      const proto =
+        element instanceof HTMLTextAreaElement
+          ? HTMLTextAreaElement.prototype
+          : HTMLInputElement.prototype;
+      const setter = Object.getOwnPropertyDescriptor(proto, "value")?.set;
+      if (setter) {
+        setter.call(element, value);
+      } else {
+        element.value = value;
+      }
+      element.dispatchEvent(new Event("input", { bubbles: true, cancelable: true }));
+      element.dispatchEvent(new Event("change", { bubbles: true, cancelable: true }));
+      element.blur();
       return true;
     } catch (e) {
-      console.warn("[AI Gen] Failed to set input value:", e);
-      return false;
-    }
-  }
-
-  /**
-   * Sets the value of a React-controlled <textarea>.
-   */
-  function setNativeTextareaValue(textarea, value) {
-    if (!textarea) return false;
-    try {
-      const setter = Object.getOwnPropertyDescriptor(
-        HTMLTextAreaElement.prototype,
-        "value"
-      ).set;
-      setter.call(textarea, value);
-      textarea.dispatchEvent(new Event("input", { bubbles: true }));
-      textarea.dispatchEvent(new Event("change", { bubbles: true }));
-      return true;
-    } catch (e) {
-      console.warn("[AI Gen] Failed to set textarea value:", e);
+      console.warn("[AI Gen] Failed to set native value:", e);
       return false;
     }
   }
@@ -356,114 +379,127 @@
   // Field Setters
   // ────────────────────────────
 
-  /** Set a string-type field (Title, Author) */
-  function fillStringField(labelText, value) {
-    const field = findFieldByLabel(labelText);
+  /** Set string field (Title, Author) */
+  function fillStringField(fieldName, labelText, value) {
+    const field = findFieldContainer(fieldName, labelText);
     if (!field) return false;
 
     const input =
+      field.control ||
       field.container.querySelector('input[type="text"]') ||
       field.container.querySelector("input:not([type])") ||
       field.container.querySelector("input");
-    return setNativeInputValue(input, value);
+    return setNativeValue(input, value);
   }
 
-  /** Set a text-type field (Description) */
-  function fillTextField(labelText, value) {
-    const field = findFieldByLabel(labelText);
+  /** Set text field (Description) */
+  function fillTextField(fieldName, labelText, value) {
+    const field = findFieldContainer(fieldName, labelText);
     if (!field) return false;
 
-    // Text widget uses a <textarea>
-    const textarea = field.container.querySelector("textarea");
-    if (textarea) return setNativeTextareaValue(textarea, value);
-
-    // Fallback: might use an input in some configs
-    const input = field.container.querySelector("input");
-    return setNativeInputValue(input, value);
+    const textarea =
+      field.control instanceof HTMLTextAreaElement
+        ? field.control
+        : field.container.querySelector("textarea") ||
+          field.container.querySelector("input");
+    return setNativeValue(textarea, value);
   }
 
-  /** Set the markdown body field */
-  async function fillMarkdownField(labelText, value) {
-    const field = findFieldByLabel(labelText);
+  /** Set datetime field (Publish Date) */
+  async function fillDateField(fieldName, labelText, dateStr) {
+    const field = findFieldContainer(fieldName, labelText);
     if (!field) return false;
 
-    // Strategy 1: Look for a raw-mode textarea directly
-    let textarea = field.container.querySelector("textarea");
-    if (textarea) {
-      return setNativeTextareaValue(textarea, value);
-    }
-
-    // Strategy 2: Look for toggle to raw/markdown mode, click it, then set textarea
+    // Strategy 1: Click the "Now" button if available in the widget
     const buttons = field.container.querySelectorAll("button");
     for (const btn of buttons) {
-      const text = (btn.textContent || "").toLowerCase();
-      const ariaLabel = (btn.getAttribute("aria-label") || "").toLowerCase();
-      const title = (btn.title || "").toLowerCase();
-      if (
-        text.includes("raw") ||
-        text.includes("markdown") ||
-        ariaLabel.includes("raw") ||
-        title.includes("raw") ||
-        title.includes("markdown")
-      ) {
+      const text = (btn.textContent || "").trim().toLowerCase();
+      if (text === "now") {
         btn.click();
-        await sleep(400);
-        textarea = field.container.querySelector("textarea");
-        if (textarea) {
-          return setNativeTextareaValue(textarea, value);
-        }
+        await sleep(200);
+        return true;
       }
     }
 
-    // Strategy 3: Look for a contenteditable element (rich text mode)
-    const editable = field.container.querySelector(
-      '[contenteditable="true"]'
-    );
-    if (editable) {
-      editable.focus();
-      // Use execCommand for compatibility with rich editors
-      document.execCommand("selectAll", false, null);
-      document.execCommand("insertText", false, value);
-      editable.dispatchEvent(new Event("input", { bubbles: true }));
-      return true;
+    // Strategy 2: Set input directly
+    const input = field.control || field.container.querySelector("input");
+    if (input) {
+      const val = dateStr || new Date().toISOString().split("T")[0];
+      return setNativeValue(input, val);
     }
 
     return false;
   }
 
-  /** Set a react-select field (Category) */
-  async function fillSelectField(labelText, value) {
-    const field = findFieldByLabel(labelText);
+  /** Set image field (Hero Image) */
+  async function fillImageField(fieldName, labelText, imageUrl) {
+    if (!imageUrl) return false;
+    const field = findFieldContainer(fieldName, labelText);
     if (!field) return false;
 
-    // Find the react-select control area
-    const container = field.container;
-
-    // Strategy: click on the select control, wait for dropdown, click the option
-    const control =
-      container.querySelector('[class*="control"]') ||
-      container.querySelector('[class*="ValueContainer"]')?.parentElement ||
-      container.querySelector('[class*="indicatorContainer"]')?.parentElement
-        ?.parentElement;
-
-    if (!control) return false;
-
-    // Click to open dropdown
-    control.dispatchEvent(
-      new MouseEvent("mousedown", { bubbles: true, cancelable: true })
-    );
-    await sleep(300);
-
-    // Find the matching option in the dropdown menu
-    const allOptions = document.querySelectorAll('[class*="option"]');
-    for (const opt of allOptions) {
-      if (opt.textContent.trim() === value) {
-        opt.click();
-        return true;
+    // Strategy 1: Intercept window.prompt when clicking "Insert from URL" or "Replace with URL"
+    const buttons = field.container.querySelectorAll("button");
+    let urlButton = null;
+    for (const btn of buttons) {
+      const text = (btn.textContent || "").toLowerCase();
+      if (text.includes("url") || text.includes("insert") || text.includes("replace")) {
+        urlButton = btn;
+        break;
       }
     }
 
-    // Fallback: try native select if present
+    if (urlButton) {
+      const originalPrompt = window.prompt;
+      try {
+        window.prompt = () => imageUrl;
+        urlButton.click();
+        await sleep(350);
+        return true;
+      } catch (err) {
+        console.warn("[AI Gen] Image prompt click error:", err);
+      } finally {
+        window.prompt = originalPrompt;
+      }
+    }
+
+    // Strategy 2: Input element fallback
+    const input = field.control || field.container.querySelector('input[type="text"]');
+    if (input) {
+      return setNativeValue(input, imageUrl);
+    }
+
+    return false;
+  }
+
+  /** Set react-select field (Category) */
+  async function fillSelectField(fieldName, labelText, value) {
+    const field = findFieldContainer(fieldName, labelText);
+    if (!field) return false;
+
+    const container = field.container;
+
+    // Open dropdown
+    const control =
+      container.querySelector('[class*="control"]') ||
+      container.querySelector('[class*="ValueContainer"]')?.parentElement ||
+      container.querySelector('[class*="indicatorContainer"]')?.parentElement?.parentElement;
+
+    if (control) {
+      control.dispatchEvent(new MouseEvent("mousedown", { bubbles: true, cancelable: true }));
+      await sleep(300);
+
+      // Match option in document
+      const allOptions = document.querySelectorAll('[class*="option"]');
+      for (const opt of allOptions) {
+        if (opt.textContent.trim().toLowerCase() === value.toLowerCase()) {
+          opt.click();
+          await sleep(200);
+          return true;
+        }
+      }
+    }
+
+    // Native select fallback
     const nativeSelect = container.querySelector("select");
     if (nativeSelect) {
       nativeSelect.value = value;
@@ -474,25 +510,23 @@
     return false;
   }
 
-  /** Set the tags list field */
-  async function fillTagsField(labelText, tags) {
-    const field = findFieldByLabel(labelText);
+  /** Set tags list field */
+  async function fillTagsField(fieldName, labelText, tags) {
+    const field = findFieldContainer(fieldName, labelText);
     if (!field) return false;
 
     const container = field.container;
     let filled = 0;
 
     for (const tag of tags) {
-      // Find the text input within the list widget
       const input =
         container.querySelector('input[type="text"]') ||
         container.querySelector("input");
       if (!input) break;
 
-      setNativeInputValue(input, tag);
+      setNativeValue(input, tag);
       await sleep(100);
 
-      // Simulate Enter to add the tag
       input.dispatchEvent(
         new KeyboardEvent("keydown", {
           key: "Enter",
@@ -511,6 +545,62 @@
     return filled > 0;
   }
 
+  /** Set markdown body field */
+  async function fillMarkdownField(fieldName, labelText, value) {
+    const field = findFieldContainer(fieldName, labelText);
+    if (!field) return false;
+
+    const container = field.container;
+
+    // Strategy 1: Check if CodeMirror is used
+    const cmElement = container.querySelector(".CodeMirror");
+    if (cmElement && cmElement.CodeMirror) {
+      cmElement.CodeMirror.setValue(value);
+      cmElement.CodeMirror.save();
+      return true;
+    }
+
+    // Strategy 2: Look for raw-mode textarea directly
+    let textarea = container.querySelector("textarea");
+    if (textarea) {
+      return setNativeValue(textarea, value);
+    }
+
+    // Strategy 3: Click markdown/raw toggle button, then set textarea
+    const buttons = container.querySelectorAll("button");
+    for (const btn of buttons) {
+      const text = (btn.textContent || "").toLowerCase();
+      const ariaLabel = (btn.getAttribute("aria-label") || "").toLowerCase();
+      const title = (btn.title || "").toLowerCase();
+      if (
+        text.includes("raw") ||
+        text.includes("markdown") ||
+        ariaLabel.includes("raw") ||
+        title.includes("raw") ||
+        title.includes("markdown")
+      ) {
+        btn.click();
+        await sleep(400);
+        textarea = container.querySelector("textarea");
+        if (textarea) {
+          return setNativeValue(textarea, value);
+        }
+      }
+    }
+
+    // Strategy 4: Rich text editor contenteditable
+    const editable = container.querySelector('[contenteditable="true"]');
+    if (editable) {
+      editable.focus();
+      document.execCommand("selectAll", false, null);
+      document.execCommand("insertText", false, value);
+      editable.dispatchEvent(new Event("input", { bubbles: true }));
+      return true;
+    }
+
+    return false;
+  }
+
   // ────────────────────────────
   // Auto-fill Orchestrator
   // ────────────────────────────
@@ -518,47 +608,71 @@
   async function autoFillFields(data) {
     const results = { filled: [], manual: [] };
 
-    // Title
-    if (fillStringField("Title", data.title)) {
+    // 1. Title
+    if (fillStringField("title", "Title", data.title)) {
       results.filled.push("Title");
     } else {
       results.manual.push({ field: "Title", value: data.title });
     }
 
-    // Description
-    if (fillTextField("Description", data.description)) {
+    // 2. Description
+    if (fillTextField("description", "Description", data.description)) {
       results.filled.push("Description");
     } else {
       results.manual.push({ field: "Description", value: data.description });
     }
 
-    // Category
-    if (await fillSelectField("Category", data.category)) {
+    // 3. Publish Date (REQUIRED in Decap CMS)
+    const pubDateVal = data.pubDate || new Date().toISOString().split("T")[0];
+    if (await fillDateField("pubDate", "Publish Date", pubDateVal)) {
+      results.filled.push("Publish Date");
+    } else {
+      results.manual.push({ field: "Publish Date", value: pubDateVal });
+    }
+
+    // 4. Hero Image (Feature Image)
+    if (data.heroImage) {
+      if (await fillImageField("heroImage", "Hero Image", data.heroImage)) {
+        results.filled.push("Hero Image");
+      } else {
+        results.manual.push({ field: "Hero Image", value: data.heroImage });
+      }
+    }
+
+    // 5. Author
+    if (data.author) {
+      if (fillStringField("author", "Author", data.author)) {
+        results.filled.push("Author");
+      }
+    }
+
+    // 6. Category
+    if (await fillSelectField("category", "Category", data.category)) {
       results.filled.push("Category");
     } else {
       results.manual.push({ field: "Category", value: data.category });
     }
 
-    // Tags
-    if (await fillTagsField("Tags", data.tags)) {
-      results.filled.push("Tags");
-    } else {
-      results.manual.push({
-        field: "Tags",
-        value: data.tags.join(", "),
-      });
+    // 7. Tags
+    if (data.tags && data.tags.length > 0) {
+      if (await fillTagsField("tags", "Tags", data.tags)) {
+        results.filled.push("Tags");
+      } else {
+        results.manual.push({
+          field: "Tags",
+          value: Array.isArray(data.tags) ? data.tags.join(", ") : data.tags,
+        });
+      }
     }
 
-    // Body (do this last — it can be slow)
-    if (await fillMarkdownField("Body", data.body)) {
+    // 8. Body (Markdown content)
+    if (await fillMarkdownField("body", "Body", data.body)) {
       results.filled.push("Body");
     } else {
       results.manual.push({ field: "Body", value: data.body });
     }
 
-    // Slug is shown in the success banner (user sets filename in CMS)
     results.suggestedSlug = data.slug;
-
     return results;
   }
 
@@ -567,7 +681,7 @@
   // ────────────────────────────
 
   function openModal() {
-    if (modalElement) return; // Already open
+    if (modalElement) return;
 
     const overlay = document.createElement("div");
     overlay.id = "ai-gen-overlay";
@@ -579,25 +693,25 @@
       <div id="ai-gen-modal">
         <div class="ai-gen-header">
           <h2>✨ Generate with AI</h2>
-          <p>Enter a topic and let AI draft a complete blog post for Kritrimta.</p>
+          <p>Enter a topic and let AI draft a complete blog post with feature image for Kritrimta.</p>
         </div>
         <div class="ai-gen-body" id="ai-gen-modal-body">
           <div class="ai-gen-field">
             <label for="ai-gen-topic">Topic / Title Idea *</label>
             <input type="text" id="ai-gen-topic"
-                   placeholder="e.g. Why RAG is replacing fine-tuning for enterprise AI"
+                   placeholder="e.g. IPv4 vs IPv6: The Exhaustion Reality and Transition Cost"
                    autocomplete="off" />
           </div>
           <div class="ai-gen-field">
             <label for="ai-gen-keywords">Target Keywords (optional)</label>
             <input type="text" id="ai-gen-keywords"
-                   placeholder="e.g. RAG, retrieval augmented generation, enterprise LLM"
+                   placeholder="e.g. IPv4 exhaustion, IPv6 migration, dual-stack architecture"
                    autocomplete="off" />
           </div>
         </div>
         <div class="ai-gen-footer" id="ai-gen-modal-footer">
           <button class="ai-gen-btn ai-gen-btn-secondary" id="ai-gen-cancel">Cancel</button>
-          <button class="ai-gen-btn ai-gen-btn-primary" id="ai-gen-submit">🚀 Generate</button>
+          <button class="ai-gen-btn ai-gen-btn-primary" id="ai-gen-submit">🚀 Generate & Auto-Fill</button>
         </div>
       </div>
     `;
@@ -605,20 +719,17 @@
     document.body.appendChild(overlay);
     modalElement = overlay;
 
-    // Focus the topic input
     setTimeout(() => {
       const topicInput = document.getElementById("ai-gen-topic");
       if (topicInput) topicInput.focus();
     }, 100);
 
-    // Button handlers
     document.getElementById("ai-gen-cancel").addEventListener("click", () => {
       if (!isGenerating) closeModal();
     });
 
     document.getElementById("ai-gen-submit").addEventListener("click", handleGenerate);
 
-    // Submit on Enter from topic input
     document.getElementById("ai-gen-topic").addEventListener("keydown", (e) => {
       if (e.key === "Enter" && !isGenerating) {
         e.preventDefault();
@@ -643,8 +754,8 @@
     body.innerHTML = `
       <div class="ai-gen-loading">
         <div class="ai-gen-spinner"></div>
-        <p><strong>Generating your post...</strong></p>
-        <p>Writing about "${escapeHTML(topic)}" in Kritrimta's voice.<br/>This usually takes 10–20 seconds.</p>
+        <p><strong>Writing post & generating feature image...</strong></p>
+        <p>Drafting "${escapeHTML(topic)}" in Kritrimta's voice.<br/>All fields and hero image will be auto-filled ready for Publish.</p>
       </div>
     `;
 
@@ -658,7 +769,6 @@
     const footer = document.getElementById("ai-gen-modal-footer");
     if (!body) return;
 
-    // Prepend error, keep or restore form
     const existingError = body.querySelector(".ai-gen-error");
     if (existingError) existingError.remove();
 
@@ -678,7 +788,6 @@
   }
 
   function showSuccessBanner(results) {
-    // Remove any existing banner
     const old = document.getElementById("ai-gen-success-banner");
     if (old) old.remove();
 
@@ -687,19 +796,17 @@
 
     let html = `
       <button class="ai-success-close" onclick="this.parentElement.remove()">×</button>
-      <p class="ai-success-title">✅ AI Content Generated</p>
+      <p class="ai-success-title">✅ All Fields Auto-Filled!</p>
       <p class="ai-success-msg">
-        Fields filled: ${results.filled.join(", ") || "none"}<br/>
-        Suggested slug: <strong>${escapeHTML(results.suggestedSlug)}</strong><br/>
-        <em>Review and edit all fields before publishing.</em>
+        Auto-filled: <strong>${results.filled.join(", ") || "all fields"}</strong>.<br/>
+        Ready! Just review and click <strong>Publish</strong>.
       </p>
     `;
 
-    // If any fields couldn't be auto-filled, show their values
     if (results.manual.length > 0) {
       html += `
         <div class="ai-gen-fallback">
-          <strong>⚠ Could not auto-fill these fields — copy manually:</strong>
+          <strong>⚠ Notice — review these fields:</strong>
       `;
       for (const item of results.manual) {
         html += `
@@ -715,9 +822,8 @@
     banner.innerHTML = html;
     document.body.appendChild(banner);
 
-    // Auto-dismiss after 30 seconds (or keep if there are manual fields)
     if (results.manual.length === 0) {
-      setTimeout(() => banner.remove(), 15000);
+      setTimeout(() => banner.remove(), 12000);
     }
   }
 
@@ -763,7 +869,6 @@
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ topic, keywords }),
           });
-          // If not 404, this is the working endpoint
           if (res.status !== 404) {
             response = res;
             break;
@@ -784,7 +889,7 @@
         data = JSON.parse(responseText);
       } catch {
         if (response.status === 404) {
-          throw new Error("Function endpoint not found (404). Please ensure the Netlify build has finished and functions are enabled.");
+          throw new Error("Function endpoint not found (404).");
         }
         throw new Error(`Server returned status ${response.status}: ${responseText.slice(0, 120)}`);
       }
@@ -793,21 +898,21 @@
         throw new Error(data.error || `Server error (${response.status})`);
       }
 
-      // Close modal before filling fields
+      // Close modal before auto-filling
       closeModal();
 
-      // Auto-fill CMS fields
-      // Brief pause to let the modal close and DOM stabilize
-      await sleep(300);
+      // Pause to allow DOM stabilization
+      await sleep(350);
+
+      // Auto-fill all CMS fields
       const results = await autoFillFields(data);
 
-      // Show success banner
+      // Show banner confirming auto-fill
       showSuccessBanner(results);
     } catch (error) {
       isGenerating = false;
       console.error("[AI Gen] Generation failed:", error);
 
-      // Restore the form so user can try again
       const body = document.getElementById("ai-gen-modal-body");
       if (body && body.querySelector(".ai-gen-loading")) {
         body.innerHTML = `
@@ -820,7 +925,6 @@
             <input type="text" id="ai-gen-keywords" value="${escapeHTML(keywords)}" autocomplete="off" />
           </div>
         `;
-        // Reattach enter handler
         document.getElementById("ai-gen-topic")?.addEventListener("keydown", (e) => {
           if (e.key === "Enter" && !isGenerating) {
             e.preventDefault();
@@ -854,12 +958,6 @@
     buttonInjected = false;
   }
 
-  /**
-   * Determines if the current route is a blog post editor.
-   * Decap CMS uses hash routing:
-   *   New:  #/collections/blog/new
-   *   Edit: #/collections/blog/entries/<slug>
-   */
   function isEditorRoute() {
     const hash = window.location.hash || "";
     return (
@@ -870,14 +968,12 @@
 
   function checkRoute() {
     if (isEditorRoute()) {
-      // Delay to let the CMS render the editor
       setTimeout(() => {
-        // Verify the editor is actually rendered
-        const hasFields = findFieldByLabel("Title");
+        const hasFields = findFieldContainer("title", "Title");
         if (hasFields) {
           injectButton();
         }
-      }, 800);
+      }, 700);
     } else {
       removeButton();
       closeModal();
@@ -913,7 +1009,6 @@
   function init() {
     injectStyles();
 
-    // Poll for route changes (hash-based routing)
     let lastHash = "";
     setInterval(() => {
       const currentHash = window.location.hash;
@@ -921,30 +1016,26 @@
         lastHash = currentHash;
         checkRoute();
       }
-    }, 500);
+    }, 400);
 
-    // Also observe DOM changes as a backup
     const observer = new MutationObserver(
       debounce(() => {
         if (isEditorRoute() && !buttonInjected) {
-          const hasFields = findFieldByLabel("Title");
+          const hasFields = findFieldContainer("title", "Title");
           if (hasFields) {
             injectButton();
           }
         }
-      }, 500)
+      }, 400)
     );
 
     observer.observe(document.body, { childList: true, subtree: true });
-
-    // Initial check
     checkRoute();
   }
 
-  // ── Start ──
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", () => setTimeout(init, 1500));
+    document.addEventListener("DOMContentLoaded", () => setTimeout(init, 1200));
   } else {
-    setTimeout(init, 1500);
+    setTimeout(init, 1200);
   }
 })();

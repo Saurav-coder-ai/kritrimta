@@ -1,12 +1,12 @@
 // ──────────────────────────────────────────────────────────
-// Netlify Function: Generate Blog Post via Google Gemini
+// Netlify Function: Generate Blog Post via OpenRouter or Google Gemini
 // Endpoint: /.netlify/functions/generate-post
 // ──────────────────────────────────────────────────────────
 
 // ── Rate Limiting (in-memory, per cold-start instance) ──
 const rateLimitStore = new Map();
 const WINDOW_MS = 10 * 60 * 1000; // 10-minute sliding window
-const MAX_REQUESTS = 5;
+const MAX_REQUESTS = 10;
 
 function isRateLimited(ip) {
   const now = Date.now();
@@ -63,7 +63,153 @@ Follow these exact requirements:
 5. **Category**: Choose the SINGLE best fit from exactly these options: "AI Tools", "Gadget Reviews", "Tech News", "Tutorials"
 6. **Slug**: URL-safe, lowercase, hyphenated, concise — derived from the title (max 60 chars)
 
+Output must strictly be valid JSON matching this schema:
+{
+  "title": "...",
+  "description": "...",
+  "body": "...",
+  "tags": ["tag1", "tag2", "tag3"],
+  "category": "AI Tools | Gadget Reviews | Tech News | Tutorials",
+  "slug": "..."
+}
+
 Kritrimta's readers are tech-literate professionals. Do not explain basics. Go deep. Challenge assumptions. Deliver insight they cannot get from a press-release summary.`;
+}
+
+// ── OpenRouter API Caller ──
+async function callOpenRouter(apiKey, prompt) {
+  const models = [
+    "google/gemini-2.0-flash-001",
+    "meta-llama/llama-3.3-70b-instruct",
+    "mistralai/mistral-small-3",
+    "openai/gpt-4o-mini",
+  ];
+
+  let lastError = null;
+
+  for (const model of models) {
+    try {
+      console.log(`[OpenRouter] Trying model: ${model}`);
+      const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${apiKey.trim()}`,
+          "Content-Type": "application/json",
+          "HTTP-Referer": "https://kritrimta.com",
+          "X-Title": "Kritrimta AI Writer",
+        },
+        body: JSON.stringify({
+          model,
+          messages: [
+            {
+              role: "system",
+              content:
+                "You are an expert technical blog writer and editor. Always reply in valid JSON only, without any markdown code fence wrappers.",
+            },
+            { role: "user", content: prompt },
+          ],
+          response_format: { type: "json_object" },
+          temperature: 0.7,
+        }),
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        const content = data.choices?.[0]?.message?.content;
+        if (content) {
+          return content;
+        }
+      }
+
+      const errText = await res.text();
+      lastError = `OpenRouter (${model}) returned ${res.status}: ${errText}`;
+      console.warn(`[OpenRouter] ${lastError}`);
+    } catch (err) {
+      lastError = `OpenRouter error with ${model}: ${err.message}`;
+      console.warn(`[OpenRouter] ${lastError}`);
+    }
+  }
+
+  throw new Error(lastError || "All OpenRouter models failed.");
+}
+
+// ── Gemini API Caller ──
+async function callGemini(apiKey, prompt) {
+  let candidateModels = [
+    "gemini-1.5-flash",
+    "gemini-1.5-flash-latest",
+    "gemini-2.0-flash",
+    "gemini-2.0-flash-001",
+    "gemini-1.5-pro",
+  ];
+
+  try {
+    const listRes = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey.trim()}`
+    );
+    if (listRes.ok) {
+      const listData = await listRes.json();
+      if (Array.isArray(listData.models)) {
+        const available = listData.models
+          .filter((m) =>
+            m.supportedGenerationMethods?.includes("generateContent")
+          )
+          .map((m) => m.name.replace(/^models\//, ""));
+
+        if (available.length > 0) {
+          available.sort((a, b) => {
+            const score = (name) => {
+              if (name.includes("1.5-flash")) return 1;
+              if (name.includes("2.0-flash")) return 2;
+              if (name.includes("flash")) return 3;
+              return 10;
+            };
+            return score(a) - score(b);
+          });
+          candidateModels = available;
+        }
+      }
+    }
+  } catch (e) {
+    console.warn("[Gemini] ListModels error:", e.message);
+  }
+
+  let lastError = null;
+
+  for (const model of candidateModels) {
+    try {
+      const modelPath = model.startsWith("models/") ? model : `models/${model}`;
+      const url = `https://generativelanguage.googleapis.com/v1beta/${modelPath}:generateContent?key=${apiKey.trim()}`;
+
+      const res = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: prompt }] }],
+          generationConfig: {
+            temperature: 0.7,
+            maxOutputTokens: 6000,
+            responseMimeType: "application/json",
+          },
+        }),
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+        if (text) return text;
+      }
+
+      const errText = await res.text();
+      lastError = `Gemini (${model}) returned ${res.status}: ${errText}`;
+      console.warn(`[Gemini] ${lastError}`);
+    } catch (e) {
+      lastError = `Gemini error with ${model}: ${e.message}`;
+      console.warn(`[Gemini] ${lastError}`);
+    }
+  }
+
+  throw new Error(lastError || "All Gemini models failed.");
 }
 
 // ── Main Handler ──
@@ -75,7 +221,6 @@ export const handler = async (event) => {
     "Content-Type": "application/json",
   };
 
-  // ── CORS Preflight ──
   if (event.httpMethod === "OPTIONS") {
     return { statusCode: 204, headers, body: "" };
   }
@@ -88,7 +233,7 @@ export const handler = async (event) => {
     };
   }
 
-  // ── Rate Limiting ──
+  // Rate Limiting
   const clientIp =
     event.headers["x-forwarded-for"]?.split(",")[0]?.trim() ||
     event.headers["client-ip"] ||
@@ -100,12 +245,11 @@ export const handler = async (event) => {
       headers,
       body: JSON.stringify({
         error:
-          "Rate limit exceeded — max 5 requests per 10 minutes. Please wait and try again.",
+          "Rate limit reached — max 10 requests per 10 minutes. Please wait and try again.",
       }),
     };
   }
 
-  // ── Parse Request Body ──
   let topic, keywords;
   try {
     const body = JSON.parse(event.body || "{}");
@@ -129,239 +273,115 @@ export const handler = async (event) => {
     };
   }
 
-  // ── Validate API Key ──
-  const apiKey =
-    process.env.GEMINI_API_KEY ||
-    process.env.Kritrimta_API ||
-    process.env.KRITRIMTA_API;
-  if (!apiKey) {
-    console.error(
-      "API key missing: neither GEMINI_API_KEY nor Kritrimta_API is set in environment variables"
-    );
+  // API Key Resolution: check OpenRouter first, then Gemini
+  const openRouterKey =
+    process.env.OPENROUTER_API_KEY ||
+    process.env.OpenRouter_API ||
+    process.env.OPENROUTER_KEY ||
+    (process.env.GEMINI_API_KEY && process.env.GEMINI_API_KEY.startsWith("sk-or-")
+      ? process.env.GEMINI_API_KEY
+      : null) ||
+    (process.env.Kritrimta_API && process.env.Kritrimta_API.startsWith("sk-or-")
+      ? process.env.Kritrimta_API
+      : null) ||
+    (process.env.KRITRIMTA_API && process.env.KRITRIMTA_API.startsWith("sk-or-")
+      ? process.env.KRITRIMTA_API
+      : null);
+
+  const geminiKey =
+    (!process.env.GEMINI_API_KEY?.startsWith("sk-or-") && process.env.GEMINI_API_KEY) ||
+    (!process.env.Kritrimta_API?.startsWith("sk-or-") && process.env.Kritrimta_API) ||
+    (!process.env.KRITRIMTA_API?.startsWith("sk-or-") && process.env.KRITRIMTA_API);
+
+  if (!openRouterKey && !geminiKey) {
+    console.error("API key missing: no OpenRouter or Gemini API key configured.");
     return {
       statusCode: 500,
       headers,
       body: JSON.stringify({
-        error: "Server configuration error — API key missing in environment variables",
+        error: "Server configuration error — API key missing in environment variables.",
       }),
     };
   }
 
-  // ── Call Gemini API with Dynamic Model Discovery ──
   const prompt = buildPrompt(topic, keywords);
+  let rawResponseText = null;
 
-  try {
-    // 1. Discover available models for this API key
-    let candidateModels = [
-      "gemini-1.5-flash",
-      "gemini-1.5-flash-latest",
-      "gemini-2.0-flash",
-      "gemini-2.0-flash-001",
-      "gemini-1.5-pro",
-      "gemini-1.5-pro-latest",
-    ];
-
+  // Try OpenRouter first if key is available
+  if (openRouterKey) {
     try {
-      const listRes = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey.trim()}`
-      );
-      if (listRes.ok) {
-        const listData = await listRes.json();
-        if (Array.isArray(listData.models)) {
-          const available = listData.models
-            .filter((m) =>
-              m.supportedGenerationMethods?.includes("generateContent")
-            )
-            .map((m) => m.name.replace(/^models\//, ""));
-
-          if (available.length > 0) {
-            // Sort: prioritize highest-quota flash models first (1.5-flash has 1500 RPD free quota)
-            available.sort((a, b) => {
-              const score = (name) => {
-                if (name === "gemini-1.5-flash" || name === "models/gemini-1.5-flash") return 1;
-                if (name.includes("1.5-flash-8b")) return 2;
-                if (name.includes("1.5-flash")) return 3;
-                if (name.includes("2.0-flash")) return 4;
-                if (name.includes("flash")) return 5;
-                if (name.includes("1.5-pro")) return 6;
-                return 10;
-              };
-              return score(a) - score(b);
-            });
-            candidateModels = available;
-            console.log("[Gemini] Prioritized models:", candidateModels.slice(0, 5));
-          }
+      rawResponseText = await callOpenRouter(openRouterKey, prompt);
+    } catch (orErr) {
+      console.warn("OpenRouter attempt failed:", orErr.message);
+      if (geminiKey) {
+        console.log("Falling back to Gemini...");
+        try {
+          rawResponseText = await callGemini(geminiKey, prompt);
+        } catch (gemErr) {
+          throw new Error(`OpenRouter (${orErr.message}) and Gemini (${gemErr.message}) both failed.`);
         }
       } else {
-        const listErr = await listRes.text();
-        console.warn("[Gemini] ListModels returned", listRes.status, listErr);
-      }
-    } catch (e) {
-      console.warn("[Gemini] ListModels request error:", e.message);
-    }
-
-    let geminiRes = null;
-    let lastErrorDetails = "";
-    let hit429Count = 0;
-
-    for (const model of candidateModels) {
-      try {
-        const modelPath = model.startsWith("models/") ? model : `models/${model}`;
-        const url = `https://generativelanguage.googleapis.com/v1beta/${modelPath}:generateContent?key=${apiKey.trim()}`;
-        
-        const res = await fetch(url, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            contents: [{ parts: [{ text: prompt }] }],
-            generationConfig: {
-              temperature: 0.7,
-              maxOutputTokens: 6000,
-              responseMimeType: "application/json",
-              responseSchema: {
-                type: "object",
-                properties: {
-                  title: { type: "string" },
-                  description: { type: "string" },
-                  body: { type: "string" },
-                  tags: { type: "array", items: { type: "string" } },
-                  category: { type: "string" },
-                  slug: { type: "string" },
-                },
-                required: [
-                  "title",
-                  "description",
-                  "body",
-                  "tags",
-                  "category",
-                  "slug",
-                ],
-              },
-            },
-          }),
-        });
-
-        if (res.ok) {
-          geminiRes = res;
-          console.log(`[Gemini] Successfully generated with model: ${model}`);
-          break;
-        }
-
-        const errText = await res.text();
-        lastErrorDetails = `Model ${model} returned ${res.status}: ${errText}`;
-        console.warn(`[Gemini] ${lastErrorDetails}`);
-
-        if (res.status === 429) {
-          hit429Count++;
-          // Do not abort immediately — try next model or wait briefly
-          await new Promise((r) => setTimeout(r, 1200));
-          continue;
-        }
-      } catch (fetchErr) {
-        lastErrorDetails = `Fetch error with ${model}: ${fetchErr.message}`;
-        console.error(`[Gemini] ${lastErrorDetails}`);
+        throw orErr;
       }
     }
-
-    if (!geminiRes) {
-      if (hit429Count > 0 && hit429Count >= candidateModels.length) {
-        return {
-          statusCode: 429,
-          headers,
-          body: JSON.stringify({
-            error: "Gemini free tier rate limit reached. Please wait ~30 seconds and try again.",
-          }),
-        };
-      }
-      return {
-        statusCode: 502,
-        headers,
-        body: JSON.stringify({
-          error: `AI generation failed. ${lastErrorDetails.slice(0, 200)}`,
-        }),
-      };
-    }
-
-    const data = await geminiRes.json();
-
-    // ── Extract Generated Text ──
-    const generatedText = data.candidates?.[0]?.content?.parts?.[0]?.text;
-
-    if (!generatedText) {
-      const finishReason = data.candidates?.[0]?.finishReason;
-      console.error(
-        "Empty Gemini response. Finish reason:",
-        finishReason,
-        JSON.stringify(data).slice(0, 500)
-      );
-      return {
-        statusCode: 502,
-        headers,
-        body: JSON.stringify({
-          error: "AI returned an empty response. Please try a different topic.",
-        }),
-      };
-    }
-
-    // ── Parse JSON ──
-    let result;
-    try {
-      result = JSON.parse(generatedText);
-    } catch {
-      // Attempt extraction from possible markdown wrapping
-      const jsonMatch = generatedText.match(
-        /```(?:json)?\s*\n?([\s\S]*?)\n?\s*```/
-      );
-      if (jsonMatch) {
-        result = JSON.parse(jsonMatch[1]);
-      } else {
-        const objectMatch = generatedText.match(/\{[\s\S]*\}/);
-        if (objectMatch) {
-          result = JSON.parse(objectMatch[0]);
-        } else {
-          throw new Error("Response is not valid JSON");
-        }
-      }
-    }
-
-    // ── Validate & Sanitize ──
-    const validCategories = [
-      "AI Tools",
-      "Gadget Reviews",
-      "Tech News",
-      "Tutorials",
-    ];
-
-    const sanitized = {
-      title: String(result.title || "").slice(0, 60),
-      description: String(result.description || "").slice(0, 155),
-      body: String(result.body || ""),
-      tags: Array.isArray(result.tags)
-        ? result.tags.map(String).slice(0, 8)
-        : [],
-      category: validCategories.includes(result.category)
-        ? result.category
-        : "Tech News",
-      slug: String(result.slug || result.title || "")
-        .toLowerCase()
-        .replace(/[^a-z0-9]+/g, "-")
-        .replace(/^-+|-+$/g, "")
-        .slice(0, 80),
-    };
-
-    return {
-      statusCode: 200,
-      headers,
-      body: JSON.stringify(sanitized),
-    };
-  } catch (error) {
-    console.error("Generation error:", error);
-    return {
-      statusCode: 500,
-      headers,
-      body: JSON.stringify({
-        error: `Generation failed: ${error.message}. Please try again.`,
-      }),
-    };
+  } else if (geminiKey) {
+    rawResponseText = await callGemini(geminiKey, prompt);
   }
+
+  // Parse JSON
+  let result;
+  try {
+    result = JSON.parse(rawResponseText);
+  } catch {
+    const jsonMatch = rawResponseText.match(/\`\`\`(?:json)?\s*\n?([\s\S]*?)\n?\s*\`\`\`/);
+    if (jsonMatch) {
+      result = JSON.parse(jsonMatch[1]);
+    } else {
+      const objectMatch = rawResponseText.match(/\{[\s\S]*\}/);
+      if (objectMatch) {
+        result = JSON.parse(objectMatch[0]);
+      } else {
+        throw new Error("AI response was not valid JSON format.");
+      }
+    }
+  }
+
+  const validCategories = ["AI Tools", "Gadget Reviews", "Tech News", "Tutorials"];
+  const chosenCategory = validCategories.includes(result.category)
+    ? result.category
+    : "Tech News";
+
+  const title = String(result.title || "").slice(0, 70);
+  const slug = String(result.slug || result.title || "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 80);
+
+  // Generate a curated, high-res tech editorial feature image URL
+  const imagePrompt = encodeURIComponent(
+    `high tech editorial digital illustration of ${topic}, futuristic minimalist dark aesthetic, cybernetic neon accents, elegant composition, high resolution, award winning tech blog cover`
+  );
+  const seed = Math.floor(Math.random() * 1000000);
+  const heroImage = `https://image.pollinations.ai/prompt/${imagePrompt}?width=1200&height=630&nologo=true&seed=${seed}`;
+
+  const sanitized = {
+    title,
+    description: String(result.description || "").slice(0, 160),
+    body: String(result.body || ""),
+    tags: Array.isArray(result.tags)
+      ? result.tags.map(String).slice(0, 8)
+      : ["Technology", "AI"],
+    category: chosenCategory,
+    slug,
+    heroImage,
+    pubDate: new Date().toISOString().split("T")[0],
+    author: "Saurav Karki",
+  };
+
+  return {
+    statusCode: 200,
+    headers,
+    body: JSON.stringify(sanitized),
+  };
 };
