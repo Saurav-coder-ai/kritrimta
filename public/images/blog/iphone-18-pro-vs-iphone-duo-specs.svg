@@ -1,0 +1,128 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 560" width="1100" height="560">
+  <defs>
+    <linearGradient id="bg5" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#070a0f" />
+      <stop offset="100%" stop-color="#0c121e" />
+    </linearGradient>
+    <pattern id="grid5" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255, 255, 255, 0.03)" stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <rect width="1100" height="560" fill="url(#bg5)" />
+  <rect width="1100" height="560" fill="url(#grid5)" />
+  <rect x="20" y="20" width="1060" height="520" rx="8" fill="none" stroke="rgba(255, 255, 255, 0.1)" stroke-width="1.5" />
+
+  <!-- Header -->
+  <text x="50" y="55" fill="#f59e0b" font-family="'JetBrains Mono', monospace" font-size="12" letter-spacing="3" font-weight="600">FIG 4.1 // HARDWARE TAXONOMY &amp; SPEC MATRIX</text>
+  <text x="50" y="85" fill="#ffffff" font-family="'Inter', sans-serif" font-size="22" font-weight="800">Flagship Architectural Face-Off: iPhone 18 Pro vs. iPhone Duo Foldable</text>
+  <line x1="50" y1="105" x2="1050" y2="105" stroke="rgba(255, 255, 255, 0.1)" stroke-width="1" />
+
+  <!-- Column 1: iPhone 18 Pro -->
+  <g transform="translate(50, 125)">
+    <rect x="0" y="0" width="310" height="390" rx="8" fill="#0b0f17" stroke="#818cf8" stroke-width="1.2"/>
+    <rect x="0" y="0" width="310" height="42" rx="8" fill="#1e1b4b"/>
+    <text x="155" y="26" fill="#c7d2fe" font-family="'JetBrains Mono', monospace" font-size="13" font-weight="700" text-anchor="middle">iPHONE 18 PRO</text>
+
+    <g transform="translate(20, 60)">
+      <text x="0" y="15" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="10">BASE PRICE / RELEASE</text>
+      <text x="0" y="32" fill="#ffffff" font-family="'Inter', sans-serif" font-size="13" font-weight="700">$1,199 // Sep 18, 2026</text>
+
+      <line x1="0" y1="44" x2="270" y2="44" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+
+      <text x="0" y="60" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="10">DISPLAY CONFIGURATION</text>
+      <text x="0" y="77" fill="#ffffff" font-family="'Inter', sans-serif" font-size="13" font-weight="600">6.3" Super Retina XDR ProMotion</text>
+      <text x="0" y="93" fill="#818cf8" font-family="'JetBrains Mono', monospace" font-size="10">3,000 nits peak, Ceramic Shield 3</text>
+
+      <line x1="0" y1="105" x2="270" y2="105" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+
+      <text x="0" y="121" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="10">SILICON &amp; NPU</text>
+      <text x="0" y="138" fill="#ffffff" font-family="'Inter', sans-serif" font-size="13" font-weight="600">A20 Pro (TSMC 2nm GAAFET)</text>
+      <text x="0" y="154" fill="#38bdf8" font-family="'JetBrains Mono', monospace" font-size="10">12GB LPDDR5X // 45 TOPS NPU</text>
+
+      <line x1="0" y1="166" x2="270" y2="166" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+
+      <text x="0" y="182" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="10">PRIMARY OPTICAL STACK</text>
+      <text x="0" y="199" fill="#10b981" font-family="'Inter', sans-serif" font-size="13" font-weight="600">48MP Variable f/1.5-f/4.0</text>
+      <text x="0" y="215" fill="#64748b" font-family="'JetBrains Mono', monospace" font-size="10">5× Tetreprism Telephoto + 48MP Ultrawide</text>
+
+      <line x1="0" y1="227" x2="270" y2="227" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+
+      <text x="0" y="243" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="10">MASS &amp; CHASSIS</text>
+      <text x="0" y="260" fill="#ffffff" font-family="'Inter', sans-serif" font-size="13" font-weight="600">199g // 8.1mm Thickness</text>
+      <text x="0" y="276" fill="#818cf8" font-family="'JetBrains Mono', monospace" font-size="10">Grade 5 Titanium Monocoque</text>
+    </g>
+  </g>
+
+  <!-- Column 2: iPhone 18 Pro Max -->
+  <g transform="translate(390, 125)">
+    <rect x="0" y="0" width="310" height="390" rx="8" fill="#0b0f17" stroke="#38bdf8" stroke-width="1.2"/>
+    <rect x="0" y="0" width="310" height="42" rx="8" fill="#082f49"/>
+    <text x="155" y="26" fill="#bae6fd" font-family="'JetBrains Mono', monospace" font-size="13" font-weight="700" text-anchor="middle">iPHONE 18 PRO MAX</text>
+
+    <g transform="translate(20, 60)">
+      <text x="0" y="15" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="10">BASE PRICE / RELEASE</text>
+      <text x="0" y="32" fill="#ffffff" font-family="'Inter', sans-serif" font-size="13" font-weight="700">$1,299 // Sep 18, 2026</text>
+
+      <line x1="0" y1="44" x2="270" y2="44" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+
+      <text x="0" y="60" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="10">DISPLAY CONFIGURATION</text>
+      <text x="0" y="77" fill="#ffffff" font-family="'Inter', sans-serif" font-size="13" font-weight="600">6.9" Super Retina XDR ProMotion</text>
+      <text x="0" y="93" fill="#38bdf8" font-family="'JetBrains Mono', monospace" font-size="10">3,000 nits peak, Border Reduction 2.0</text>
+
+      <line x1="0" y1="105" x2="270" y2="105" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+
+      <text x="0" y="121" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="10">SILICON &amp; NPU</text>
+      <text x="0" y="138" fill="#ffffff" font-family="'Inter', sans-serif" font-size="13" font-weight="600">A20 Pro (TSMC 2nm GAAFET)</text>
+      <text x="0" y="154" fill="#38bdf8" font-family="'JetBrains Mono', monospace" font-size="10">12GB LPDDR5X // Extended Vapor Chamber</text>
+
+      <line x1="0" y1="166" x2="270" y2="166" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+
+      <text x="0" y="182" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="10">PRIMARY OPTICAL STACK</text>
+      <text x="0" y="199" fill="#10b981" font-family="'Inter', sans-serif" font-size="13" font-weight="600">48MP Variable f/1.5-f/4.0</text>
+      <text x="0" y="215" fill="#64748b" font-family="'JetBrains Mono', monospace" font-size="10">6× Periscope Telephoto (144mm equiv.)</text>
+
+      <line x1="0" y1="227" x2="270" y2="227" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+
+      <text x="0" y="243" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="10">MASS &amp; CHASSIS</text>
+      <text x="0" y="260" fill="#ffffff" font-family="'Inter', sans-serif" font-size="13" font-weight="600">224g // 8.2mm Thickness</text>
+      <text x="0" y="276" fill="#38bdf8" font-family="'JetBrains Mono', monospace" font-size="10">Largest iPhone Battery Ever (~5,000 mAh)</text>
+    </g>
+  </g>
+
+  <!-- Column 3: iPhone Duo (Foldable) -->
+  <g transform="translate(730, 125)">
+    <rect x="0" y="0" width="320" height="390" rx="8" fill="#0b0f17" stroke="#f59e0b" stroke-width="1.5"/>
+    <rect x="0" y="0" width="320" height="42" rx="8" fill="#451a03"/>
+    <text x="160" y="26" fill="#fef3c7" font-family="'JetBrains Mono', monospace" font-size="13" font-weight="700" text-anchor="middle">iPHONE DUO (FOLDABLE)</text>
+
+    <g transform="translate(20, 60)">
+      <text x="0" y="15" fill="#fbbf24" font-family="'JetBrains Mono', monospace" font-size="10">BASE PRICE / RELEASE</text>
+      <text x="0" y="32" fill="#f59e0b" font-family="'Inter', sans-serif" font-size="13" font-weight="700">$1,999 // Oct 23, 2026</text>
+
+      <line x1="0" y1="44" x2="280" y2="44" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+
+      <text x="0" y="60" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="10">DUAL DISPLAY TOPOLOGY</text>
+      <text x="0" y="77" fill="#ffffff" font-family="'Inter', sans-serif" font-size="13" font-weight="600">7.6" Inner Nano-UTG (Crease-less)</text>
+      <text x="0" y="93" fill="#f59e0b" font-family="'JetBrains Mono', monospace" font-size="10">5.4" Outer Compact Cover Display</text>
+
+      <line x1="0" y1="105" x2="280" y2="105" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+
+      <text x="0" y="121" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="10">SILICON &amp; NPU</text>
+      <text x="0" y="138" fill="#ffffff" font-family="'Inter', sans-serif" font-size="13" font-weight="600">A20 Pro (TSMC 2nm GAAFET)</text>
+      <text x="0" y="154" fill="#f59e0b" font-family="'JetBrains Mono', monospace" font-size="10">16GB LPDDR5X (Unified Foldable OS)</text>
+
+      <line x1="0" y1="166" x2="280" y2="166" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+
+      <text x="0" y="182" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="10">OPTICAL &amp; BIOMETRIC</text>
+      <text x="0" y="199" fill="#ffffff" font-family="'Inter', sans-serif" font-size="13" font-weight="600">Dual 48MP Fusion + Under-Display Cam</text>
+      <text x="0" y="215" fill="#64748b" font-family="'JetBrains Mono', monospace" font-size="10">Slim Profile Modules (Fixed Aperture)</text>
+
+      <line x1="0" y1="227" x2="280" y2="227" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+
+      <text x="0" y="243" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="10">CHASSIS, MASS &amp; RESISTANCE</text>
+      <text x="0" y="260" fill="#ffffff" font-family="'Inter', sans-serif" font-size="13" font-weight="600">238g // 4.9mm Unfolded (9.8mm Closed)</text>
+      <text x="0" y="276" fill="#10b981" font-family="'JetBrains Mono', monospace" font-size="10">100-Part Liquidmetal Hinge // IP68 Rating</text>
+    </g>
+  </g>
+</svg>

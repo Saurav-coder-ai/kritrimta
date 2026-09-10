@@ -1,0 +1,125 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#070a0f" />
+      <stop offset="50%" stop-color="#0c121c" />
+      <stop offset="100%" stop-color="#141a26" />
+    </linearGradient>
+    <linearGradient id="gold-amber" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f59e0b" />
+      <stop offset="50%" stop-color="#d97706" />
+      <stop offset="100%" stop-color="#b45309" />
+    </linearGradient>
+    <linearGradient id="titanium-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8" />
+      <stop offset="100%" stop-color="#818cf8" />
+    </linearGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255, 255, 255, 0.035)" stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)" />
+  <rect width="1200" height="630" fill="url(#grid)" />
+  <rect x="30" y="30" width="1140" height="570" fill="none" stroke="rgba(255, 255, 255, 0.1)" stroke-width="1.5" />
+
+  <!-- Kicker -->
+  <text x="70" y="80" fill="#f59e0b" font-family="'JetBrains Mono', monospace" font-size="14" letter-spacing="4" font-weight="600">KRITRIMTA HARDWARE LABS // SPECIAL REPORT</text>
+  <line x1="70" y1="96" x2="1130" y2="96" stroke="rgba(255, 255, 255, 0.1)" stroke-width="1" />
+
+  <!-- Left Column: Editorial Typography -->
+  <g transform="translate(70, 140)">
+    <rect x="0" y="0" width="160" height="24" rx="4" fill="rgba(245, 158, 11, 0.15)" stroke="#f59e0b" stroke-width="1"/>
+    <text x="80" y="16" fill="#fbbf24" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="700" letter-spacing="2" text-anchor="middle">HARDWARE DEEP DIVE</text>
+
+    <text x="0" y="65" fill="#ffffff" font-family="'Inter', -apple-system, sans-serif" font-size="36" font-weight="800">
+      <tspan x="0" dy="0">Apple's Mechanical</tspan>
+      <tspan x="0" dy="46">&amp; Silicon Rubicon</tspan>
+    </text>
+
+    <text x="0" y="170" fill="#94a3b8" font-family="'Inter', -apple-system, sans-serif" font-size="16">
+      <tspan x="0" dy="0">A first-principles engineering dissection of the iPhone Duo</tspan>
+      <tspan x="0" dy="24">foldable, iPhone 18 Pro, TSMC 2nm A20 Pro, and variable optics.</tspan>
+    </text>
+
+    <g transform="translate(0, 235)">
+      <circle cx="16" cy="16" r="16" fill="#1e293b" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+      <text x="16" y="21" fill="#fbbf24" font-family="'JetBrains Mono', monospace" font-size="13" font-weight="700" text-anchor="middle">SK</text>
+      <text x="44" y="14" fill="#f8fafc" font-family="'Inter', sans-serif" font-size="13" font-weight="600">Saurav Karki</text>
+      <text x="44" y="28" fill="#64748b" font-family="'JetBrains Mono', monospace" font-size="11">Chief Editor // Sep 10, 2026</text>
+    </g>
+
+    <!-- Key Metrics Badges -->
+    <g transform="translate(0, 305)">
+      <rect x="0" y="0" width="135" height="42" rx="6" fill="#0f172a" stroke="rgba(255,255,255,0.08)" stroke-width="1" />
+      <text x="14" y="18" fill="#64748b" font-family="'JetBrains Mono', monospace" font-size="9" letter-spacing="1">SILICON NODE</text>
+      <text x="14" y="34" fill="#38bdf8" font-family="'JetBrains Mono', monospace" font-size="13" font-weight="700">TSMC 2nm GAA</text>
+
+      <rect x="150" y="0" width="135" height="42" rx="6" fill="#0f172a" stroke="rgba(255,255,255,0.08)" stroke-width="1" />
+      <text x="164" y="18" fill="#64748b" font-family="'JetBrains Mono', monospace" font-size="9" letter-spacing="1">HINGE COMPLEXITY</text>
+      <text x="164" y="34" fill="#f59e0b" font-family="'JetBrains Mono', monospace" font-size="13" font-weight="700">100+ Components</text>
+
+      <rect x="300" y="0" width="135" height="42" rx="6" fill="#0f172a" stroke="rgba(255,255,255,0.08)" stroke-width="1" />
+      <text x="314" y="18" fill="#64748b" font-family="'JetBrains Mono', monospace" font-size="9" letter-spacing="1">VARIABLE OPTICS</text>
+      <text x="314" y="34" fill="#10b981" font-family="'JetBrains Mono', monospace" font-size="13" font-weight="700">f/1.5 – f/4.0</text>
+    </g>
+  </g>
+
+  <!-- Right Column: Visual Device Blueprint Schematic -->
+  <g transform="translate(630, 130)">
+    <rect x="0" y="0" width="500" height="430" rx="12" fill="#0b0f17" stroke="rgba(255, 255, 255, 0.08)" stroke-width="1" />
+    <line x1="0" y1="46" x2="500" y2="46" stroke="rgba(255, 255, 255, 0.08)" stroke-width="1" />
+    <text x="24" y="29" fill="#fbbf24" font-family="'JetBrains Mono', monospace" font-size="12" letter-spacing="2">DUAL DEVICE ARCHITECTURE SCHEMATIC</text>
+
+    <!-- iPhone Duo Foldable Render Diagram -->
+    <g transform="translate(25, 65)">
+      <!-- Unfolded Outer Silhouette -->
+      <rect x="0" y="0" width="260" height="180" rx="8" fill="#111827" stroke="#38bdf8" stroke-width="1.5"/>
+      <!-- Fold Line / Hinge Center -->
+      <line x1="130" y1="0" x2="130" y2="180" stroke="#f59e0b" stroke-width="2" stroke-dasharray="4,3"/>
+      
+      <!-- Inner Screen Area -->
+      <rect x="8" y="8" width="244" height="164" rx="4" fill="rgba(56, 189, 248, 0.05)" stroke="rgba(56, 189, 248, 0.2)" stroke-width="1"/>
+      <text x="130" y="95" fill="#f8fafc" font-family="'JetBrains Mono', monospace" font-size="12" font-weight="700" text-anchor="middle">7.6" SUPER RETINA XDR</text>
+      <text x="130" y="115" fill="#38bdf8" font-family="'JetBrains Mono', monospace" font-size="10" text-anchor="middle">Nano-Texture UTG // Apple Pencil Support</text>
+
+      <!-- Labels -->
+      <text x="130" y="28" fill="#f59e0b" font-family="'JetBrains Mono', monospace" font-size="10" font-weight="600" text-anchor="middle">Liquidmetal Teardrop Hinge</text>
+      <text x="130" y="155" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="9" text-anchor="middle">IP68 Water Resistance // Grade 5 Titanium</text>
+    </g>
+
+    <!-- iPhone 18 Pro Slab Outline Diagram -->
+    <g transform="translate(305, 65)">
+      <rect x="0" y="0" width="165" height="180" rx="10" fill="#111827" stroke="#818cf8" stroke-width="1.5"/>
+      <!-- Screen -->
+      <rect x="6" y="6" width="153" height="168" rx="6" fill="rgba(129, 140, 248, 0.05)" stroke="rgba(129, 140, 248, 0.2)" stroke-width="1"/>
+      <!-- Dynamic Island / Under Display Face ID -->
+      <ellipse cx="82" cy="22" rx="16" ry="6" fill="#030712" stroke="#818cf8" stroke-width="1"/>
+      
+      <text x="82" y="85" fill="#f8fafc" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="700" text-anchor="middle">iPHONE 18 PRO</text>
+      <text x="82" y="105" fill="#a5b4fc" font-family="'JetBrains Mono', monospace" font-size="9" text-anchor="middle">6.3" &amp; 6.9" ProMotion</text>
+      <text x="82" y="125" fill="#10b981" font-family="'JetBrains Mono', monospace" font-size="9" text-anchor="middle">Variable f/1.5-f/4.0</text>
+      <text x="82" y="145" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="8" text-anchor="middle">2nm A20 Pro SoC</text>
+    </g>
+
+    <!-- Bottom Architectural Summary Banner -->
+    <g transform="translate(25, 265)">
+      <rect x="0" y="0" width="445" height="140" rx="8" fill="#07121e" stroke="rgba(255, 255, 255, 0.08)" stroke-width="1"/>
+      <text x="20" y="28" fill="#fbbf24" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="700">KEY ARCHITECTURAL HIGHLIGHTS // SEP 2026</text>
+
+      <g transform="translate(20, 48)">
+        <circle cx="4" cy="6" r="3" fill="#38bdf8"/>
+        <text x="16" y="10" fill="#cbd5e1" font-family="'Inter', sans-serif" font-size="11">TSMC N2 2nm Process: 15% clock gain, 30% power reduction at iso-speed</text>
+
+        <circle cx="4" cy="30" r="3" fill="#f59e0b"/>
+        <text x="16" y="34" fill="#cbd5e1" font-family="'Inter', sans-serif" font-size="11">iPhone Duo: $1,999 starting price, 5.4" outer / 7.6" inner foldable</text>
+
+        <circle cx="4" cy="54" r="3" fill="#10b981"/>
+        <text x="16" y="58" fill="#cbd5e1" font-family="'Inter', sans-serif" font-size="11">Mechanical Variable Aperture: Six physical blades adjusting f/1.5 to f/4.0</text>
+
+        <circle cx="4" cy="78" r="3" fill="#a855f7"/>
+        <text x="16" y="82" fill="#cbd5e1" font-family="'Inter', sans-serif" font-size="11">iOS 27 Foldable Runtime: Dual-app split, continuity canvas, stylus latency < 2ms</text>
+      </g>
+    </g>
+  </g>
+</svg>
