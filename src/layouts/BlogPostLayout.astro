@@ -11,6 +11,7 @@ interface Props {
   pubDate: Date;
   updatedDate?: Date;
   heroImage?: string;
+  image?: string;
   author: string;
   category: string;
   tags: string[];
@@ -18,7 +19,8 @@ interface Props {
   body: string;
 }
 
-const { title, description, pubDate, updatedDate, heroImage, author = 'Saurav Karki', category, tags = [], featured, body = '' } = Astro.props;
+const { title, description, pubDate, updatedDate, heroImage, image, author = 'Saurav Karki', category, tags = [], featured, body = '' } = Astro.props;
+const displayImage = heroImage || image;
 const readingTime = getReadingTime(body);
 
 // Get related posts (same category, excluding current)
@@ -34,7 +36,7 @@ const schemaOrg = {
   '@type': 'BlogPosting',
   headline: title,
   description: description,
-  image: heroImage ? new URL(heroImage, Astro.site).toString() : undefined,
+  image: displayImage ? new URL(displayImage, Astro.site).toString() : undefined,
   datePublished: pubDate.toISOString(),
   dateModified: (updatedDate || pubDate).toISOString(),
   author: {
@@ -60,7 +62,7 @@ const schemaOrg = {
 <BaseLayout
   title={title}
   description={description}
-  image={heroImage}
+  image={displayImage}
   type="article"
   publishedDate={pubDate}
   modifiedDate={updatedDate}
@@ -110,11 +112,11 @@ const schemaOrg = {
       </div>
     </header>
 
-    {heroImage && (
+    {displayImage && (
       <div class="container hero-container">
         <figure class="article-cover">
           <img
-            src={heroImage}
+            src={displayImage}
             alt={title}
             loading="eager"
             width="1200"
