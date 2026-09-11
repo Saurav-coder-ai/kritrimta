@@ -2,7 +2,8 @@
 title: "iPhone 18 Pro to Launch Soon in Nepal with 48MP Variable-Aperture Camera and A20 Pro Chip: Expected Price, Full Specs & Availability"
 description: "Apple’s latest iPhone 18 Pro is launching soon in Nepal. Check out the expected price in Nepal for all variants (256GB to 2TB), full specifications, 2nm A20 Pro chip, 48MP physical variable aperture camera, 3x vapor chamber cooling, Genxt official warranty, and MDMS registration."
 pubDate: 2026-09-10
-heroImage: "/images/blog/iphone-18-pro-price-in-nepal-hero.svg"
+heroImage: "/images/blog/apple-iphone-18-pro-2up.jpg"
+image: "/images/blog/apple-iphone-18-pro-2up.jpg"
 author: "Saurav Karki"
 category: "Gadget Reviews"
 tags: ["iPhone 18 Pro", "iPhone 18 Pro Price in Nepal", "Apple Nepal", "Genxt", "Oliz Store", "EvoStore", "MDMS Nepal", "Smartphones", "Gadget Reviews"]
@@ -53,6 +54,7 @@ We expect the **iPhone 18 Pro price in Nepal to start at NPR 264,000** for the b
 ```
 
 ![iPhone 18 Pro Nepal Pricing Breakdown](/images/blog/iphone-18-pro-nepal-pricing-breakdown.svg)
+*Illustrative Infographic: Landed Cost Structure, Tariffs, and Expected Retail Pricing in Nepal.*
 
 ### Why Does the Official Nepal Price Carry a Premium?
 
@@ -74,7 +76,8 @@ Starting with the design, the iPhone 18 Pro maintains the recognizable Pro-serie
 
 The chassis is slightly thicker than its predecessor, the iPhone 17 Pro, accommodating the expanded battery capacity and the new mechanical variable aperture camera assembly.
 
-![iPhone 18 Pro vs iPhone Duo Spec Matrix](/images/blog/iphone-18-pro-vs-iphone-duo-specs.svg)
+![iPhone 18 Pro Color Lineup](/images/blog/apple-iphone-18-pro-color-lineup.jpg)
+*Image: Apple. The iPhone 18 Pro finish lineup: Black, Silver, Glacier, and Burgundy.*
 
 On the front, the iPhone 18 Pro features a **6.3-inch Super Retina XDR OLED display** with ProMotion adaptive refresh rates ranging from 1Hz to 120Hz. The panel reaches up to **3,000 nits of peak brightness**, ensuring clear outdoor legibility in bright high-altitude sunlight across Nepal. Features like Always-On display, HDR, True Tone, and a durable anti-reflective coating remain standard.
 
@@ -90,6 +93,7 @@ Crucially, the redesigned Dynamic Island can now accommodate **up to three Live 
 Under the hood, the iPhone 18 Pro is powered by Apple’s groundbreaking **A20 Pro chip**, fabricated on a **2-nanometer Gate-All-Around (GAAFET) process node**. The 2nm architecture allows Apple to pack more transistors into the silicon die while dramatically improving power efficiency.
 
 ![A20 Pro 2nm Silicon Architecture](/images/blog/a20-pro-2nm-silicon-architecture.svg)
+*Illustrative Technical Diagram: TSMC 2nm (N2) Gate-All-Around (GAAFET) Nanosheet Silicon Architecture.*
 
 The A20 Pro features a six-core CPU with:
 * **Two Super Cores:** Up to 20% faster single-threaded performance for heavy computational tasks.
@@ -111,6 +115,7 @@ To prevent thermal throttling during demanding workloads—such as 4K video edit
 The camera system represents the most substantial hardware advancement on the iPhone 18 Pro. All three rear lenses now utilize 48-megapixel sensors, led by the revolutionary **mechanical variable aperture on the main camera**.
 
 ![iPhone 18 Pro Variable Aperture Optics](/images/blog/variable-aperture-optics-iphone-18-pro.svg)
+*Illustrative Technical Diagram: Motorized Six-Blade Variable Aperture Mechanism ($f/1.48$ to $f/4.0$).*
 
 #### 48MP Fusion Main Camera with Variable Aperture
 Unlike static smartphone lenses, the 48MP Fusion Main camera incorporates a motorized six-blade mechanical iris that dynamically adjusts between four physical stops:
