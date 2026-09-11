@@ -9,6 +9,7 @@ const blog = defineCollection({
     pubDate: z.coerce.date(),
     updatedDate: z.coerce.date().optional(),
     heroImage: z.string().optional(),
+    image: z.string().optional(),
     author: z.string().default('Saurav Karki'),
     category: z.enum(['AI Tools', 'Gadget Reviews', 'Tech News', 'Tutorials']),
     tags: z.array(z.string()).default([]),
