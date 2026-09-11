@@ -2,7 +2,8 @@
 title: "Apple’s Mechanical and Silicon Rubicon: The Complete Engineering Dissection of iPhone 18 Pro and the iPhone Duo Foldable"
 description: "A first-principles hardware breakdown of Apple's September 2026 announcements: the $1,999 iPhone Duo foldable, the TSMC 2nm A20 Pro GAAFET architecture, the 100-component liquidmetal hinge, and the iPhone 18 Pro variable aperture optics."
 pubDate: 2026-09-10
-heroImage: "/images/blog/iphone-18-pro-and-iphone-duo-hero.svg"
+heroImage: "/images/blog/apple-iphone-duo-opening.jpg"
+image: "/images/blog/apple-iphone-duo-opening.jpg"
 author: "Saurav Karki"
 category: "Gadget Reviews"
 tags: ["iPhone 18 Pro", "iPhone Duo", "Foldable iPhone", "Apple", "A20 Pro", "2nm GAAFET", "Hardware Architecture", "Variable Aperture", "Smartphones"]
@@ -33,6 +34,7 @@ For seven years, the fatal flaw of foldable smartphones has been the visual and 
 Apple’s solution in the **iPhone Duo** is not a chemical trick; it is a mechanical triumph of kinematics and materials science.
 
 ![iPhone Duo Hinge and Crease Engineering](/images/blog/iphone-duo-hinge-and-crease-engineering.svg)
+*Illustrative Technical Diagram: Kinematics of the iPhone Duo 100-component liquidmetal teardrop hinge and stress-relief sliding wings.*
 
 ### The 100-Component Liquidmetal Teardrop Hinge
 The structural spine of the iPhone Duo is an articulated multi-gear hinge comprising over **100 precision CNC-machined components**. The mechanism is cast from an amorphous zirconium-titanium alloy (**Liquidmetal**) exhibiting twice the tensile strength of Grade 5 titanium with zero grain boundaries:
@@ -71,6 +73,7 @@ While the folding chassis captures the visual headlines, the most consequential 
 The A20 Pro is the world’s first mass-production system-on-chip fabricated on **TSMC’s 2-nanometer (N2) process node**.
 
 ![A20 Pro 2nm Silicon Architecture](/images/blog/a20-pro-2nm-silicon-architecture.svg)
+*Illustrative Technical Diagram: TSMC 2nm (N2) Gate-All-Around (GAAFET) Nanosheet Silicon Architecture.*
 
 ### The Architectural Shift from FinFET to Nanosheet GAA
 For over a decade, digital computing has relied on FinFET transistors, where a vertical silicon "fin" is gated on three sides. At sub-3nm dimensions, FinFETs suffer severe quantum mechanical leakage: electrons tunnel across the gate even in the off-state, driving static power dissipation to unsustainable levels.
@@ -113,6 +116,7 @@ While this improved low-light photon gathering, it created a severe optical cons
 The **iPhone 18 Pro** resolves this not with software filters, but with classical optomechanical physics: a **motorized six-blade variable physical iris**.
 
 ![iPhone 18 Pro Variable Aperture Optics](/images/blog/variable-aperture-optics-iphone-18-pro.svg)
+*Illustrative Technical Diagram: Motorized Six-Blade Variable Aperture Mechanism ($f/1.5$ to $f/4.0$).*
 
 ### The Dual Operational Regimes of the 48MP Fusion Camera
 
@@ -146,7 +150,11 @@ The camera app seamlessly modulates the iris in real-time based on scene semanti
 
 Choosing between the iPhone 18 Pro series and the iPhone Duo is not merely a question of budget; it is a fundamental choice between two distinct ergonomic workflows.
 
-![iPhone 18 Pro vs iPhone Duo Spec Matrix](/images/blog/iphone-18-pro-vs-iphone-duo-specs.svg)
+![iPhone Duo Form Factors](/images/blog/apple-iphone-duo-display-sizes.jpg)
+*Image: Apple. The iPhone Duo in hand: compact 5.4-inch outer cover display (left) versus unfolded 7.6-inch inner canvas (right).*
+
+![iPhone 18 Pro Lineup](/images/blog/apple-iphone-18-pro-color-lineup.jpg)
+*Image: Apple. The iPhone 18 Pro industrial chassis across all four finishes: Black, Silver, Glacier, and Burgundy.*
 
 ```
 COMPREHENSIVE HARDWARE SPECIFICATION MATRIX:
