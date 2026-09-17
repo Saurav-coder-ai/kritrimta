@@ -8,7 +8,7 @@ author: "Saurav Karki"
 category: "AI Tools"
 tags: ["AI Tools", "Web Development", "Freelancing", "Productivity", "Nepal", "Coding"]
 featured: false
-draft: true
+draft: false
 ---
 
 If you work at an established software firm, AI tooling is rarely an out-of-pocket concern. Your employer covers your GitHub Copilot seat, pays for ChatGPT Team accounts, and provides high-speed fiber internet.
@@ -149,3 +149,4 @@ If you are a student or starting freelancer without an international dollar card
 Start with two core tools: install **Codeium** in VS Code for autocomplete, and use **Google AI Studio** for complex debugging and architectural planning. If you are enrolled in college, apply for the **GitHub Student Developer Pack**.
 
 Mastering these free tools will accelerate your freelance workflow without costing a single rupee.
+

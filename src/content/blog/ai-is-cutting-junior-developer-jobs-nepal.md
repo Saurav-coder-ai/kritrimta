@@ -8,7 +8,7 @@ author: "Saurav Karki"
 category: "Tech News"
 tags: ["AI Tools", "Tech News", "Nepal", "Career", "Web Development", "Computer Science"]
 featured: false
-draft: true
+draft: false
 ---
 
 Every afternoon around 3:30 PM, the tea stall outside our campus fills up with the same tense conversation. Whether you talk to friends studying BCA, BIT, BSc.CSIT, BE Computer/IT, or MCA across Kathmandu, Lalitpur, or Pokhara, the anxiety sounds identical. Someone refreshes their phone, points to a discussion on LinkedIn, and asks the question hanging over every lecture hall: *Is coding still worth it in 2026?*
@@ -131,3 +131,4 @@ Sitting through evening classes after hours of screen time can make the future f
 The reality is that typing code was never the central challenge of software engineering. The real work lies in understanding real-world requirements, organizing complex systems, anticipating edge cases, and building software that people can rely on.
 
 AI handles repetitive syntax, freeing developers to focus on higher-level problem solving. By strengthening your fundamentals, learning to audit AI-generated code, and building practical systems, you can enter Nepal's tech workforce with confidence.
+
