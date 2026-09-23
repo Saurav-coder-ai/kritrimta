@@ -4,7 +4,7 @@ import FeaturedPost from '@/components/FeaturedPost.astro';
 import PostCard from '@/components/PostCard.astro';
 import CategoryList from '@/components/CategoryList.astro';
 import Newsletter from '@/components/Newsletter.astro';
-import { SplineHero } from '@/components/ui/demo';
+import { SplineSceneBasic } from '@/components/ui/demo';
 import { getCollection } from 'astro:content';
 
 const allPosts = await getCollection('blog', ({ data }) => import.meta.env.DEV || !data.draft);
@@ -25,12 +25,13 @@ const secondaryPosts = remainingPosts.slice(1);
   title="Kritrimta"
   description="An independent journal of artificial intelligence, high-performance computing, and hardware engineering. Edited by Saurav Karki."
 >
-  <!-- Primary 3D Editorial Hero Section -->
-  <section class="editorial-hero-section" id="hero">
+  <!-- 3D Interactive Hero Section -->
+  <section class="hero-section">
     <div class="container">
-      <SplineHero client:only="react" />
+      <SplineSceneBasic client:only="react" />
     </div>
   </section>
+
 
   <!-- Lead Story (Featured Article) -->
   {featuredPost && (
@@ -196,13 +197,13 @@ const secondaryPosts = remainingPosts.slice(1);
 </BaseLayout>
 
 <style>
-  .editorial-hero-section {
-    padding: 2.25rem 0 3.25rem;
+  .hero-section {
+    padding: 2rem 0 3rem;
   }
 
   @media (max-width: 768px) {
-    .editorial-hero-section {
-      padding: 1.25rem 0 2.25rem;
+    .hero-section {
+      padding: 1.25rem 0 2rem;
     }
   }
 

@@ -1,0 +1,131 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#06090e" />
+      <stop offset="50%" stop-color="#0b111a" />
+      <stop offset="100%" stop-color="#121824" />
+    </linearGradient>
+    <linearGradient id="cyan-glow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#06b6d4" />
+      <stop offset="50%" stop-color="#3b82f6" />
+      <stop offset="100%" stop-color="#8b5cf6" />
+    </linearGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255, 255, 255, 0.03)" stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)" />
+  <rect width="1200" height="630" fill="url(#grid)" />
+
+  <!-- Outer Editorial Frame -->
+  <rect x="30" y="30" width="1140" height="570" fill="none" stroke="rgba(255, 255, 255, 0.08)" stroke-width="1.5" />
+  
+  <!-- Masthead Kicker -->
+  <text x="70" y="78" fill="#38bdf8" font-family="'JetBrains Mono', monospace" font-size="13" letter-spacing="4" font-weight="600">KRITRIMTA ARCHITECTURE LABS // FOUNDATIONAL AI REPORT</text>
+  <line x1="70" y1="94" x2="1130" y2="94" stroke="rgba(255, 255, 255, 0.08)" stroke-width="1" />
+
+  <!-- Right Side: Architectural Schematic (LCM Continuous Latent Pipeline) -->
+  <g transform="translate(640, 135)">
+    <rect x="0" y="0" width="490" height="425" rx="12" fill="#090d15" stroke="rgba(255, 255, 255, 0.08)" stroke-width="1" />
+    <line x1="0" y1="42" x2="490" y2="42" stroke="rgba(255, 255, 255, 0.08)" stroke-width="1" />
+    <text x="24" y="27" fill="#38bdf8" font-family="'JetBrains Mono', monospace" font-size="11" letter-spacing="2">CONTINUOUS LATENT REASONING TOPOLOGY</text>
+
+    <!-- Block 1: Multi-Modal / Multi-Lingual Inputs to SONAR -->
+    <g transform="translate(24, 60)">
+      <text x="0" y="0" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="10" font-weight="600">1. MULTILINGUAL SENTENCE INPUTS</text>
+      
+      <!-- Surface Input Pills -->
+      <rect x="0" y="12" width="125" height="24" rx="4" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+      <text x="62" y="28" fill="#cbd5e1" font-family="'JetBrains Mono', monospace" font-size="9" text-anchor="middle">English Sentence</text>
+
+      <rect x="135" y="12" width="125" height="24" rx="4" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+      <text x="197" y="28" fill="#cbd5e1" font-family="'JetBrains Mono', monospace" font-size="9" text-anchor="middle">नेपाली वाक्य (Nepali)</text>
+
+      <rect x="270" y="12" width="165" height="24" rx="4" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+      <text x="352" y="28" fill="#cbd5e1" font-family="'JetBrains Mono', monospace" font-size="9" text-anchor="middle">Speech / Multimodal Frame</text>
+    </g>
+
+    <!-- Block 2: The Continuous SONAR Bottleneck -->
+    <g transform="translate(24, 125)">
+      <!-- Downward Arrows -->
+      <path d="M 62 0 L 62 14" stroke="#38bdf8" stroke-width="1.5" fill="none"/>
+      <path d="M 197 0 L 197 14" stroke="#38bdf8" stroke-width="1.5" fill="none"/>
+      <path d="M 352 0 L 352 14" stroke="#38bdf8" stroke-width="1.5" fill="none"/>
+      <polygon points="62,18 58,12 66,12" fill="#38bdf8" />
+      <polygon points="197,18 193,12 201,12" fill="#38bdf8" />
+      <polygon points="352,18 348,12 356,12" fill="#38bdf8" />
+
+      <text x="0" y="34" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="10" font-weight="600">2. SONAR FIXED CONTINUOUS EMBEDDING (R^1024)</text>
+      <rect x="0" y="44" width="442" height="38" rx="6" fill="rgba(6, 182, 212, 0.12)" stroke="#06b6d4" stroke-width="1.5"/>
+      <text x="221" y="68" fill="#22d3ee" font-family="'JetBrains Mono', monospace" font-size="12" font-weight="600" text-anchor="middle">Shared Latent Concept Manifold [ c_t ∈ ℝ^1024 ]</text>
+    </g>
+
+    <!-- Block 3: Continuous Autoregressive LCM Backbone -->
+    <g transform="translate(24, 225)">
+      <!-- Downward Arrow -->
+      <path d="M 221 0 L 221 16" stroke="#38bdf8" stroke-width="1.5" fill="none"/>
+      <polygon points="221,20 217,14 225,14" fill="#38bdf8" />
+
+      <text x="0" y="32" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="10" font-weight="600">3. CONTINUOUS AUTOREGRESSIVE REASONING BACKBONE</text>
+      
+      <!-- LCM Predictor Box -->
+      <rect x="0" y="42" width="442" height="52" rx="6" fill="rgba(139, 92, 246, 0.12)" stroke="#8b5cf6" stroke-width="1.5"/>
+      <text x="221" y="66" fill="#c084fc" font-family="'JetBrains Mono', monospace" font-size="12" font-weight="600" text-anchor="middle">LCM Predictor: c_{t+1} = f_θ(c_1, c_2, ... c_t)</text>
+      <text x="221" y="84" fill="#a78bfa" font-family="'JetBrains Mono', monospace" font-size="9" text-anchor="middle">Latent Diffusion / Flow Matching / Residual Quantization (No Discrete Softmax)</text>
+    </g>
+
+    <!-- Block 4: Target Modality Decoding -->
+    <g transform="translate(24, 335)">
+      <!-- Downward Arrow -->
+      <path d="M 221 0 L 221 12" stroke="#38bdf8" stroke-width="1.5" fill="none"/>
+      <polygon points="221,16 217,10 225,10" fill="#38bdf8" />
+
+      <!-- Comparison Metrics Grid -->
+      <rect x="0" y="24" width="442" height="52" rx="6" fill="#040609" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+      
+      <text x="16" y="44" fill="#64748b" font-family="'JetBrains Mono', monospace" font-size="9">SEQUENCE LENGTH</text>
+      <text x="16" y="64" fill="#22d3ee" font-family="'JetBrains Mono', monospace" font-size="13" font-weight="700">35x Shorter</text>
+
+      <line x1="145" y1="32" x2="145" y2="68" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+      <text x="160" y="44" fill="#64748b" font-family="'JetBrains Mono', monospace" font-size="9">KV CACHE MEMORY</text>
+      <text x="160" y="64" fill="#4ade80" font-family="'JetBrains Mono', monospace" font-size="13" font-weight="700">96.8% Reduction</text>
+
+      <line x1="300" y1="32" x2="300" y2="68" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+      <text x="315" y="44" fill="#64748b" font-family="'JetBrains Mono', monospace" font-size="9">CROSS-LINGUAL</text>
+      <text x="315" y="64" fill="#a78bfa" font-family="'JetBrains Mono', monospace" font-size="13" font-weight="700">Zero Tokenizer Tax</text>
+    </g>
+  </g>
+
+  <!-- Left Side: Main Editorial Header & Metadata -->
+  <g transform="translate(70, 160)">
+    <!-- Category Pill -->
+    <rect x="0" y="0" width="230" height="30" rx="4" fill="rgba(56, 189, 248, 0.12)" stroke="#38bdf8" stroke-width="1"/>
+    <text x="14" y="20" fill="#38bdf8" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="600" letter-spacing="1">SYSTEMS &amp; COGNITION</text>
+
+    <!-- Main Headline -->
+    <text x="0" y="78" fill="#ffffff" font-family="'Newsreader', Georgia, serif" font-size="44" font-weight="700" letter-spacing="-0.5">The Death of</text>
+    <text x="0" y="130" fill="#ffffff" font-family="'Newsreader', Georgia, serif" font-size="44" font-weight="700" letter-spacing="-0.5">the Token</text>
+
+    <!-- Subtitle / Analytical Hook -->
+    <text x="0" y="185" fill="#38bdf8" font-family="'Plus Jakarta Sans', sans-serif" font-size="18" font-weight="600">Why Large Concept Models (LCMs)</text>
+    <text x="0" y="214" fill="#94a3b8" font-family="'Plus Jakarta Sans', sans-serif" font-size="16" font-weight="400">and Continuous Latent Reasoning</text>
+    <text x="0" y="240" fill="#cbd5e1" font-family="'Plus Jakarta Sans', sans-serif" font-size="16" font-weight="500">Are the True Frontier of Intelligence</text>
+
+    <!-- Technical Specs Tag Box -->
+    <g transform="translate(0, 280)">
+      <rect x="0" y="0" width="530" height="74" rx="8" fill="#090d15" stroke="rgba(255, 255, 255, 0.08)" stroke-width="1"/>
+      <text x="18" y="30" fill="#64748b" font-family="'JetBrains Mono', monospace" font-size="10">PARADIGM SHIFT</text>
+      <text x="18" y="52" fill="#f8fafc" font-family="'JetBrains Mono', monospace" font-size="12" font-weight="600">Tokens ➔ Continuous Embeddings</text>
+      
+      <line x1="260" y1="16" x2="260" y2="60" stroke="rgba(255, 255, 255, 0.08)" stroke-width="1"/>
+      <text x="276" y="30" fill="#64748b" font-family="'JetBrains Mono', monospace" font-size="10">FOUNDATIONAL PRIMITIVE</text>
+      <text x="276" y="52" fill="#38bdf8" font-family="'JetBrains Mono', monospace" font-size="12" font-weight="600">SONAR Omnispace [ℝ^1024]</text>
+    </g>
+  </g>
+
+  <!-- Bottom Colophon -->
+  <text x="70" y="570" fill="#475569" font-family="'JetBrains Mono', monospace" font-size="12">KRITRIMTA JOURNAL // EDITORIAL LEADERSHIP // SAURAV KARKI</text>
+  <text x="1130" y="570" fill="#475569" font-family="'JetBrains Mono', monospace" font-size="12" text-anchor="end">FIRST-PRINCIPLES AI ARCHITECTURE REVIEW</text>
+</svg>
