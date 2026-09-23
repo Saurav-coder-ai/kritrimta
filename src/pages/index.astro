@@ -4,7 +4,7 @@ import FeaturedPost from '@/components/FeaturedPost.astro';
 import PostCard from '@/components/PostCard.astro';
 import CategoryList from '@/components/CategoryList.astro';
 import Newsletter from '@/components/Newsletter.astro';
-import { SplineSceneBasic } from '@/components/ui/demo';
+import { SplineHero } from '@/components/ui/demo';
 import { getCollection } from 'astro:content';
 
 const allPosts = await getCollection('blog', ({ data }) => import.meta.env.DEV || !data.draft);
@@ -25,52 +25,16 @@ const secondaryPosts = remainingPosts.slice(1);
   title="Kritrimta"
   description="An independent journal of artificial intelligence, high-performance computing, and hardware engineering. Edited by Saurav Karki."
 >
-  <!-- Masthead / Editorial Hero Section -->
-  <section class="masthead-section">
+  <!-- Primary 3D Editorial Hero Section -->
+  <section class="editorial-hero-section" id="hero">
     <div class="container">
-      <div class="masthead-meta">
-        <span class="masthead-tag">KRITRIMTA JOURNAL // EST. 2026</span>
-        <span class="masthead-divider">&bull;</span>
-        <span class="masthead-editor">EDITED BY SAURAV KARKI</span>
-        <span class="masthead-divider">&bull;</span>
-        <span class="masthead-status">AUTONOMOUS COMPUTING & SILICON</span>
-      </div>
-
-      <div class="masthead-content">
-        <h1 class="masthead-title">
-          Analysis, Benchmarks &amp; <span class="accent-gradient">First Principles</span> in Artificial Intelligence.
-        </h1>
-        <p class="masthead-mission">
-          An independent publication examining the engineering realities, model economics, and silicon architectures behind modern computing systems. Uncompromised by corporate PR.
-        </p>
-      </div>
-
-      <div class="masthead-rule"></div>
-    </div>
-  </section>
-
-  <!-- Interactive 3D Computational Lab / Hero Showcase -->
-  <section class="spline-showcase-section">
-    <div class="container">
-      <div class="section-kicker-bar">
-        <span class="kicker-label">INTERACTIVE 3D COMPUTATIONAL LAB</span>
-        <span class="kicker-line"></span>
-        <span class="kicker-badge">REAL-TIME WEBGL</span>
-      </div>
-      <SplineSceneBasic
-        client:only="react"
-        badge="Autonomous Systems & Silicon Lab"
-        title="Interactive 3D"
-        description="Bring your UI to life with beautiful 3D scenes. Create immersive experiences that capture attention and enhance your design."
-        ctaText="Explore Research &rarr;"
-        ctaLink="/category/ai-tools"
-      />
+      <SplineHero client:only="react" />
     </div>
   </section>
 
   <!-- Lead Story (Featured Article) -->
   {featuredPost && (
-    <section class="lead-story-section">
+    <section class="lead-story-section" id="latest-coverage">
       <div class="container">
         <div class="section-kicker-bar">
           <span class="kicker-label">LEAD INVESTIGATION</span>
@@ -232,89 +196,14 @@ const secondaryPosts = remainingPosts.slice(1);
 </BaseLayout>
 
 <style>
-  .masthead-section {
-    padding: 3.5rem 0 1.5rem;
+  .editorial-hero-section {
+    padding: 2.25rem 0 3.25rem;
   }
 
-  .masthead-meta {
-    display: flex;
-    align-items: center;
-    gap: 0.65rem;
-    font-family: var(--font-mono);
-    font-size: 0.72rem;
-    color: var(--color-text-faint);
-    letter-spacing: 0.08em;
-    margin-bottom: 1.5rem;
-    flex-wrap: wrap;
-  }
-
-  .masthead-tag {
-    color: var(--color-accent);
-    font-weight: 600;
-  }
-
-  .masthead-divider {
-    opacity: 0.4;
-  }
-
-  .masthead-content {
-    max-width: 960px;
-    margin-bottom: 2.5rem;
-  }
-
-  .masthead-title {
-    font-family: var(--font-serif);
-    font-size: clamp(2.3rem, 5vw, 3.8rem);
-    line-height: 1.1;
-    font-weight: 600;
-    letter-spacing: -0.025em;
-    margin-bottom: 1.25rem;
-  }
-
-  .masthead-mission {
-    font-size: clamp(1.05rem, 2vw, 1.25rem);
-    color: var(--color-text-muted);
-    line-height: 1.6;
-    max-width: 740px;
-    font-family: var(--font-sans);
-  }
-
-  .masthead-rule {
-    height: 1px;
-    background: var(--color-border);
-    width: 100%;
-  }
-
-  .section-kicker-bar {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: 1.75rem;
-  }
-
-  .kicker-label {
-    font-family: var(--font-mono);
-    font-size: 0.72rem;
-    font-weight: 600;
-    letter-spacing: 0.12em;
-    color: var(--color-accent);
-    white-space: nowrap;
-  }
-
-  .kicker-badge {
-    font-family: var(--font-mono);
-    font-size: 0.65rem;
-    padding: 0.2rem 0.6rem;
-    border-radius: 9999px;
-    background: rgba(224, 83, 43, 0.1);
-    color: var(--color-accent);
-    border: 1px solid rgba(224, 83, 43, 0.25);
-    letter-spacing: 0.08em;
-    white-space: nowrap;
-  }
-
-  .spline-showcase-section {
-    padding: 1rem 0 3rem;
+  @media (max-width: 768px) {
+    .editorial-hero-section {
+      padding: 1.25rem 0 2.25rem;
+    }
   }
 
   .kicker-line {
