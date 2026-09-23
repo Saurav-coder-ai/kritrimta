@@ -57,10 +57,10 @@ export function SplineHero({
               <span aria-hidden="true">&darr;</span>
             </a>
             <a
-              href="/dashboard"
+              href="/tools"
               className="inline-flex items-center gap-2 px-5 py-3 rounded-lg border border-neutral-700 hover:border-neutral-500 bg-neutral-900/70 hover:bg-neutral-800 text-neutral-200 hover:text-white text-sm font-medium transition-all duration-200"
             >
-              <span>System Telemetry</span>
+              <span>Explore Tools</span>
               <span aria-hidden="true">&rarr;</span>
             </a>
           </div>
